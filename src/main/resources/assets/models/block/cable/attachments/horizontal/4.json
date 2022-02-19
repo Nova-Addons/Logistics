@@ -1,0 +1,6 @@
+{
+	"parent": "logistics:block/cable/attachment_horizontal",
+	"textures": {
+		"2": "logistics:block/cable/attachment/4"
+	}
+}

@@ -1,0 +1,78 @@
+{
+    "gui_item_filter_placeholder": "gui/placeholder/item_filter",
+    "gui_trash_can_placeholder": "gui/placeholder/trash_can",
+    "gui_nbt_btn_off": "gui/btn/nbt_off",
+    "gui_nbt_btn_on": "gui/btn/nbt_on",
+    "gui_whitelist_btn": "gui/btn/whitelist",
+    "gui_blacklist_btn": "gui/btn/blacklist",
+    "item_filter": "item/item_filter",
+    "basic_power_cell": "block/power_cell/basic",
+    "advanced_power_cell": "block/power_cell/advanced",
+    "elite_power_cell": "block/power_cell/elite",
+    "ultimate_power_cell": "block/power_cell/ultimate",
+    "creative_power_cell": "block/power_cell/creative",
+    "basic_fluid_tank": "block/fluid_tank/basic",
+    "advanced_fluid_tank": "block/fluid_tank/advanced",
+    "elite_fluid_tank": "block/fluid_tank/elite",
+    "ultimate_fluid_tank": "block/fluid_tank/ultimate",
+    "creative_fluid_tank": "block/fluid_tank/creative",
+    "storage_unit": "block/storage_unit",
+    "fluid_storage_unit": "block/fluid_storage_unit",
+    "vacuum_chest": "block/vacuum_chest",
+    "trash_can": "block/trash_can",
+    "basic_cable": {
+        "item": "item/cable/basic",
+        "block": {
+            "block/cable/basic/%s": [0, 63],
+            "block/cable/attachments/horizontal/%s": [0, 15],
+            "block/cable/attachments/up/%s": [0, 15],
+            "block/cable/attachments/down/%s": [0, 15]
+        }
+    },
+    "advanced_cable": {
+        "item": "item/cable/advanced",
+        "block": {
+            "block/cable/advanced/%s": [0, 63],
+            "block/cable/attachments/horizontal/%s": [0, 15],
+            "block/cable/attachments/up/%s": [0, 15],
+            "block/cable/attachments/down/%s": [0, 15]
+        }
+    },
+    "elite_cable": {
+        "item": "item/cable/elite",
+        "block": {
+            "block/cable/elite/%s": [0, 63],
+            "block/cable/attachments/horizontal/%s": [0, 15],
+            "block/cable/attachments/up/%s": [0, 15],
+            "block/cable/attachments/down/%s": [0, 15]
+        }
+    },
+    "ultimate_cable": {
+        "item": "item/cable/ultimate",
+        "block": {
+            "block/cable/ultimate/%s": [0, 63],
+            "block/cable/attachments/horizontal/%s": [0, 15],
+            "block/cable/attachments/up/%s": [0, 15],
+            "block/cable/attachments/down/%s": [0, 15]
+        }
+    },
+    "creative_cable": {
+        "item": "item/cable/creative",
+        "block": {
+            "block/cable/creative/%s": [0, 63],
+            "block/cable/attachments/horizontal/%s": [0, 15],
+            "block/cable/attachments/up/%s": [0, 15],
+            "block/cable/attachments/down/%s": [0, 15]
+        }
+    },
+    "tank_water_levels": {
+        "item": {
+            "block/fluid_levels/tank/water/%s": [0, 99]
+        }
+    },
+    "tank_lava_levels": {
+        "item": {
+            "block/fluid_levels/tank/lava/%s": [0, 99]
+        }
+    }
+}
