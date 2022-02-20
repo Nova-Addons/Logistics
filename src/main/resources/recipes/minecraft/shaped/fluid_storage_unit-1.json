@@ -1,0 +1,14 @@
+{
+  "result": "nova:fluid_storage_unit",
+  "shape": [
+    "iei",
+    "tdt",
+    "iti"
+  ],
+  "ingredients": {
+    "t": "nova:ultimate_fluid_tank",
+    "e": "minecraft:end_crystal",
+    "i": "minecraft:iron_ingot",
+    "d": "minecraft:diamond_block"
+  }
+}

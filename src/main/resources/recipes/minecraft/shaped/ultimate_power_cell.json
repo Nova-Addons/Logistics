@@ -1,0 +1,14 @@
+{
+  "result": "nova:ultimate_power_cell",
+  "shape": [
+    "pcp",
+    "cbc",
+    "pfp"
+  ],
+  "ingredients": {
+    "p": "minecraft:iron_ingot",
+    "c": "nova:ultimate_cable",
+    "b": "nova:elite_power_cell",
+    "f": "nova:ultimate_machine_frame"
+  }
+}

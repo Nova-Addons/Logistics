@@ -1,0 +1,11 @@
+{
+  "result": "nova:trash_can",
+  "shape": [
+    "iii",
+    "i i",
+    "iii"
+  ],
+  "ingredients": {
+    "i": "minecraft:iron_ingot"
+  }
+}

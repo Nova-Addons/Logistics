@@ -1,0 +1,14 @@
+{
+  "result": "nova:storage_unit",
+  "shape": [
+    "pep",
+    "cdc",
+    "pcp"
+  ],
+  "ingredients": {
+    "e": "minecraft:end_crystal",
+    "c": "minecraft:chest",
+    "p": "minecraft:iron_ingot",
+    "d": "minecraft:diamond_block"
+  }
+}
