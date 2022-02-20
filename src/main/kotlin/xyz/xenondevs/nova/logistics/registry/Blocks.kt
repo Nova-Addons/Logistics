@@ -4,7 +4,6 @@ import org.bukkit.Material.*
 import xyz.xenondevs.nova.logistics.LOGISTICS
 import xyz.xenondevs.nova.logistics.tileentity.*
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerDefaultItem
-import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerDefaultTileEntity
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerEnergyTileEntity
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerTileEntity
 
@@ -28,10 +27,10 @@ object Blocks {
     val ULTIMATE_FLUID_TANK = registerEnergyTileEntity(LOGISTICS, "ultimate_fluid_tank", ::UltimateFluidTank, BARRIER)
     val CREATIVE_FLUID_TANK = registerEnergyTileEntity(LOGISTICS, "creative_fluid_tank", ::CreativeFluidTank, BARRIER)
     
-    val STORAGE_UNIT = registerDefaultTileEntity(LOGISTICS, "storage_unit", ::StorageUnit, BARRIER)
-    val FLUID_STORAGE_UNIT = registerDefaultTileEntity(LOGISTICS, "fluid_storage_unit", ::FluidStorageUnit, BARRIER)
-    val VACUUM_CHEST = registerDefaultTileEntity(LOGISTICS, "vacuum_chest", ::VacuumChest, BARRIER)
-    val TRASH_CAN = registerDefaultTileEntity(LOGISTICS, "trash_can", ::TrashCan, BARRIER)
+    val STORAGE_UNIT = registerTileEntity(LOGISTICS, "storage_unit", ::StorageUnit, BARRIER)
+    val FLUID_STORAGE_UNIT = registerTileEntity(LOGISTICS, "fluid_storage_unit", ::FluidStorageUnit, BARRIER)
+    val VACUUM_CHEST = registerTileEntity(LOGISTICS, "vacuum_chest", ::VacuumChest, BARRIER)
+    val TRASH_CAN = registerTileEntity(LOGISTICS, "trash_can", ::TrashCan, BARRIER)
     
     // Move these somewhere else?
     val TANK_WATER_LEVELS = registerDefaultItem(LOGISTICS, "tank_water_levels")

@@ -14,8 +14,8 @@ import xyz.xenondevs.nova.data.serialization.cbf.element.CompoundElement
 import xyz.xenondevs.nova.integration.protection.ProtectionManager
 import xyz.xenondevs.nova.logistics.gui.cable.CableConfigGUI
 import xyz.xenondevs.nova.logistics.registry.Blocks
+import xyz.xenondevs.nova.material.CoreItems
 import xyz.xenondevs.nova.material.NovaMaterial
-import xyz.xenondevs.nova.material.NovaMaterialRegistry
 import xyz.xenondevs.nova.tileentity.Model
 import xyz.xenondevs.nova.tileentity.TileEntity
 import xyz.xenondevs.nova.tileentity.network.*
@@ -198,7 +198,7 @@ open class Cable(
             
             hitboxes += Hitbox(
                 from, to,
-                { it.action.isRightClick() && it.handItems.any { item -> item.novaMaterial == NovaMaterialRegistry.WRENCH } },
+                { it.action.isRightClick() && it.handItems.any { item -> item.novaMaterial == CoreItems.WRENCH } },
                 { handleCableWrenchHit(it, blockFace) }
             )
         }
