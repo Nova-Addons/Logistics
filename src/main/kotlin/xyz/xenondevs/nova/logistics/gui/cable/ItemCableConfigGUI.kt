@@ -7,12 +7,12 @@ import de.studiocode.invui.gui.builder.guitype.GUIType
 import de.studiocode.invui.virtualinventory.VirtualInventory
 import de.studiocode.invui.virtualinventory.event.ItemUpdateEvent
 import org.bukkit.block.BlockFace
+import xyz.xenondevs.nova.logistics.item.getLogisticsItemFilterConfig
+import xyz.xenondevs.nova.logistics.item.isItemFilter
 import xyz.xenondevs.nova.logistics.registry.GUIMaterials
-import xyz.xenondevs.nova.logistics.registry.Items
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.NetworkManager
 import xyz.xenondevs.nova.tileentity.network.item.ItemNetwork
-import xyz.xenondevs.nova.tileentity.network.item.getOrCreateFilterConfig
 import xyz.xenondevs.nova.tileentity.network.item.holder.ItemHolder
 import xyz.xenondevs.nova.ui.item.AddNumberItem
 import xyz.xenondevs.nova.ui.item.DisplayNumberItem
@@ -81,8 +81,8 @@ class ItemCableConfigGUI(
                 itemHolder.extractPriorities[face] = extractPriority
                 itemHolder.channels[face] = channel
                 itemHolder.itemConfig[face] = NetworkConnectionType.of(insertState, extractState)
-                itemHolder.insertFilters.putOrRemove(face, insertFilterInventory.getUnsafeItemStack(0)?.getOrCreateFilterConfig())
-                itemHolder.extractFilters.putOrRemove(face, extractFilterInventory.getUnsafeItemStack(0)?.getOrCreateFilterConfig())
+                itemHolder.insertFilters.putOrRemove(face, insertFilterInventory.getUnsafeItemStack(0)?.getLogisticsItemFilterConfig())
+                itemHolder.extractFilters.putOrRemove(face, extractFilterInventory.getUnsafeItemStack(0)?.getLogisticsItemFilterConfig())
                 
                 it.handleEndPointAdd(itemHolder.endPoint, false)
                 itemHolder.endPoint.updateNearbyBridges()
@@ -92,8 +92,7 @@ class ItemCableConfigGUI(
     
     private fun checkItem(event: ItemUpdateEvent) {
         val newStack = event.newItemStack
-        if (newStack != null && newStack.novaMaterial != Items.ITEM_FILTER)
-            event.isCancelled = true
+        event.isCancelled = newStack != null && !newStack.novaMaterial.isItemFilter()
     }
     
 }

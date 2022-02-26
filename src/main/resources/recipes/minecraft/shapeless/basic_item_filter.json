@@ -1,5 +1,5 @@
 {
-  "result": "nova:item_filter",
+  "result": "nova:basic_item_filter",
   "ingredients": {
     "minecraft:hopper": 1,
     "minecraft:paper": 1

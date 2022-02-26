@@ -1,0 +1,13 @@
+{
+  "result": "nova:ultimate_item_filter",
+  "shape": [
+    "dpd",
+    "pfp",
+    "dpd"
+  ],
+  "ingredients": {
+    "f": "nova:elite_item_filter",
+    "p": "nova:iron_plate",
+    "d": "nova:diamond_dust"
+  }
+}
