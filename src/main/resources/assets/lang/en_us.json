@@ -18,10 +18,14 @@
   "block.logistics.fluid_storage_unit": "Fluid Storage Unit",
   "block.logistics.vacuum_chest": "Vacuum Chest",
   "block.logistics.trash_can": "Trash Can",
+  
   "item.logistics.basic_item_filter": "Basic Item Filter",
   "item.logistics.advanced_item_filter": "Advanced Item Filter",
   "item.logistics.elite_item_filter": "Elite Item Filter",
   "item.logistics.ultimate_item_filter": "Ultimate Item Filter",
+  
+  "menu.logistics.items.category.logistics": "Logistics",
+  "menu.logistics.items.category.crafting": "Crafting Components",
   "menu.logistics.cable_config": "Config",
   "menu.logistics.cable_config.insert": "Insert",
   "menu.logistics.cable_config.extract": "Extract",
