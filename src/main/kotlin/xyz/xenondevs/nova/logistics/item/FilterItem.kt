@@ -7,6 +7,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.item.NovaItem
+import xyz.xenondevs.nova.item.behavior.ItemBehavior
 import xyz.xenondevs.nova.logistics.gui.itemfilter.ItemFilterWindow
 import xyz.xenondevs.nova.logistics.registry.Items
 import xyz.xenondevs.nova.material.NovaMaterial
@@ -41,21 +42,30 @@ abstract class FilterItem(size: Lazy<Int>) : NovaItem() {
     
     val size by size
     
-    override fun handleInteract(player: Player, itemStack: ItemStack, action: Action, event: PlayerInteractEvent) {
-        if (action == Action.RIGHT_CLICK_AIR) {
-            event.isCancelled = true
-            ItemFilterWindow(player, itemStack.novaMaterial!!, size, itemStack)
-        }
+    init {
+        behaviors += ItemFilterBehavior()
     }
-    
-    override fun modifyItemBuilder(itemBuilder: ItemBuilder): ItemBuilder =
-        itemBuilder.addModifier {
-            it.saveFilterConfig(ItemFilter(size))
-            return@addModifier it
-        }
     
     fun getFilterConfig(itemStack: ItemStack): ItemFilter =
         itemStack.getOrCreateFilterConfig(size)
+    
+    private inner class ItemFilterBehavior : ItemBehavior() {
+    
+        override fun handleInteract(player: Player, itemStack: ItemStack, action: Action, event: PlayerInteractEvent) {
+            if (action == Action.RIGHT_CLICK_AIR) {
+                event.isCancelled = true
+                ItemFilterWindow(player, itemStack.novaMaterial!!, size, itemStack)
+            }
+        }
+    
+        override fun modifyItemBuilder(itemBuilder: ItemBuilder): ItemBuilder {
+            return itemBuilder.addModifier {
+                it.saveFilterConfig(ItemFilter(size))
+                return@addModifier it
+            }
+        }
+        
+    }
     
 }
 
