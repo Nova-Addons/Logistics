@@ -130,7 +130,7 @@ class StorageUnit(
                 val type = inventory.type ?: return ItemBuilder(Material.BARRIER).setDisplayName("§r")
                 val amount = inventory.amount
                 val component = TranslatableComponent(
-                    "menu.nova.storage_unit.item_display_" + if (amount > 1) "plural" else "singular",
+                    "menu.logistics.storage_unit.item_display_" + if (amount > 1) "plural" else "singular",
                     TextComponent(amount.toString()).apply { color = ChatColor.GREEN }
                 )
                 return ItemBuilder(type).setDisplayName(component).setAmount(1)

@@ -54,7 +54,7 @@ class ItemCableConfigGUI(
     }
     
     override fun updateValues(updateButtons: Boolean) {
-        NetworkManager.runNow { // TODO: runSync / runAsync ?
+        NetworkManager.execute { // TODO: queueSync / queueAsync ?
             val allowedConnections = itemHolder.allowedConnectionTypes[itemHolder.inventories[face]]!!
             allowsExtract = allowedConnections.extract
             allowsInsert = allowedConnections.insert
@@ -73,21 +73,12 @@ class ItemCableConfigGUI(
     }
     
     override fun writeChanges() {
-        NetworkManager.runAsync {
-            if (itemHolder.endPoint.networks.isNotEmpty()) {
-                it.handleEndPointRemove(itemHolder.endPoint, true)
-                
-                itemHolder.insertPriorities[face] = insertPriority
-                itemHolder.extractPriorities[face] = extractPriority
-                itemHolder.channels[face] = channel
-                itemHolder.itemConfig[face] = NetworkConnectionType.of(insertState, extractState)
-                itemHolder.insertFilters.putOrRemove(face, insertFilterInventory.getUnsafeItemStack(0)?.getLogisticsItemFilterConfig())
-                itemHolder.extractFilters.putOrRemove(face, extractFilterInventory.getUnsafeItemStack(0)?.getLogisticsItemFilterConfig())
-                
-                it.handleEndPointAdd(itemHolder.endPoint, false)
-                itemHolder.endPoint.updateNearbyBridges()
-            }
-        }
+        itemHolder.insertPriorities[face] = insertPriority
+        itemHolder.extractPriorities[face] = extractPriority
+        itemHolder.channels[face] = channel
+        itemHolder.itemConfig[face] = NetworkConnectionType.of(insertState, extractState)
+        itemHolder.insertFilters.putOrRemove(face, insertFilterInventory.getUnsafeItemStack(0)?.getLogisticsItemFilterConfig())
+        itemHolder.extractFilters.putOrRemove(face, extractFilterInventory.getUnsafeItemStack(0)?.getLogisticsItemFilterConfig())
     }
     
     private fun checkItem(event: ItemUpdateEvent) {

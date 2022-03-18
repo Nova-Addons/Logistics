@@ -41,7 +41,6 @@ private val NetworkNode.fluidHolder: FluidHolder?
     get() = if (this is NetworkEndPoint) holders[FLUID] as FluidHolder? else null
 
 open class Cable(
-    override val typeId: Int,
     override val energyTransferRate: Long,
     override val itemTransferRate: Int,
     override val fluidTransferRate: Long,
@@ -52,30 +51,54 @@ open class Cable(
     armorStand: FakeArmorStand,
 ) : TileEntity(uuid, data, material, ownerUUID, armorStand), EnergyBridge, ItemBridge, FluidBridge {
     
+    override val typeId = material.id
     override val supportedNetworkTypes = SUPPORTED_NETWORK_TYPES
     override val networks = EnumMap<NetworkType, Network>(NetworkType::class.java)
-    override val bridgeFaces = retrieveEnumCollectionOrNull("bridgeFaces", HashSet()) ?: CUBE_FACES.toMutableSet()
+    override val bridgeFaces = retrieveEnumCollectionOrNull("bridgeFaces", HashSet()) ?: CUBE_FACES.toHashSet()
+    override val connectedNodes: MutableMap<NetworkType, MutableMap<BlockFace, NetworkNode>> = emptyEnumMap()
     
     override val gui: Lazy<TileEntityGUI>? = null
-    
-    override val connectedNodes: MutableMap<NetworkType, MutableMap<BlockFace, NetworkNode>> =
-        NetworkType.values().associateWithTo(emptyEnumMap()) { enumMapOf() }
-    
     private val configGUIs = emptyEnumMap<BlockFace, CableConfigGUI>()
     
-    private val multiModel = createMultiModel()
     private val hitboxes = ArrayList<Hitbox>()
+    private val multiModel = createMultiModel()
+    private var modelId = retrieveData("modelId") { 0 }
+   private var attachments: ArrayList<Pair<Int, Int>> = retrieveCollectionOrNull("attachments", ArrayList()) ?: ArrayList()
+    
+    init {
+        if (attachments.isNotEmpty()) {
+            updateAttachmentModels()
+            createAttachmentHitboxes()
+        }
+        createCableHitboxes()
+    }
     
     override fun saveData() {
         super.saveData()
+        
+        storeData("modelId", modelId)
+        storeList("attachments", attachments)
+        
         storeList("bridgeFaces", bridgeFaces)
+        storeEnumMap("networks", serializeNetworks())
+        storeEnumMap("connectedNodes", serializeConnectedNodes())
+    }
+    
+    override fun retrieveSerializedConnectedNodes(): Map<NetworkType, Map<BlockFace, UUID>>? {
+        return retrieveEnumMapOrNull("connectedNodes")
+    }
+    
+    override fun retrieveSerializedNetworks(): Map<NetworkType, UUID>? {
+        return retrieveEnumMapOrNull("networks")
     }
     
     override fun handleNetworkUpdate() {
         // assume that we have NetworkManager.LOCK
         if (isValid && NOVA.isEnabled) {
-            multiModel.replaceModels(getModelsNeeded())
+            calculateCableModelId()
+            calculateAttachmentModelIds()
             updateHeadStack()
+            updateAttachmentModels()
             
             configGUIs.forEach { (face, gui) ->
                 val neighbor = connectedNodes[ITEMS]?.get(face)
@@ -93,14 +116,14 @@ open class Cable(
                 } else closeAndRemove()
             }
             
-            // !! Needs to be run in the server thread (updating blocks)
+            // !! Needs to be run on the server thread (updating blocks)
             // !! Also needs to be synchronized with NetworkManager as connectedNodes are retrieved
-            NetworkManager.runSync { updateHitbox() }
+            NetworkManager.queueSync { updateHitbox() }
         }
     }
     
     override fun handleInitialized(first: Boolean) {
-        NetworkManager.runAsync { it.handleBridgeAdd(this) }
+        if (first) NetworkManager.queueAsync { it.addBridge(this) }
     }
     
     override fun handleHitboxPlaced() {
@@ -110,27 +133,26 @@ open class Cable(
     
     override fun handleRemoved(unload: Boolean) {
         super.handleRemoved(unload)
-        
-        val task: NetworkManagerTask = { it.handleBridgeRemove(this, unload) }
-        if (NOVA.isEnabled) NetworkManager.runAsync(task) else NetworkManager.runNow(task)
-        
         hitboxes.forEach { it.remove() }
-        
-        if (!unload) configGUIs.values.forEach(CableConfigGUI::closeForAllViewers)
+        if (!unload) {
+            NetworkManager.queueAsync { it.removeBridge(this) }
+            configGUIs.values.forEach(CableConfigGUI::closeForAllViewers)
+        }
     }
     
     override fun getHeadStack(): ItemStack {
-        val connectedFaces = connectedNodes.values.flatMapTo(HashSet()) { it.keys }
-        
-        val booleans = CUBE_FACES.map { connectedFaces.contains(it) }.reversed().toBooleanArray()
-        val number = MathUtils.convertBooleanArrayToInt(booleans)
-        return material.block!!.createItemStack(number)
+        return material.block!!.createItemStack(modelId)
     }
     
-    private fun getModelsNeeded(): List<Model> {
+    private fun calculateCableModelId() {
+        val connectedFaces = connectedNodes.values.flatMapTo(HashSet()) { it.keys }
+        val booleans = CUBE_FACES.map { connectedFaces.contains(it) }.reversed().toBooleanArray()
+        modelId = MathUtils.convertBooleanArrayToInt(booleans)
+    }
+    
+    private fun calculateAttachmentModelIds() {
         require(networks.isNotEmpty()) { "No network is initialized" }
-        
-        val models = ArrayList<Model>()
+        attachments.clear()
         
         CUBE_FACES.forEach { face ->
             val oppositeFace = face.oppositeFace
@@ -153,14 +175,18 @@ open class Cable(
                     else -> 0
                 }
             
-            val attachmentStack = material.block!!.createItemStack(ATTACHMENTS[id])
-            models += Model(
-                attachmentStack,
-                location.clone().center().apply { yaw = face.rotationValues.second * 90f }
-            )
+            attachments += id to face.ordinal
         }
+    }
+    
+    private fun updateAttachmentModels() {
+        val models = ArrayList<Model>()
         
-        return models
+        attachments.forEach { (id, face) ->
+            val attachmentStack = material.block!!.createItemStack(ATTACHMENTS[id])
+            models += Model(attachmentStack, location.clone().center().apply { yaw = BlockFace.values()[face].rotationValues.second * 90f })
+        }
+        multiModel.replaceModels(models)
     }
     
     private fun updateHitbox() {
@@ -204,40 +230,30 @@ open class Cable(
     }
     
     private fun createAttachmentHitboxes() {
-        val neighbors = CUBE_FACES.associateWithNotNull { face ->
-            val itemHolder = connectedNodes[ITEMS]?.get(face)?.itemHolder
-            val fluidHolder = connectedNodes[FLUID]?.get(face)?.fluidHolder
+        attachments.forEach { (_, faceOrdinal) ->
+            val face = BlockFace.values()[faceOrdinal]
             
-            if (itemHolder != null || fluidHolder != null) {
-                itemHolder to fluidHolder
-            } else null
+            val pointA = Point3D(0.125, 0.125, 0.0)
+            val pointB = Point3D(0.875, 0.875, 0.2)
+            
+            val origin = Point3D(0.5, 0.5, 0.5)
+            
+            val rotationValues = face.rotationValues
+            pointA.rotateAroundXAxis(rotationValues.first, origin)
+            pointA.rotateAroundYAxis(rotationValues.second, origin)
+            pointB.rotateAroundXAxis(rotationValues.first, origin)
+            pointB.rotateAroundYAxis(rotationValues.second, origin)
+            
+            val sortedPoints = Point3D.sort(pointA, pointB)
+            val from = location.clone().add(sortedPoints.first.x, sortedPoints.first.y, sortedPoints.first.z)
+            val to = location.clone().add(sortedPoints.second.x, sortedPoints.second.y, sortedPoints.second.z)
+            
+            hitboxes += Hitbox(
+                from, to,
+                { it.action.isRightClick() },
+                { handleAttachmentHit(it, face) }
+            )
         }
-        
-        neighbors
-            .forEach { (face, endPointDataHolders) ->
-                val (itemHolder, fluidHolder) = endPointDataHolders
-                
-                val pointA = Point3D(0.125, 0.125, 0.0)
-                val pointB = Point3D(0.875, 0.875, 0.2)
-                
-                val origin = Point3D(0.5, 0.5, 0.5)
-                
-                val rotationValues = face.rotationValues
-                pointA.rotateAroundXAxis(rotationValues.first, origin)
-                pointA.rotateAroundYAxis(rotationValues.second, origin)
-                pointB.rotateAroundXAxis(rotationValues.first, origin)
-                pointB.rotateAroundYAxis(rotationValues.second, origin)
-                
-                val sortedPoints = Point3D.sort(pointA, pointB)
-                val from = location.clone().add(sortedPoints.first.x, sortedPoints.first.y, sortedPoints.first.z)
-                val to = location.clone().add(sortedPoints.second.x, sortedPoints.second.y, sortedPoints.second.z)
-                
-                hitboxes += Hitbox(
-                    from, to,
-                    { it.action.isRightClick() },
-                    { handleAttachmentHit(it, itemHolder, fluidHolder, face) }
-                )
-            }
     }
     
     private fun updateBlockHitbox() {
@@ -261,10 +277,13 @@ open class Cable(
         }
     }
     
-    private fun handleAttachmentHit(event: PlayerInteractEvent, itemHolder: ItemHolder?, fluidHolder: FluidHolder?, face: BlockFace) {
+    private fun handleAttachmentHit(event: PlayerInteractEvent, face: BlockFace) {
         if (!event.player.hasInventoryOpen) {
             event.isCancelled = true
-            configGUIs.getOrPut(face) { CableConfigGUI(itemHolder, fluidHolder, face.oppositeFace) }.openWindow(event.player)
+            NetworkManager.queueSync {
+                val endPoint = getConnectedNode(face) as NetworkEndPoint
+                configGUIs.getOrPut(face) { CableConfigGUI(endPoint, endPoint.itemHolder, endPoint.fluidHolder, face.oppositeFace) }.openWindow(event.player)
+            }
         }
     }
     
@@ -275,15 +294,15 @@ open class Cable(
         if (player.isSneaking) {
             Bukkit.getPluginManager().callEvent(BlockBreakEvent(location.block, player))
         } else {
-            NetworkManager.runAsync {
+            NetworkManager.queueAsync {
                 if (connectedNodes.values.any { node -> node.containsKey(face) }) {
-                    it.handleBridgeRemove(this, false)
+                    it.removeBridge(this, false)
                     bridgeFaces.remove(face)
-                    it.handleBridgeAdd(this)
+                    it.addBridge(this)
                 } else if (!bridgeFaces.contains(face)) {
-                    it.handleBridgeRemove(this, false)
+                    it.removeBridge(this, false)
                     bridgeFaces.add(face)
-                    it.handleBridgeAdd(this)
+                    it.addBridge(this)
                 }
             }
         }
@@ -316,7 +335,6 @@ class BasicCable(
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : Cable(
-    0,
     BASIC_ENERGY_RATE,
     BASIC_ITEM_RATE,
     BASIC_FLUID_RATE,
@@ -334,7 +352,6 @@ class AdvancedCable(
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : Cable(
-    1,
     ADVANCED_ENERGY_RATE,
     ADVANCED_ITEM_RATE,
     ADVANCED_FLUID_RATE,
@@ -352,7 +369,6 @@ class EliteCable(
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : Cable(
-    2,
     ELITE_ENERGY_RATE,
     ELITE_ITEM_RATE,
     ELITE_FLUID_RATE,
@@ -370,7 +386,6 @@ class UltimateCable(
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : Cable(
-    3,
     ULTIMATE_ENERGY_RATE,
     ULTIMATE_ITEM_RATE,
     ULTIMATE_FLUID_RATE,
@@ -388,7 +403,6 @@ class CreativeCable(
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : Cable(
-    4,
     Long.MAX_VALUE,
     Int.MAX_VALUE,
     Long.MAX_VALUE,

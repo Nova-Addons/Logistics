@@ -8,11 +8,14 @@ import net.md_5.bungee.api.chat.TranslatableComponent
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
 import xyz.xenondevs.nova.material.CoreGUIMaterial
+import xyz.xenondevs.nova.tileentity.network.NetworkEndPoint
+import xyz.xenondevs.nova.tileentity.network.NetworkManager
 import xyz.xenondevs.nova.tileentity.network.fluid.holder.FluidHolder
 import xyz.xenondevs.nova.tileentity.network.item.holder.ItemHolder
 import xyz.xenondevs.nova.ui.item.ClickyTabItem
 
 class CableConfigGUI(
+    val endPoint: NetworkEndPoint,
     val itemHolder: ItemHolder?,
     val fluidHolder: FluidHolder?,
     private val face: BlockFace
@@ -67,8 +70,14 @@ class CableConfigGUI(
     }
     
     private fun writeChanges() {
-        itemConfigGUI?.writeChanges()
-        fluidConfigGUI?.writeChanges()
+        NetworkManager.queueAsync {
+            it.removeEndPoint(endPoint, false)
+    
+            itemConfigGUI?.writeChanges()
+            fluidConfigGUI?.writeChanges()
+            
+            it.addEndPoint(endPoint, false).thenRun { endPoint.updateNearbyBridges() }
+        }
     }
     
 }

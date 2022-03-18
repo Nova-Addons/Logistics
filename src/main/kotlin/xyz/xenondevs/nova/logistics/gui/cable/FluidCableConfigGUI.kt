@@ -40,7 +40,7 @@ class FluidCableConfigGUI(
     }
     
     override fun updateValues(updateButtons: Boolean) {
-        NetworkManager.runNow { // TODO: runSync / runAsync ?
+        NetworkManager.execute { // TODO: queueSync / queueAsync ?
             val allowedConnections = fluidHolder.allowedConnectionTypes[fluidHolder.containerConfig[face]]!!
             allowsExtract = allowedConnections.extract
             allowsInsert = allowedConnections.insert
@@ -56,19 +56,10 @@ class FluidCableConfigGUI(
     }
     
     override fun writeChanges() {
-        NetworkManager.runAsync {
-            if (fluidHolder.endPoint.networks.isNotEmpty()) {
-                it.handleEndPointRemove(fluidHolder.endPoint, true)
-                
-                fluidHolder.insertPriorities[face] = insertPriority
-                fluidHolder.extractPriorities[face] = extractPriority
-                fluidHolder.channels[face] = channel
-                fluidHolder.connectionConfig[face] = NetworkConnectionType.of(insertState, extractState)
-                
-                it.handleEndPointAdd(fluidHolder.endPoint, false)
-                fluidHolder.endPoint.updateNearbyBridges()
-            }
-        }
+        fluidHolder.insertPriorities[face] = insertPriority
+        fluidHolder.extractPriorities[face] = extractPriority
+        fluidHolder.channels[face] = channel
+        fluidHolder.connectionConfig[face] = NetworkConnectionType.of(insertState, extractState)
     }
     
 }
