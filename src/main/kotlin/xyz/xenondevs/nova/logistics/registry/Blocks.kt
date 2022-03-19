@@ -9,11 +9,11 @@ import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerTileEntity
 
 object Blocks {
     
-    val BASIC_CABLE = registerTileEntity(LOGISTICS, "basic_cable", ::BasicCable, STRUCTURE_VOID, isDirectional = false)
-    val ADVANCED_CABLE = registerTileEntity(LOGISTICS, "advanced_cable", ::AdvancedCable, STRUCTURE_VOID, isDirectional = false)
-    val ELITE_CABLE = registerTileEntity(LOGISTICS, "elite_cable", ::EliteCable, STRUCTURE_VOID, isDirectional = false)
-    val ULTIMATE_CABLE = registerTileEntity(LOGISTICS, "ultimate_cable", ::UltimateCable, STRUCTURE_VOID, isDirectional = false)
-    val CREATIVE_CABLE = registerTileEntity(LOGISTICS, "creative_cable", ::CreativeCable, STRUCTURE_VOID, isDirectional = false)
+    val BASIC_CABLE = registerTileEntity(LOGISTICS, "basic_cable", ::BasicCable, STRUCTURE_VOID, isInteractable = false, isDirectional = false)
+    val ADVANCED_CABLE = registerTileEntity(LOGISTICS, "advanced_cable", ::AdvancedCable, STRUCTURE_VOID, isInteractable = false, isDirectional = false)
+    val ELITE_CABLE = registerTileEntity(LOGISTICS, "elite_cable", ::EliteCable, STRUCTURE_VOID, isInteractable = false, isDirectional = false)
+    val ULTIMATE_CABLE = registerTileEntity(LOGISTICS, "ultimate_cable", ::UltimateCable, STRUCTURE_VOID, isInteractable = false, isDirectional = false)
+    val CREATIVE_CABLE = registerTileEntity(LOGISTICS, "creative_cable", ::CreativeCable, STRUCTURE_VOID, isInteractable = false, isDirectional = false)
     
     val BASIC_POWER_CELL = registerEnergyTileEntity(LOGISTICS, "basic_power_cell", ::BasicPowerCell, IRON_BLOCK)
     val ADVANCED_POWER_CELL = registerEnergyTileEntity(LOGISTICS, "advanced_power_cell", ::AdvancedPowerCell, IRON_BLOCK)
