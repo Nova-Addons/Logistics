@@ -9,6 +9,7 @@ import de.studiocode.invui.virtualinventory.event.ItemUpdateEvent
 import org.bukkit.entity.Item
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.serialization.cbf.element.CompoundElement
+import xyz.xenondevs.nova.integration.protection.ProtectionManager
 import xyz.xenondevs.nova.logistics.item.getLogisticsItemFilterConfig
 import xyz.xenondevs.nova.logistics.item.isItemFilter
 import xyz.xenondevs.nova.logistics.registry.Blocks.VACUUM_CHEST
@@ -121,6 +122,7 @@ class VacuumChest(
                 if (it is Item
                     && it.location in region
                     && filter?.allowsItem(it.itemStack) != false
+                    && ProtectionManager.canInteractWithEntity(this, it, null).get()
                 ) {
                     items += it
                     it.velocity = location.clone().subtract(it.location).toVector()
