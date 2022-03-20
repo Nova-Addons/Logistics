@@ -69,14 +69,14 @@
         }
     },
     "tank_water_levels": {
-        "block_type": "translucent",
-        "block": {
+        "item_type": "translucent",
+        "item": {
             "block/fluid_levels/tank/water/%s": [0, 99]
         }
     },
     "tank_lava_levels": {
-        "block_type": "translucent",
-        "block": {
+        "item_type": "translucent",
+        "item": {
             "block/fluid_levels/tank/lava/%s": [0, 99]
         }
     }

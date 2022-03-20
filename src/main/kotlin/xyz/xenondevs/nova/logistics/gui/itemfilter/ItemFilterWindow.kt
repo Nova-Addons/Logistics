@@ -17,14 +17,14 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.nova.logistics.item.isItemFilter
 import xyz.xenondevs.nova.logistics.registry.GUIMaterials
-import xyz.xenondevs.nova.material.NovaMaterial
+import xyz.xenondevs.nova.material.ItemNovaMaterial
 import xyz.xenondevs.nova.tileentity.network.item.getOrCreateFilterConfig
 import xyz.xenondevs.nova.tileentity.network.item.saveFilterConfig
 import xyz.xenondevs.nova.util.data.setLocalizedName
 import xyz.xenondevs.nova.util.novaMaterial
 import kotlin.math.ceil
 
-class ItemFilterWindow(player: Player, material: NovaMaterial, size: Int, private val itemStack: ItemStack) {
+class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, private val itemStack: ItemStack) {
     
     private val itemFilter = itemStack.getOrCreateFilterConfig(size)
     private val filterInventory = object : VirtualInventory(null, itemFilter.items.size, itemFilter.items, IntArray(itemFilter.items.size) { 1 }) {

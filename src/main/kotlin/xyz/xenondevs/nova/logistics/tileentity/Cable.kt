@@ -14,7 +14,7 @@ import xyz.xenondevs.nova.data.serialization.cbf.element.CompoundElement
 import xyz.xenondevs.nova.logistics.gui.cable.CableConfigGUI
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.material.CoreItems
-import xyz.xenondevs.nova.material.NovaMaterial
+import xyz.xenondevs.nova.material.TileEntityNovaMaterial
 import xyz.xenondevs.nova.tileentity.Model
 import xyz.xenondevs.nova.tileentity.TileEntity
 import xyz.xenondevs.nova.tileentity.network.*
@@ -46,7 +46,7 @@ open class Cable(
     override val fluidTransferRate: Long,
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : TileEntity(uuid, data, material, ownerUUID, armorStand), EnergyBridge, ItemBridge, FluidBridge {
@@ -331,7 +331,7 @@ private val ULTIMATE_FLUID_RATE = NovaConfig[Blocks.ULTIMATE_CABLE].getLong("flu
 class BasicCable(
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : Cable(
@@ -348,7 +348,7 @@ class BasicCable(
 class AdvancedCable(
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : Cable(
@@ -365,7 +365,7 @@ class AdvancedCable(
 class EliteCable(
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : Cable(
@@ -382,7 +382,7 @@ class EliteCable(
 class UltimateCable(
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : Cable(
@@ -399,7 +399,7 @@ class UltimateCable(
 class CreativeCable(
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : Cable(

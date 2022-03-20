@@ -6,7 +6,7 @@ import de.studiocode.invui.gui.builder.guitype.GUIType
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.serialization.cbf.element.CompoundElement
 import xyz.xenondevs.nova.logistics.registry.Blocks
-import xyz.xenondevs.nova.material.NovaMaterial
+import xyz.xenondevs.nova.material.TileEntityNovaMaterial
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.fluid.FluidType
@@ -25,7 +25,7 @@ open class FluidTank(
     capacity: Long,
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand
 ) : NetworkedTileEntity(uuid, data, material, ownerUUID, armorStand) {
@@ -55,7 +55,7 @@ open class FluidTank(
                 FluidType.LAVA -> Blocks.TANK_LAVA_LEVELS
                 FluidType.WATER -> Blocks.TANK_WATER_LEVELS
                 else -> throw IllegalStateException()
-            }.block!!.createItemStack(state)
+            }.item.createItemStack(state)
         } else null
         
         val shouldGlow = fluidContainer.type == FluidType.LAVA
@@ -104,7 +104,7 @@ private val ULTIMATE_CAPACITY = NovaConfig[Blocks.ULTIMATE_FLUID_TANK].getLong("
 class BasicFluidTank(
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand
 ) : FluidTank(BASIC_CAPACITY, uuid, data, material, ownerUUID, armorStand)
@@ -112,7 +112,7 @@ class BasicFluidTank(
 class AdvancedFluidTank(
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand
 ) : FluidTank(ADVANCED_CAPACITY, uuid, data, material, ownerUUID, armorStand)
@@ -120,7 +120,7 @@ class AdvancedFluidTank(
 class EliteFluidTank(
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand
 ) : FluidTank(ELITE_CAPACITY, uuid, data, material, ownerUUID, armorStand)
@@ -128,7 +128,7 @@ class EliteFluidTank(
 class UltimateFluidTank(
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand
 ) : FluidTank(ULTIMATE_CAPACITY, uuid, data, material, ownerUUID, armorStand)
@@ -136,7 +136,7 @@ class UltimateFluidTank(
 class CreativeFluidTank(
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand
 ) : FluidTank(Long.MAX_VALUE, uuid, data, material, ownerUUID, armorStand)

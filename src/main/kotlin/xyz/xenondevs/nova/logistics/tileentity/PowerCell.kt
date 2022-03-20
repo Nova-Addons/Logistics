@@ -6,7 +6,7 @@ import de.studiocode.invui.gui.builder.guitype.GUIType
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.serialization.cbf.element.CompoundElement
 import xyz.xenondevs.nova.logistics.registry.Blocks
-import xyz.xenondevs.nova.material.NovaMaterial
+import xyz.xenondevs.nova.material.TileEntityNovaMaterial
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
 import xyz.xenondevs.nova.tileentity.network.energy.EnergyConnectionType.*
 import xyz.xenondevs.nova.tileentity.network.energy.holder.BufferEnergyHolder
@@ -21,7 +21,7 @@ open class PowerCell(
     val maxEnergy: Long,
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : NetworkedTileEntity(uuid, data, material, ownerUUID, armorStand) {
@@ -63,7 +63,7 @@ private val ULTIMATE_CAPACITY = NovaConfig[Blocks.ULTIMATE_POWER_CELL].getLong("
 class BasicPowerCell(
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : PowerCell(
@@ -79,7 +79,7 @@ class BasicPowerCell(
 class AdvancedPowerCell(
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : PowerCell(
@@ -95,7 +95,7 @@ class AdvancedPowerCell(
 class ElitePowerCell(
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : PowerCell(
@@ -111,7 +111,7 @@ class ElitePowerCell(
 class UltimatePowerCell(
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : PowerCell(
@@ -127,7 +127,7 @@ class UltimatePowerCell(
 class CreativePowerCell(
     uuid: UUID,
     data: CompoundElement,
-    material: NovaMaterial,
+    material: TileEntityNovaMaterial,
     ownerUUID: UUID,
     armorStand: FakeArmorStand,
 ) : PowerCell(
