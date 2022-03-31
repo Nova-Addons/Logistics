@@ -4,9 +4,8 @@ import de.studiocode.invui.gui.GUI
 import de.studiocode.invui.gui.SlotElement.VISlotElement
 import de.studiocode.invui.gui.builder.GUIBuilder
 import de.studiocode.invui.gui.builder.guitype.GUIType
-import xyz.xenondevs.nova.data.serialization.cbf.element.CompoundElement
+import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.GUIMaterials
-import xyz.xenondevs.nova.material.TileEntityNovaMaterial
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.fluid.FluidType
@@ -18,18 +17,11 @@ import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
 import xyz.xenondevs.nova.util.CUBE_FACES
 import xyz.xenondevs.nova.util.VoidingVirtualInventory
 import xyz.xenondevs.nova.util.associateWithToEnumMap
-import xyz.xenondevs.nova.world.armorstand.FakeArmorStand
 import java.util.*
 
 private val ALL_INSERT_CONFIG = { CUBE_FACES.associateWithToEnumMap { NetworkConnectionType.INSERT } }
 
-class TrashCan(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand
-) : NetworkedTileEntity(uuid, data, material, ownerUUID, armorStand) {
+class TrashCan(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState) {
     
     private val inventory = VoidingVirtualInventory(1)
     override val gui: Lazy<TileEntityGUI> = lazy(::TrashCanGUI)

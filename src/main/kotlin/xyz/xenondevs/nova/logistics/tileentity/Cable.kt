@@ -7,14 +7,12 @@ import org.bukkit.block.BlockFace
 import org.bukkit.block.data.Orientable
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.player.PlayerInteractEvent
-import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.nova.NOVA
 import xyz.xenondevs.nova.data.config.NovaConfig
-import xyz.xenondevs.nova.data.serialization.cbf.element.CompoundElement
+import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.gui.cable.CableConfigGUI
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.material.CoreItems
-import xyz.xenondevs.nova.material.TileEntityNovaMaterial
 import xyz.xenondevs.nova.tileentity.Model
 import xyz.xenondevs.nova.tileentity.TileEntity
 import xyz.xenondevs.nova.tileentity.network.*
@@ -26,8 +24,7 @@ import xyz.xenondevs.nova.tileentity.network.fluid.holder.FluidHolder
 import xyz.xenondevs.nova.tileentity.network.item.ItemBridge
 import xyz.xenondevs.nova.tileentity.network.item.holder.ItemHolder
 import xyz.xenondevs.nova.util.*
-import xyz.xenondevs.nova.world.armorstand.FakeArmorStand
-import xyz.xenondevs.nova.world.hitbox.Hitbox
+import xyz.xenondevs.nova.world.block.hitbox.Hitbox
 import xyz.xenondevs.nova.world.point.Point3D
 import java.util.*
 
@@ -44,18 +41,15 @@ open class Cable(
     override val energyTransferRate: Long,
     override val itemTransferRate: Int,
     override val fluidTransferRate: Long,
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand,
-) : TileEntity(uuid, data, material, ownerUUID, armorStand), EnergyBridge, ItemBridge, FluidBridge {
+    blockState: NovaTileEntityState
+) : TileEntity(blockState), EnergyBridge, ItemBridge, FluidBridge {
     
-    override val typeId = material.id
     override val supportedNetworkTypes = SUPPORTED_NETWORK_TYPES
     override val networks = EnumMap<NetworkType, Network>(NetworkType::class.java)
     override val bridgeFaces = retrieveEnumCollectionOrNull("bridgeFaces", HashSet()) ?: CUBE_FACES.toHashSet()
     override val connectedNodes: MutableMap<NetworkType, MutableMap<BlockFace, NetworkNode>> = emptyEnumMap()
+    override val typeId: String
+        get() = material.id
     
     override val gui: Lazy<TileEntityGUI>? = null
     private val configGUIs = emptyEnumMap<BlockFace, CableConfigGUI>()
@@ -63,7 +57,7 @@ open class Cable(
     private val hitboxes = ArrayList<Hitbox>()
     private val multiModel = createMultiModel()
     private var modelId = retrieveData("modelId") { 0 }
-   private var attachments: ArrayList<Pair<Int, Int>> = retrieveCollectionOrNull("attachments", ArrayList()) ?: ArrayList()
+    private var attachments: ArrayList<Pair<Int, Int>> = retrieveCollectionOrNull("attachments", ArrayList()) ?: ArrayList()
     
     init {
         if (attachments.isNotEmpty()) {
@@ -71,6 +65,9 @@ open class Cable(
             createAttachmentHitboxes()
         }
         createCableHitboxes()
+        
+        if (modelId != 0)
+            blockState.modelProvider.update(modelId)
     }
     
     override fun saveData() {
@@ -97,7 +94,7 @@ open class Cable(
         if (isValid && NOVA.isEnabled) {
             calculateCableModelId()
             calculateAttachmentModelIds()
-            updateHeadStack()
+            blockState.modelProvider.update(modelId)
             updateAttachmentModels()
             
             configGUIs.forEach { (face, gui) ->
@@ -126,11 +123,6 @@ open class Cable(
         if (first) NetworkManager.queueAsync { it.addBridge(this) }
     }
     
-    override fun handleHitboxPlaced() {
-        super.handleHitboxPlaced()
-        updateBlockHitbox()
-    }
-    
     override fun handleRemoved(unload: Boolean) {
         super.handleRemoved(unload)
         hitboxes.forEach { it.remove() }
@@ -138,10 +130,6 @@ open class Cable(
             NetworkManager.queueAsync { it.removeBridge(this) }
             configGUIs.values.forEach(CableConfigGUI::closeForAllViewers)
         }
-    }
-    
-    override fun getHeadStack(): ItemStack {
-        return material.block!!.createItemStack(modelId)
     }
     
     private fun calculateCableModelId() {
@@ -183,7 +171,7 @@ open class Cable(
         val models = ArrayList<Model>()
         
         attachments.forEach { (id, face) ->
-            val attachmentStack = material.block!!.createItemStack(ATTACHMENTS[id])
+            val attachmentStack = material.block.createItemStack(ATTACHMENTS[id])
             models += Model(attachmentStack, location.clone().center().apply { yaw = BlockFace.values()[face].rotationValues.second * 90f })
         }
         multiModel.replaceModels(models)
@@ -328,87 +316,37 @@ private val ULTIMATE_ENERGY_RATE = NovaConfig[Blocks.ULTIMATE_CABLE].getLong("en
 private val ULTIMATE_ITEM_RATE = NovaConfig[Blocks.ULTIMATE_CABLE].getInt("item_transfer_rate")!!
 private val ULTIMATE_FLUID_RATE = NovaConfig[Blocks.ULTIMATE_CABLE].getLong("fluid_transfer_rate")!!
 
-class BasicCable(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand,
-) : Cable(
+class BasicCable(blockState: NovaTileEntityState) : Cable(
     BASIC_ENERGY_RATE,
     BASIC_ITEM_RATE,
     BASIC_FLUID_RATE,
-    uuid,
-    data,
-    material,
-    ownerUUID,
-    armorStand,
+    blockState
 )
 
-class AdvancedCable(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand,
-) : Cable(
+class AdvancedCable(blockState: NovaTileEntityState) : Cable(
     ADVANCED_ENERGY_RATE,
     ADVANCED_ITEM_RATE,
     ADVANCED_FLUID_RATE,
-    uuid,
-    data,
-    material,
-    ownerUUID,
-    armorStand,
+    blockState
 )
 
-class EliteCable(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand,
-) : Cable(
+class EliteCable(blockState: NovaTileEntityState) : Cable(
     ELITE_ENERGY_RATE,
     ELITE_ITEM_RATE,
     ELITE_FLUID_RATE,
-    uuid,
-    data,
-    material,
-    ownerUUID,
-    armorStand,
+    blockState
 )
 
-class UltimateCable(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand,
-) : Cable(
+class UltimateCable(blockState: NovaTileEntityState) : Cable(
     ULTIMATE_ENERGY_RATE,
     ULTIMATE_ITEM_RATE,
     ULTIMATE_FLUID_RATE,
-    uuid,
-    data,
-    material,
-    ownerUUID,
-    armorStand,
+    blockState
 )
 
-class CreativeCable(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand,
-) : Cable(
+class CreativeCable(blockState: NovaTileEntityState) : Cable(
     Long.MAX_VALUE,
     Int.MAX_VALUE,
     Long.MAX_VALUE,
-    uuid,
-    data,
-    material,
-    ownerUUID,
-    armorStand,
+    blockState
 )

@@ -4,28 +4,22 @@ import de.studiocode.invui.gui.GUI
 import de.studiocode.invui.gui.builder.GUIBuilder
 import de.studiocode.invui.gui.builder.guitype.GUIType
 import xyz.xenondevs.nova.data.config.NovaConfig
-import xyz.xenondevs.nova.data.serialization.cbf.element.CompoundElement
+import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks
-import xyz.xenondevs.nova.material.TileEntityNovaMaterial
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
 import xyz.xenondevs.nova.tileentity.network.energy.EnergyConnectionType.*
 import xyz.xenondevs.nova.tileentity.network.energy.holder.BufferEnergyHolder
 import xyz.xenondevs.nova.ui.EnergyBar
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
-import xyz.xenondevs.nova.world.armorstand.FakeArmorStand
-import java.util.*
 
 open class PowerCell(
     creative: Boolean,
-    val maxEnergy: Long,
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand,
-) : NetworkedTileEntity(uuid, data, material, ownerUUID, armorStand) {
+    maxEnergy: Long,
+    blockState: NovaTileEntityState
+) : NetworkedTileEntity(blockState) {
     
+    @Suppress("LeakingThis")
     final override val energyHolder = BufferEnergyHolder(this, maxEnergy, creative) { createEnergySideConfig(BUFFER) }
     
     override val gui = lazy { PowerCellGUI() }
@@ -60,82 +54,32 @@ private val ADVANCED_CAPACITY = NovaConfig[Blocks.ADVANCED_POWER_CELL].getLong("
 private val ELITE_CAPACITY = NovaConfig[Blocks.ELITE_POWER_CELL].getLong("capacity")!!
 private val ULTIMATE_CAPACITY = NovaConfig[Blocks.ULTIMATE_POWER_CELL].getLong("capacity")!!
 
-class BasicPowerCell(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand,
-) : PowerCell(
+class BasicPowerCell(blockState: NovaTileEntityState) : PowerCell(
     false,
     BASIC_CAPACITY,
-    uuid,
-    data,
-    material,
-    ownerUUID,
-    armorStand,
+    blockState
 )
 
-class AdvancedPowerCell(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand,
-) : PowerCell(
+class AdvancedPowerCell(blockState: NovaTileEntityState) : PowerCell(
     false,
     ADVANCED_CAPACITY,
-    uuid,
-    data,
-    material,
-    ownerUUID,
-    armorStand,
+    blockState
 )
 
-class ElitePowerCell(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand,
-) : PowerCell(
+class ElitePowerCell(blockState: NovaTileEntityState): PowerCell(
     false,
     ELITE_CAPACITY,
-    uuid,
-    data,
-    material,
-    ownerUUID,
-    armorStand,
+    blockState
 )
 
-class UltimatePowerCell(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand,
-) : PowerCell(
+class UltimatePowerCell(blockState: NovaTileEntityState) : PowerCell(
     false,
     ULTIMATE_CAPACITY,
-    uuid,
-    data,
-    material,
-    ownerUUID,
-    armorStand,
+    blockState
 )
 
-class CreativePowerCell(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand,
-) : PowerCell(
+class CreativePowerCell(blockState: NovaTileEntityState): PowerCell(
     true,
     Long.MAX_VALUE,
-    uuid,
-    data,
-    material,
-    ownerUUID,
-    armorStand,
+    blockState
 )

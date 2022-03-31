@@ -12,10 +12,9 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import xyz.xenondevs.nova.data.config.NovaConfig
-import xyz.xenondevs.nova.data.serialization.cbf.element.CompoundElement
+import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.logistics.registry.Blocks.FLUID_STORAGE_UNIT
-import xyz.xenondevs.nova.material.TileEntityNovaMaterial
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.fluid.FluidType
@@ -23,22 +22,16 @@ import xyz.xenondevs.nova.tileentity.network.fluid.holder.NovaFluidHolder
 import xyz.xenondevs.nova.ui.FluidBar
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
+import xyz.xenondevs.nova.util.center
 import xyz.xenondevs.nova.world.armorstand.FakeArmorStand
-import java.util.*
 
 private val MAX_CAPACITY = NovaConfig[FLUID_STORAGE_UNIT].getLong("max_capacity")!!
 
-class FluidStorageUnit(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand
-) : NetworkedTileEntity(uuid, data, material, ownerUUID, armorStand) {
+class FluidStorageUnit(blockState: NovaTileEntityState): NetworkedTileEntity(blockState) {
     
     override val gui = lazy(::FluidStorageUnitGUI)
     private val fluidTank = getFluidContainer("fluid", setOf(FluidType.LAVA, FluidType.WATER), MAX_CAPACITY, 0, ::handleFluidUpdate)
-    private val fluidLevel = FakeArmorStand(armorStand.location) { it.isInvisible = true; it.isMarker = true }
+    private val fluidLevel = FakeArmorStand(pos.location.center()) { it.isInvisible = true; it.isMarker = true }
     override val fluidHolder = NovaFluidHolder(this, fluidTank to NetworkConnectionType.BUFFER) { createSideConfig(NetworkConnectionType.BUFFER) }
     
     init {

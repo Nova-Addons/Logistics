@@ -4,9 +4,8 @@ import de.studiocode.invui.gui.GUI
 import de.studiocode.invui.gui.builder.GUIBuilder
 import de.studiocode.invui.gui.builder.guitype.GUIType
 import xyz.xenondevs.nova.data.config.NovaConfig
-import xyz.xenondevs.nova.data.serialization.cbf.element.CompoundElement
+import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks
-import xyz.xenondevs.nova.material.TileEntityNovaMaterial
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.fluid.FluidType
@@ -14,8 +13,8 @@ import xyz.xenondevs.nova.tileentity.network.fluid.holder.NovaFluidHolder
 import xyz.xenondevs.nova.ui.FluidBar
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
+import xyz.xenondevs.nova.util.center
 import xyz.xenondevs.nova.world.armorstand.FakeArmorStand
-import java.util.*
 import kotlin.math.roundToInt
 import net.minecraft.world.entity.EquipmentSlot as NMSEquipmentSlot
 
@@ -23,20 +22,18 @@ private const val MAX_STATE = 99
 
 open class FluidTank(
     capacity: Long,
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand
-) : NetworkedTileEntity(uuid, data, material, ownerUUID, armorStand) {
+    blockState: NovaTileEntityState
+) : NetworkedTileEntity(blockState) {
     
     override val gui = lazy(::FluidTankGUI)
     
     private val fluidContainer = getFluidContainer("tank", hashSetOf(FluidType.WATER, FluidType.LAVA), capacity, 0, ::handleFluidUpdate)
     override val fluidHolder = NovaFluidHolder(this, fluidContainer to NetworkConnectionType.BUFFER) { createSideConfig(NetworkConnectionType.BUFFER) }
-    private val fluidLevel = FakeArmorStand(armorStand.location) { it.isInvisible = true; it.isMarker = true }
+    private lateinit var fluidLevel: FakeArmorStand
     
-    init {
+    override fun handleInitialized(first: Boolean) {
+        super.handleInitialized(first)
+        fluidLevel = FakeArmorStand(pos.location.center()) { it.isInvisible = true; it.isMarker = true }
         updateFluidLevel()
     }
     
@@ -101,42 +98,12 @@ private val ADVANCED_CAPACITY = NovaConfig[Blocks.ADVANCED_FLUID_TANK].getLong("
 private val ELITE_CAPACITY = NovaConfig[Blocks.ELITE_FLUID_TANK].getLong("capacity")!!
 private val ULTIMATE_CAPACITY = NovaConfig[Blocks.ULTIMATE_FLUID_TANK].getLong("capacity")!!
 
-class BasicFluidTank(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand
-) : FluidTank(BASIC_CAPACITY, uuid, data, material, ownerUUID, armorStand)
+class BasicFluidTank(blockState: NovaTileEntityState) : FluidTank(BASIC_CAPACITY, blockState)
 
-class AdvancedFluidTank(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand
-) : FluidTank(ADVANCED_CAPACITY, uuid, data, material, ownerUUID, armorStand)
+class AdvancedFluidTank(blockState: NovaTileEntityState) : FluidTank(ADVANCED_CAPACITY, blockState)
 
-class EliteFluidTank(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand
-) : FluidTank(ELITE_CAPACITY, uuid, data, material, ownerUUID, armorStand)
+class EliteFluidTank(blockState: NovaTileEntityState) : FluidTank(ELITE_CAPACITY, blockState)
 
-class UltimateFluidTank(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand
-) : FluidTank(ULTIMATE_CAPACITY, uuid, data, material, ownerUUID, armorStand)
+class UltimateFluidTank(blockState: NovaTileEntityState) : FluidTank(ULTIMATE_CAPACITY, blockState)
 
-class CreativeFluidTank(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand
-) : FluidTank(Long.MAX_VALUE, uuid, data, material, ownerUUID, armorStand)
+class CreativeFluidTank(blockState: NovaTileEntityState) : FluidTank(Long.MAX_VALUE, blockState)

@@ -9,12 +9,12 @@ import de.studiocode.invui.virtualinventory.event.ItemUpdateEvent
 import org.bukkit.entity.Item
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.serialization.cbf.element.CompoundElement
+import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.integration.protection.ProtectionManager
 import xyz.xenondevs.nova.logistics.item.getLogisticsItemFilterConfig
 import xyz.xenondevs.nova.logistics.item.isItemFilter
 import xyz.xenondevs.nova.logistics.registry.Blocks.VACUUM_CHEST
 import xyz.xenondevs.nova.logistics.registry.GUIMaterials
-import xyz.xenondevs.nova.material.TileEntityNovaMaterial
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
 import xyz.xenondevs.nova.tileentity.SELF_UPDATE_REASON
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
@@ -31,23 +31,15 @@ import xyz.xenondevs.nova.ui.item.DisplayNumberItem
 import xyz.xenondevs.nova.ui.item.RemoveNumberItem
 import xyz.xenondevs.nova.ui.item.VisualizeRegionItem
 import xyz.xenondevs.nova.util.novaMaterial
-import xyz.xenondevs.nova.world.armorstand.FakeArmorStand
 import xyz.xenondevs.nova.world.region.Region
 import xyz.xenondevs.nova.world.region.VisualRegion
-import java.util.*
 import de.studiocode.invui.item.Item as UIItem
 
 private val MIN_RANGE = NovaConfig[VACUUM_CHEST].getInt("range.min")!!
 private val MAX_RANGE = NovaConfig[VACUUM_CHEST].getInt("range.max")!!
 private val DEFAULT_RANGE = NovaConfig[VACUUM_CHEST].getInt("range.default")!!
 
-class VacuumChest(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand,
-) : NetworkedTileEntity(uuid, data, material, ownerUUID, armorStand), Upgradable {
+class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState), Upgradable {
     
     private val inventory: VirtualInventory = getInventory("inventory", 9) {}
     private val filterInventory: VirtualInventory = VirtualInventory(null, 1, arrayOfNulls(1), intArrayOf(1)).apply {

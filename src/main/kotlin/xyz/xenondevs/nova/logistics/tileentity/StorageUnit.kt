@@ -18,9 +18,8 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.nova.data.config.NovaConfig
-import xyz.xenondevs.nova.data.serialization.cbf.element.CompoundElement
+import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks.STORAGE_UNIT
-import xyz.xenondevs.nova.material.TileEntityNovaMaterial
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
 import xyz.xenondevs.nova.tileentity.SELF_UPDATE_REASON
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
@@ -30,19 +29,11 @@ import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
 import xyz.xenondevs.nova.util.runTaskLater
 import xyz.xenondevs.nova.util.takeUnlessAir
-import xyz.xenondevs.nova.world.armorstand.FakeArmorStand
-import java.util.*
 import kotlin.math.min
 
 private val MAX_ITEMS = NovaConfig[STORAGE_UNIT].getInt("max_items")!!
 
-class StorageUnit(
-    uuid: UUID,
-    data: CompoundElement,
-    material: TileEntityNovaMaterial,
-    ownerUUID: UUID,
-    armorStand: FakeArmorStand,
-) : NetworkedTileEntity(uuid, data, material, ownerUUID, armorStand) {
+class StorageUnit(blockState: NovaTileEntityState): NetworkedTileEntity(blockState) {
     
     override val gui = lazy { StorageUnitGUI() }
     private val inventory = StorageUnitInventory(retrieveOrNull("type"), retrieveOrNull("amount") ?: 0)
