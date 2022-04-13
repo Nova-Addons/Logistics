@@ -14,7 +14,7 @@ import xyz.xenondevs.nova.material.ItemNovaMaterial
 import xyz.xenondevs.nova.tileentity.network.item.ItemFilter
 import xyz.xenondevs.nova.tileentity.network.item.getOrCreateFilterConfig
 import xyz.xenondevs.nova.tileentity.network.item.saveFilterConfig
-import xyz.xenondevs.nova.util.novaMaterial
+import xyz.xenondevs.nova.util.item.novaMaterial
 
 private val FILTER_MATERIALS = hashMapOf(
     BasicItemFilter.size to Items.BASIC_ITEM_FILTER,

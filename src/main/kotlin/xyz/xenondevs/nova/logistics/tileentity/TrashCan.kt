@@ -41,7 +41,6 @@ class TrashCan(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState
         
         private val sideConfigGUI = SideConfigGUI(
             this@TrashCan,
-            null,
             listOf(itemHolder.getNetworkedInventory(inventory) to "inventory.nova.default"),
             listOf(VoidingFluidContainer to "container.nova.fluid_tank"),
             ::openWindow

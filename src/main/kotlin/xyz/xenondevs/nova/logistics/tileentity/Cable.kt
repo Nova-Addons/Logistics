@@ -24,6 +24,7 @@ import xyz.xenondevs.nova.tileentity.network.fluid.holder.FluidHolder
 import xyz.xenondevs.nova.tileentity.network.item.ItemBridge
 import xyz.xenondevs.nova.tileentity.network.item.holder.ItemHolder
 import xyz.xenondevs.nova.util.*
+import xyz.xenondevs.nova.util.item.novaMaterial
 import xyz.xenondevs.nova.world.block.hitbox.Hitbox
 import xyz.xenondevs.nova.world.point.Point3D
 import java.util.*

@@ -27,8 +27,8 @@ import xyz.xenondevs.nova.tileentity.network.item.holder.NovaItemHolder
 import xyz.xenondevs.nova.tileentity.network.item.inventory.NetworkedInventory
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
+import xyz.xenondevs.nova.util.item.takeUnlessAir
 import xyz.xenondevs.nova.util.runTaskLater
-import xyz.xenondevs.nova.util.takeUnlessAir
 import kotlin.math.min
 
 private val MAX_ITEMS = NovaConfig[STORAGE_UNIT].getInt("max_items")!!
@@ -88,7 +88,6 @@ class StorageUnit(blockState: NovaTileEntityState): NetworkedTileEntity(blockSta
         
         private val sideConfigGUI = SideConfigGUI(
             this@StorageUnit,
-            null,
             listOf(inventory to "inventory.nova.default"),
             ::openWindow
         )

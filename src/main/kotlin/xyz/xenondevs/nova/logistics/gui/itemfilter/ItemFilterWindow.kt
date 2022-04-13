@@ -21,7 +21,7 @@ import xyz.xenondevs.nova.material.ItemNovaMaterial
 import xyz.xenondevs.nova.tileentity.network.item.getOrCreateFilterConfig
 import xyz.xenondevs.nova.tileentity.network.item.saveFilterConfig
 import xyz.xenondevs.nova.util.data.setLocalizedName
-import xyz.xenondevs.nova.util.novaMaterial
+import xyz.xenondevs.nova.util.item.novaMaterial
 import kotlin.math.ceil
 
 class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, private val itemStack: ItemStack) {

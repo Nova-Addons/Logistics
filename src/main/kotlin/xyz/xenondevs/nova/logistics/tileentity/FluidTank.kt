@@ -20,6 +20,7 @@ import net.minecraft.world.entity.EquipmentSlot as NMSEquipmentSlot
 
 private const val MAX_STATE = 99
 
+@Suppress("LeakingThis")
 open class FluidTank(
     capacity: Long,
     blockState: NovaTileEntityState
@@ -74,7 +75,7 @@ open class FluidTank(
         
         private val sideConfigGUI = SideConfigGUI(
             this@FluidTank,
-            fluidContainers = listOf(fluidContainer to "container.nova.fluid_tank"),
+            fluidContainerNames = listOf(fluidContainer to "container.nova.fluid_tank"),
             openPrevious = ::openWindow
         )
         

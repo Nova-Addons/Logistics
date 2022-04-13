@@ -17,7 +17,7 @@ import xyz.xenondevs.nova.tileentity.network.item.holder.ItemHolder
 import xyz.xenondevs.nova.ui.item.AddNumberItem
 import xyz.xenondevs.nova.ui.item.DisplayNumberItem
 import xyz.xenondevs.nova.ui.item.RemoveNumberItem
-import xyz.xenondevs.nova.util.novaMaterial
+import xyz.xenondevs.nova.util.item.novaMaterial
 import xyz.xenondevs.nova.util.putOrRemove
 
 class ItemCableConfigGUI(
@@ -61,8 +61,8 @@ class ItemCableConfigGUI(
             
             insertPriority = itemHolder.insertPriorities[face]!!
             extractPriority = itemHolder.extractPriorities[face]!!
-            insertState = itemHolder.itemConfig[face]!!.insert
-            extractState = itemHolder.itemConfig[face]!!.extract
+            insertState = itemHolder.connectionConfig[face]!!.insert
+            extractState = itemHolder.connectionConfig[face]!!.extract
             channel = itemHolder.channels[face]!!
             
             insertFilterInventory.setItemStackSilently(0, itemHolder.insertFilters[face]?.createFilterItem())
@@ -76,7 +76,7 @@ class ItemCableConfigGUI(
         itemHolder.insertPriorities[face] = insertPriority
         itemHolder.extractPriorities[face] = extractPriority
         itemHolder.channels[face] = channel
-        itemHolder.itemConfig[face] = NetworkConnectionType.of(insertState, extractState)
+        itemHolder.connectionConfig[face] = NetworkConnectionType.of(insertState, extractState)
         itemHolder.insertFilters.putOrRemove(face, insertFilterInventory.getUnsafeItemStack(0)?.getLogisticsItemFilterConfig())
         itemHolder.extractFilters.putOrRemove(face, extractFilterInventory.getUnsafeItemStack(0)?.getLogisticsItemFilterConfig())
     }

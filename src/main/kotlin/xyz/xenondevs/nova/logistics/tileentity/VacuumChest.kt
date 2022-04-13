@@ -30,7 +30,7 @@ import xyz.xenondevs.nova.ui.item.AddNumberItem
 import xyz.xenondevs.nova.ui.item.DisplayNumberItem
 import xyz.xenondevs.nova.ui.item.RemoveNumberItem
 import xyz.xenondevs.nova.ui.item.VisualizeRegionItem
-import xyz.xenondevs.nova.util.novaMaterial
+import xyz.xenondevs.nova.util.item.novaMaterial
 import xyz.xenondevs.nova.world.region.Region
 import xyz.xenondevs.nova.world.region.VisualRegion
 import de.studiocode.invui.item.Item as UIItem
@@ -134,7 +134,6 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
         
         private val sideConfigGUI = SideConfigGUI(
             this@VacuumChest,
-            null,
             listOf(itemHolder.getNetworkedInventory(inventory) to "inventory.nova.default")
         ) { openWindow(it) }
         

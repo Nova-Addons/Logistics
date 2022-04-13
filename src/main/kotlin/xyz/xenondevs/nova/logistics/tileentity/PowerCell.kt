@@ -7,32 +7,28 @@ import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
-import xyz.xenondevs.nova.tileentity.network.energy.EnergyConnectionType.*
+import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType.BUFFER
 import xyz.xenondevs.nova.tileentity.network.energy.holder.BufferEnergyHolder
 import xyz.xenondevs.nova.ui.EnergyBar
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
 
+@Suppress("LeakingThis")
 open class PowerCell(
     creative: Boolean,
     maxEnergy: Long,
     blockState: NovaTileEntityState
 ) : NetworkedTileEntity(blockState) {
     
-    @Suppress("LeakingThis")
-    final override val energyHolder = BufferEnergyHolder(this, maxEnergy, creative) { createEnergySideConfig(BUFFER) }
+    final override val energyHolder = BufferEnergyHolder(this, maxEnergy, creative) { createSideConfig(BUFFER) }
     
-    override val gui = lazy { PowerCellGUI() }
+    override val gui = lazy(::PowerCellGUI)
     
     override fun handleTick() = Unit
     
     inner class PowerCellGUI : TileEntityGUI() {
         
-        private val sideConfigGUI = SideConfigGUI(
-            this@PowerCell,
-            listOf(NONE, PROVIDE, CONSUME, BUFFER),
-            null
-        ) { openWindow(it) }
+        private val sideConfigGUI = SideConfigGUI(this@PowerCell, ::openWindow)
         
         override val gui: GUI = GUIBuilder(GUIType.NORMAL, 9, 5)
             .setStructure("" +
@@ -66,7 +62,7 @@ class AdvancedPowerCell(blockState: NovaTileEntityState) : PowerCell(
     blockState
 )
 
-class ElitePowerCell(blockState: NovaTileEntityState): PowerCell(
+class ElitePowerCell(blockState: NovaTileEntityState) : PowerCell(
     false,
     ELITE_CAPACITY,
     blockState
@@ -78,7 +74,7 @@ class UltimatePowerCell(blockState: NovaTileEntityState) : PowerCell(
     blockState
 )
 
-class CreativePowerCell(blockState: NovaTileEntityState): PowerCell(
+class CreativePowerCell(blockState: NovaTileEntityState) : PowerCell(
     true,
     Long.MAX_VALUE,
     blockState

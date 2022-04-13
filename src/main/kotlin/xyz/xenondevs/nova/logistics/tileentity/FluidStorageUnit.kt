@@ -60,7 +60,7 @@ class FluidStorageUnit(blockState: NovaTileEntityState): NetworkedTileEntity(blo
         
         private val sideConfigGUI = SideConfigGUI(
             this@FluidStorageUnit,
-            fluidContainers = listOf(fluidTank to "container.nova.fluid_tank"),
+            fluidContainerNames = listOf(fluidTank to "container.nova.fluid_tank"),
             openPrevious = ::openWindow
         )
         
