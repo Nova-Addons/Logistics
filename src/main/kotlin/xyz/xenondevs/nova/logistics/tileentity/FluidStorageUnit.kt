@@ -31,7 +31,7 @@ class FluidStorageUnit(blockState: NovaTileEntityState): NetworkedTileEntity(blo
     
     override val gui = lazy(::FluidStorageUnitGUI)
     private val fluidTank = getFluidContainer("fluid", setOf(FluidType.LAVA, FluidType.WATER), MAX_CAPACITY, 0, ::handleFluidUpdate)
-    private val fluidLevel = FakeArmorStand(pos.location.center()) { it.isInvisible = true; it.isMarker = true }
+    private val fluidLevel = FakeArmorStand(pos.location.center()) { _, data -> data.invisible = true; data.marker = true }
     override val fluidHolder = NovaFluidHolder(this, fluidTank to NetworkConnectionType.BUFFER) { createSideConfig(NetworkConnectionType.BUFFER) }
     
     init {
@@ -44,11 +44,10 @@ class FluidStorageUnit(blockState: NovaTileEntityState): NetworkedTileEntity(blo
                 FluidType.LAVA -> Blocks.TANK_LAVA_LEVELS
                 FluidType.WATER -> Blocks.TANK_WATER_LEVELS
                 else -> throw IllegalStateException()
-            }.item.createItemStack(10)
+            }.item.createClientsideItemStack(10)
         } else null
         
-        fluidLevel.setEquipment(EquipmentSlot.HEAD, stack)
-        fluidLevel.updateEquipment()
+        fluidLevel.setEquipment(EquipmentSlot.HEAD, stack, true)
     }
     
     override fun handleRemoved(unload: Boolean) {

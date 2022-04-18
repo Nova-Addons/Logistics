@@ -172,7 +172,7 @@ open class Cable(
         val models = ArrayList<Model>()
         
         attachments.forEach { (id, face) ->
-            val attachmentStack = material.block.createItemStack(ATTACHMENTS[id])
+            val attachmentStack = material.block.createClientsideItemStack(ATTACHMENTS[id])
             models += Model(attachmentStack, location.clone().center().apply { yaw = BlockFace.values()[face].rotationValues.second * 90f })
         }
         multiModel.replaceModels(models)

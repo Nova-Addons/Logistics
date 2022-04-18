@@ -34,7 +34,7 @@ open class FluidTank(
     
     override fun handleInitialized(first: Boolean) {
         super.handleInitialized(first)
-        fluidLevel = FakeArmorStand(pos.location.center()) { it.isInvisible = true; it.isMarker = true }
+        fluidLevel = FakeArmorStand(pos.location.center()) { _, data -> data.invisible = true; data.marker = true }
         updateFluidLevel()
     }
     
@@ -53,17 +53,12 @@ open class FluidTank(
                 FluidType.LAVA -> Blocks.TANK_LAVA_LEVELS
                 FluidType.WATER -> Blocks.TANK_WATER_LEVELS
                 else -> throw IllegalStateException()
-            }.item.createItemStack(state)
+            }.item.createClientsideItemStack(state)
         } else null
         
         val shouldGlow = fluidContainer.type == FluidType.LAVA
-        if (fluidLevel.hasVisualFire != shouldGlow) {
-            fluidLevel.hasVisualFire = shouldGlow
-            fluidLevel.updateEntityData()
-        }
-        
-        fluidLevel.setEquipment(NMSEquipmentSlot.HEAD, stack)
-        fluidLevel.updateEquipment()
+        fluidLevel.updateEntityData(true) { onFire = shouldGlow }
+        fluidLevel.setEquipment(NMSEquipmentSlot.HEAD, stack, true)
     }
     
     override fun handleRemoved(unload: Boolean) {
