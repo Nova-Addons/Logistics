@@ -65,7 +65,7 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
             if (gui.isInitialized()) gui.value.updateRangeItems()
         }
     private val maxRange: Int
-        get() = MAX_RANGE + upgradeHolder.getRangeModifier()
+        get() = MAX_RANGE + upgradeHolder.getValue(UpgradeType.RANGE)
     
     private var tick = 0
     
@@ -139,12 +139,12 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
         
         private val rangeItems = ArrayList<UIItem>()
         
-        override val gui: GUI = GUIBuilder(GUIType.NORMAL, 9, 5)
-            .setStructure("" +
-                "1 - - - - - - - 2" +
-                "| s u # i i i p |" +
-                "| r # # i i i d |" +
-                "| f # # i i i m |" +
+        override val gui: GUI = GUIBuilder(GUIType.NORMAL)
+            .setStructure(
+                "1 - - - - - - - 2",
+                "| s u # i i i p |",
+                "| r # # i i i d |",
+                "| f # # i i i m |",
                 "3 - - - - - - - 4")
             .addIngredient('i', inventory)
             .addIngredient('s', OpenSideConfigItem(sideConfigGUI))

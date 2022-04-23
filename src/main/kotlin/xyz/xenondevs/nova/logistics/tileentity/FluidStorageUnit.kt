@@ -27,7 +27,7 @@ import xyz.xenondevs.nova.world.armorstand.FakeArmorStand
 
 private val MAX_CAPACITY = NovaConfig[FLUID_STORAGE_UNIT].getLong("max_capacity")!!
 
-class FluidStorageUnit(blockState: NovaTileEntityState): NetworkedTileEntity(blockState) {
+class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState) {
     
     override val gui = lazy(::FluidStorageUnitGUI)
     private val fluidTank = getFluidContainer("fluid", setOf(FluidType.LAVA, FluidType.WATER), MAX_CAPACITY, 0, ::handleFluidUpdate)
@@ -63,12 +63,12 @@ class FluidStorageUnit(blockState: NovaTileEntityState): NetworkedTileEntity(blo
             openPrevious = ::openWindow
         )
         
-        override val gui: GUI = GUIBuilder(GUIType.NORMAL, 9, 5)
-            .setStructure("" +
-                "1 - - - - - - - 2" +
-                "| s # # # # # f |" +
-                "| # # # d # # f |" +
-                "| # # # # # # f |" +
+        override val gui: GUI = GUIBuilder(GUIType.NORMAL)
+            .setStructure(
+                "1 - - - - - - - 2",
+                "| s # # # # # f |",
+                "| # # # d # # f |",
+                "| # # # # # # f |",
                 "3 - - - - - - - 4")
             .addIngredient('s', OpenSideConfigItem(sideConfigGUI))
             .addIngredient('d', FluidStorageUnitDisplay())

@@ -20,11 +20,11 @@ object Blocks {
     private val TANK = BlockOptions(2.0, ToolCategory.PICKAXE, ToolLevel.STONE, true, BARRIER, SoundEffect(Sound.BLOCK_GLASS_PLACE), SoundEffect(Sound.BLOCK_GLASS_BREAK), GLASS)
     private val OTHER = BlockOptions(4.0, ToolCategory.PICKAXE, ToolLevel.STONE, true, BARRIER, SoundEffect(Sound.BLOCK_STONE_PLACE), SoundEffect(Sound.BLOCK_STONE_BREAK), COBBLESTONE)
     
-    val BASIC_CABLE = registerTileEntity(LOGISTICS, "basic_cable", CABLE, ::BasicCable, isInteractable = false, properties = emptyList())
-    val ADVANCED_CABLE = registerTileEntity(LOGISTICS, "advanced_cable", CABLE, ::AdvancedCable, isInteractable = false, properties = emptyList())
-    val ELITE_CABLE = registerTileEntity(LOGISTICS, "elite_cable", CABLE, ::EliteCable, isInteractable = false, properties = emptyList())
-    val ULTIMATE_CABLE = registerTileEntity(LOGISTICS, "ultimate_cable", CABLE, ::UltimateCable, isInteractable = false, properties = emptyList())
-    val CREATIVE_CABLE = registerTileEntity(LOGISTICS, "creative_cable", CABLE, ::CreativeCable, isInteractable = false, properties = emptyList())
+    val BASIC_CABLE = registerTileEntity(LOGISTICS, "basic_cable", CABLE, ::BasicCable, isInteractive = false, properties = emptyList())
+    val ADVANCED_CABLE = registerTileEntity(LOGISTICS, "advanced_cable", CABLE, ::AdvancedCable, isInteractive = false, properties = emptyList())
+    val ELITE_CABLE = registerTileEntity(LOGISTICS, "elite_cable", CABLE, ::EliteCable, isInteractive = false, properties = emptyList())
+    val ULTIMATE_CABLE = registerTileEntity(LOGISTICS, "ultimate_cable", CABLE, ::UltimateCable, isInteractive = false, properties = emptyList())
+    val CREATIVE_CABLE = registerTileEntity(LOGISTICS, "creative_cable", CABLE, ::CreativeCable, isInteractive = false, properties = emptyList())
     
     val BASIC_POWER_CELL = registerEnergyTileEntity(LOGISTICS, "basic_power_cell", POWER_CELL, ::BasicPowerCell)
     val ADVANCED_POWER_CELL = registerEnergyTileEntity(LOGISTICS, "advanced_power_cell", POWER_CELL, ::AdvancedPowerCell)

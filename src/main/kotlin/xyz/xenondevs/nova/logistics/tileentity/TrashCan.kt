@@ -46,10 +46,10 @@ class TrashCan(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState
             ::openWindow
         )
         
-        override val gui: GUI = GUIBuilder(GUIType.NORMAL, 9, 3)
-            .setStructure("" +
-                "1 - - - - - - - 2" +
-                "| s # # i # # # |" +
+        override val gui: GUI = GUIBuilder(GUIType.NORMAL)
+            .setStructure(
+                "1 - - - - - - - 2",
+                "| s # # i # # # |",
                 "3 - - - - - - - 4")
             .addIngredient('i', VISlotElement(inventory, 0, GUIMaterials.TRASH_CAN_PLACEHOLDER.itemProvider))
             .addIngredient('s', OpenSideConfigItem(sideConfigGUI))

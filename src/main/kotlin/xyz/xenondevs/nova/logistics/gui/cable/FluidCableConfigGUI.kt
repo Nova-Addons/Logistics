@@ -22,10 +22,10 @@ class FluidCableConfigGUI(
     init {
         updateValues(false)
         
-        gui = GUIBuilder(GUIType.NORMAL, 9, 3)
-            .setStructure("" +
-                "# p # # # # # P #" +
-                "# d # e c i # D #" +
+        gui = GUIBuilder(GUIType.NORMAL)
+            .setStructure(
+                "# p # # # # # P #",
+                "# d # e c i # D #",
                 "# m # # # # # M #")
             .addIngredient('i', InsertItem().also(updatableItems::add))
             .addIngredient('e', ExtractItem().also(updatableItems::add))

@@ -29,13 +29,14 @@ class CableConfigGUI(
     init {
         require(itemConfigGUI != null || fluidConfigGUI != null)
         
-        gui = GUIBuilder(GUIType.TAB, 9, 5)
-            .setStructure("" +
-                "# # # i # f # # #" +
-                "- - - - - - - - -" +
-                "x x x x x x x x x" +
-                "x x x x x x x x x" +
-                "x x x x x x x x x")
+        gui = GUIBuilder(GUIType.TAB)
+            .setStructure(
+                "# # # i # f # # #" ,
+                "- - - - - - - - -" ,
+                "x x x x x x x x x" ,
+                "x x x x x x x x x" ,
+                "x x x x x x x x x"
+            )
             .addIngredient('i', ClickyTabItem(0) {
                 (if (itemConfigGUI != null) {
                     if (it.currentTab == 0)

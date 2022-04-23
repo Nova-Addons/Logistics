@@ -30,12 +30,12 @@ open class PowerCell(
         
         private val sideConfigGUI = SideConfigGUI(this@PowerCell, ::openWindow)
         
-        override val gui: GUI = GUIBuilder(GUIType.NORMAL, 9, 5)
-            .setStructure("" +
-                "1 - - - - - - - 2" +
-                "| s # # e # # # |" +
-                "| # # # e # # # |" +
-                "| # # # e # # # |" +
+        override val gui: GUI = GUIBuilder(GUIType.NORMAL)
+            .setStructure(
+                "1 - - - - - - - 2",
+                "| s # # e # # # |",
+                "| # # # e # # # |",
+                "| # # # e # # # |",
                 "3 - - - - - - - 4")
             .addIngredient('s', OpenSideConfigItem(sideConfigGUI))
             .addIngredient('e', EnergyBar(3, energyHolder))

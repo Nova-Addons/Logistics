@@ -34,10 +34,10 @@ class ItemCableConfigGUI(
     init {
         updateValues(false)
         
-        gui = GUIBuilder(GUIType.NORMAL, 9, 3)
-            .setStructure("" +
-                "# p # # c # # P #" +
-                "# d # e # i # D #" +
+        gui = GUIBuilder(GUIType.NORMAL)
+            .setStructure(
+                "# p # # c # # P #",
+                "# d # e # i # D #",
                 "# m # E # I # M #")
             .addIngredient('i', InsertItem().also(updatableItems::add))
             .addIngredient('e', ExtractItem().also(updatableItems::add))

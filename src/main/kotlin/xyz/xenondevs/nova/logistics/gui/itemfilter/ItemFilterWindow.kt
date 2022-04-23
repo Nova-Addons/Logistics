@@ -51,25 +51,26 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
         val rows = ceil(itemFilter.items.size / 7.0).toInt()
         
         if (rows > 3) {
-            gui = GUIBuilder(GUIType.SCROLL_INVENTORY, 9, 6)
-                .setStructure("" +
-                    "1 - - - - - - - 2" +
-                    "| # # m # n # # |" +
-                    "| x x x x x x x u" +
-                    "| x x x x x x x |" +
-                    "| x x x x x x x d" +
-                    "3 - - - - - - - 4")
+            gui = GUIBuilder(GUIType.SCROLL_INVENTORY)
+                .setStructure(
+                    "1 - - - - - - - 2",
+                    "| # # m # n # # |",
+                    "| x x x x x x x u",
+                    "| x x x x x x x |",
+                    "| x x x x x x x d",
+                    "3 - - - - - - - 4"
+                )
                 .addIngredient('m', SwitchModeItem())
                 .addIngredient('n', SwitchNBTItem())
                 .setInventory(filterInventory)
                 .build()
         } else {
-            gui = GUIBuilder(GUIType.NORMAL, 9, 3 + rows)
-                .setStructure("" +
+            gui = GUIBuilder(GUIType.NORMAL)
+                .setStructure(9, 3 + rows,
                     "1 - - - - - - - 2" +
-                    "| # # m # n # # |" +
-                    ("| # # # # # # # |").repeat(rows) +
-                    "3 - - - - - - - 4")
+                        "| # # m # n # # |" +
+                        ("| # # # # # # # |").repeat(rows) +
+                        "3 - - - - - - - 4")
                 .addIngredient('m', SwitchModeItem())
                 .addIngredient('n', SwitchNBTItem())
                 .build()

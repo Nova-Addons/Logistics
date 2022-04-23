@@ -94,10 +94,10 @@ class StorageUnit(blockState: NovaTileEntityState): NetworkedTileEntity(blockSta
         
         private val storageUnitDisplay = StorageUnitDisplay()
         
-        override val gui: GUI = GUIBuilder(GUIType.NORMAL, 9, 3)
-            .setStructure("" +
-                "1 - - - - - - - 2" +
-                "| # i # c # o s |" +
+        override val gui: GUI = GUIBuilder(GUIType.NORMAL)
+            .setStructure(
+                "1 - - - - - - - 2",
+                "| # i # c # o s |",
                 "3 - - - - - - - 4")
             .addIngredient('c', storageUnitDisplay)
             .addIngredient('i', VISlotElement(inputInventory, 0))

@@ -50,7 +50,7 @@ open class Cable(
     override val bridgeFaces = retrieveEnumCollectionOrNull("bridgeFaces", HashSet()) ?: CUBE_FACES.toHashSet()
     override val connectedNodes: MutableMap<NetworkType, MutableMap<BlockFace, NetworkNode>> = emptyEnumMap()
     override val typeId: String
-        get() = material.id
+        get() = material.id.toString()
     
     override val gui: Lazy<TileEntityGUI>? = null
     private val configGUIs = emptyEnumMap<BlockFace, CableConfigGUI>()
