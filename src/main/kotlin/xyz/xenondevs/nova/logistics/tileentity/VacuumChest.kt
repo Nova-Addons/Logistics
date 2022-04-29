@@ -11,7 +11,7 @@ import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.serialization.cbf.element.CompoundElement
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.integration.protection.ProtectionManager
-import xyz.xenondevs.nova.logistics.item.getLogisticsItemFilterConfig
+import xyz.xenondevs.nova.logistics.item.getItemFilterConfig
 import xyz.xenondevs.nova.logistics.item.isItemFilter
 import xyz.xenondevs.nova.logistics.registry.Blocks.VACUUM_CHEST
 import xyz.xenondevs.nova.logistics.registry.GUIMaterials
@@ -126,7 +126,7 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
     private fun handleFilterInventoryUpdate(event: ItemUpdateEvent) {
         val newStack = event.newItemStack
         if (newStack?.novaMaterial.isItemFilter())
-            filter = newStack.getLogisticsItemFilterConfig()
+            filter = newStack.getItemFilterConfig()
         else if (newStack != null) event.isCancelled = true
     }
     

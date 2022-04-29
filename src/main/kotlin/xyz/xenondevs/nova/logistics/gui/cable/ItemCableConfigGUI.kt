@@ -7,7 +7,7 @@ import de.studiocode.invui.gui.builder.guitype.GUIType
 import de.studiocode.invui.virtualinventory.VirtualInventory
 import de.studiocode.invui.virtualinventory.event.ItemUpdateEvent
 import org.bukkit.block.BlockFace
-import xyz.xenondevs.nova.logistics.item.getLogisticsItemFilterConfig
+import xyz.xenondevs.nova.logistics.item.getItemFilterConfig
 import xyz.xenondevs.nova.logistics.item.isItemFilter
 import xyz.xenondevs.nova.logistics.registry.GUIMaterials
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
@@ -77,8 +77,8 @@ class ItemCableConfigGUI(
         itemHolder.extractPriorities[face] = extractPriority
         itemHolder.channels[face] = channel
         itemHolder.connectionConfig[face] = NetworkConnectionType.of(insertState, extractState)
-        itemHolder.insertFilters.putOrRemove(face, insertFilterInventory.getUnsafeItemStack(0)?.getLogisticsItemFilterConfig())
-        itemHolder.extractFilters.putOrRemove(face, extractFilterInventory.getUnsafeItemStack(0)?.getLogisticsItemFilterConfig())
+        itemHolder.insertFilters.putOrRemove(face, insertFilterInventory.getUnsafeItemStack(0)?.getItemFilterConfig())
+        itemHolder.extractFilters.putOrRemove(face, extractFilterInventory.getUnsafeItemStack(0)?.getItemFilterConfig())
     }
     
     private fun checkItem(event: ItemUpdateEvent) {

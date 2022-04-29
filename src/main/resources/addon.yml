@@ -1,0 +1,5 @@
+id: logistics
+name: Logistics
+version: ${project.version}
+main: xyz.xenondevs.nova.logistics.Logistics
+authors: [ "StudioCode", "ByteZ1337", "Javahase" ]
