@@ -31,7 +31,7 @@ import xyz.xenondevs.nova.util.item.takeUnlessAir
 import xyz.xenondevs.nova.util.runTaskLater
 import kotlin.math.min
 
-private val MAX_ITEMS = NovaConfig[STORAGE_UNIT].getInt("max_items")!!
+private val MAX_ITEMS = NovaConfig[STORAGE_UNIT].getInt("max_items")
 
 class StorageUnit(blockState: NovaTileEntityState): NetworkedTileEntity(blockState) {
     

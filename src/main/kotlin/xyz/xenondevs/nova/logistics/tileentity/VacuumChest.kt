@@ -35,9 +35,9 @@ import xyz.xenondevs.nova.world.region.Region
 import xyz.xenondevs.nova.world.region.VisualRegion
 import de.studiocode.invui.item.Item as UIItem
 
-private val MIN_RANGE = NovaConfig[VACUUM_CHEST].getInt("range.min")!!
-private val MAX_RANGE = NovaConfig[VACUUM_CHEST].getInt("range.max")!!
-private val DEFAULT_RANGE = NovaConfig[VACUUM_CHEST].getInt("range.default")!!
+private val MIN_RANGE = NovaConfig[VACUUM_CHEST].getInt("range.min")
+private val MAX_RANGE = NovaConfig[VACUUM_CHEST].getInt("range.max")
+private val DEFAULT_RANGE = NovaConfig[VACUUM_CHEST].getInt("range.default")
 
 class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState), Upgradable {
     

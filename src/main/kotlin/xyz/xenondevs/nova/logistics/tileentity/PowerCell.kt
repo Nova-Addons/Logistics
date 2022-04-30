@@ -45,10 +45,10 @@ open class PowerCell(
     
 }
 
-private val BASIC_CAPACITY = NovaConfig[Blocks.BASIC_POWER_CELL].getLong("capacity")!!
-private val ADVANCED_CAPACITY = NovaConfig[Blocks.ADVANCED_POWER_CELL].getLong("capacity")!!
-private val ELITE_CAPACITY = NovaConfig[Blocks.ELITE_POWER_CELL].getLong("capacity")!!
-private val ULTIMATE_CAPACITY = NovaConfig[Blocks.ULTIMATE_POWER_CELL].getLong("capacity")!!
+private val BASIC_CAPACITY = NovaConfig[Blocks.BASIC_POWER_CELL].getLong("capacity")
+private val ADVANCED_CAPACITY = NovaConfig[Blocks.ADVANCED_POWER_CELL].getLong("capacity")
+private val ELITE_CAPACITY = NovaConfig[Blocks.ELITE_POWER_CELL].getLong("capacity")
+private val ULTIMATE_CAPACITY = NovaConfig[Blocks.ULTIMATE_POWER_CELL].getLong("capacity")
 
 class BasicPowerCell(blockState: NovaTileEntityState) : PowerCell(
     false,

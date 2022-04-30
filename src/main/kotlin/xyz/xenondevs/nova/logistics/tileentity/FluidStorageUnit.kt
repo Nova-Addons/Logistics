@@ -25,7 +25,7 @@ import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
 import xyz.xenondevs.nova.util.center
 import xyz.xenondevs.nova.world.armorstand.FakeArmorStand
 
-private val MAX_CAPACITY = NovaConfig[FLUID_STORAGE_UNIT].getLong("max_capacity")!!
+private val MAX_CAPACITY = NovaConfig[FLUID_STORAGE_UNIT].getLong("max_capacity")
 
 class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState) {
     
