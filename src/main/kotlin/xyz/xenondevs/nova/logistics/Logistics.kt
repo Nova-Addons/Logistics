@@ -1,6 +1,7 @@
 package xyz.xenondevs.nova.logistics
 
 import xyz.xenondevs.nova.addon.Addon
+import xyz.xenondevs.nova.logistics.advancement.Advancements
 import xyz.xenondevs.nova.logistics.item.findCorrectFilterMaterial
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.logistics.registry.Items
@@ -19,6 +20,7 @@ class Logistics : Addon() {
         
         Blocks.init()
         Items.init()
+        Advancements.register()
         
         ItemFilter.creatorFun = { filter -> findCorrectFilterMaterial(filter).createItemStack().apply { saveFilterConfig(filter) } }
     }
