@@ -6,6 +6,8 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.nova.data.config.NovaConfig
+import xyz.xenondevs.nova.data.config.ValueReloadable
+import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.item.behavior.ItemBehavior
 import xyz.xenondevs.nova.logistics.gui.itemfilter.ItemFilterWindow
 import xyz.xenondevs.nova.logistics.registry.Items
@@ -38,7 +40,7 @@ fun findCorrectFilterMaterial(itemFilter: ItemFilter): ItemNovaMaterial {
     return FILTER_MATERIALS[itemFilter.size] ?: Items.BASIC_ITEM_FILTER
 }
 
-abstract class ItemFilterBehavior(size: Lazy<Int>) : ItemBehavior() {
+abstract class ItemFilterBehavior(size: ValueReloadable<Int>) : ItemBehavior() {
     
     val size by size
     
@@ -61,7 +63,7 @@ abstract class ItemFilterBehavior(size: Lazy<Int>) : ItemBehavior() {
     
 }
 
-object BasicItemFilterBehavior : ItemFilterBehavior(lazy { NovaConfig[Items.BASIC_ITEM_FILTER].getInt("size")!! })
-object AdvancedItemFilterBehavior : ItemFilterBehavior(lazy { NovaConfig[Items.ADVANCED_ITEM_FILTER].getInt("size")!! })
-object EliteItemFilterBehavior : ItemFilterBehavior(lazy { NovaConfig[Items.ELITE_ITEM_FILTER].getInt("size")!! })
-object UltimateItemFilterBehavior : ItemFilterBehavior(lazy { NovaConfig[Items.ULTIMATE_ITEM_FILTER].getInt("size")!! })
+object BasicItemFilterBehavior : ItemFilterBehavior(configReloadable { NovaConfig[Items.BASIC_ITEM_FILTER].getInt("size") })
+object AdvancedItemFilterBehavior : ItemFilterBehavior(configReloadable { NovaConfig[Items.ADVANCED_ITEM_FILTER].getInt("size") })
+object EliteItemFilterBehavior : ItemFilterBehavior(configReloadable { NovaConfig[Items.ELITE_ITEM_FILTER].getInt("size") })
+object UltimateItemFilterBehavior : ItemFilterBehavior(configReloadable { NovaConfig[Items.ULTIMATE_ITEM_FILTER].getInt("size") })

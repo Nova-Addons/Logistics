@@ -9,8 +9,9 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import xyz.xenondevs.nova.NOVA
 import xyz.xenondevs.nova.data.config.NovaConfig
-import xyz.xenondevs.nova.data.config.Reloadable
+import xyz.xenondevs.nova.data.config.ValueReloadable
 import xyz.xenondevs.nova.data.config.configReloadable
+import xyz.xenondevs.nova.data.config.notReloadable
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.gui.cable.CableConfigGUI
 import xyz.xenondevs.nova.logistics.registry.Blocks
@@ -42,12 +43,15 @@ private val NetworkNode.fluidHolder: FluidHolder?
 
 @Suppress("LeakingThis")
 open class Cable(
-    override var energyTransferRate: Long,
-    override var itemTransferRate: Int,
-    override var fluidTransferRate: Long,
-    blockState: NovaTileEntityState,
-    val onReload: (Cable) -> Unit = {}
-) : TileEntity(blockState), EnergyBridge, ItemBridge, FluidBridge, Reloadable {
+     energyTransferRateDelegate: ValueReloadable<Long>,
+     itemTransferRateDelegate: ValueReloadable<Int>,
+     fluidTransferRateDelegate: ValueReloadable<Long>,
+    blockState: NovaTileEntityState
+) : TileEntity(blockState), EnergyBridge, ItemBridge, FluidBridge {
+    
+    override val energyTransferRate by energyTransferRateDelegate
+    override val itemTransferRate by itemTransferRateDelegate
+    override val fluidTransferRate by fluidTransferRateDelegate
     
     override val supportedNetworkTypes = SUPPORTED_NETWORK_TYPES
     override val networks = EnumMap<NetworkType, Network>(NetworkType::class.java)
@@ -65,7 +69,6 @@ open class Cable(
     private var attachments: ArrayList<Pair<Int, Int>> = retrieveCollectionOrNull("attachments", ArrayList()) ?: ArrayList()
     
     init {
-        NovaConfig.reloadables.add(this)
         if (attachments.isNotEmpty()) {
             updateAttachmentModels()
             createAttachmentHitboxes()
@@ -74,11 +77,6 @@ open class Cable(
         
         if (modelId != 0)
             blockState.modelProvider.update(modelId)
-    }
-    
-    override fun reload() {
-        onReload(this)
-        NetworkManager.queueAsync { it.reloadNetworks() }
     }
     
     override fun saveData() {
@@ -310,73 +308,53 @@ open class Cable(
     
 }
 
-private val BASIC_ENERGY_RATE by configReloadable { NovaConfig[Blocks.BASIC_CABLE].getLong("energy_transfer_rate")!! }
-private val BASIC_ITEM_RATE by configReloadable { NovaConfig[Blocks.BASIC_CABLE].getInt("item_transfer_rate")!! }
-private val BASIC_FLUID_RATE by configReloadable { NovaConfig[Blocks.BASIC_CABLE].getLong("fluid_transfer_rate")!! }
+private val BASIC_ENERGY_RATE = configReloadable { NovaConfig[Blocks.BASIC_CABLE].getLong("energy_transfer_rate") }
+private val BASIC_ITEM_RATE = configReloadable { NovaConfig[Blocks.BASIC_CABLE].getInt("item_transfer_rate") }
+private val BASIC_FLUID_RATE = configReloadable { NovaConfig[Blocks.BASIC_CABLE].getLong("fluid_transfer_rate") }
 
-private val ADVANCED_ENERGY_RATE by configReloadable { NovaConfig[Blocks.ADVANCED_CABLE].getLong("energy_transfer_rate")!! }
-private val ADVANCED_ITEM_RATE by configReloadable { NovaConfig[Blocks.ADVANCED_CABLE].getInt("item_transfer_rate")!! }
-private val ADVANCED_FLUID_RATE by configReloadable { NovaConfig[Blocks.ADVANCED_CABLE].getLong("fluid_transfer_rate")!! }
+private val ADVANCED_ENERGY_RATE = configReloadable { NovaConfig[Blocks.ADVANCED_CABLE].getLong("energy_transfer_rate") }
+private val ADVANCED_ITEM_RATE = configReloadable { NovaConfig[Blocks.ADVANCED_CABLE].getInt("item_transfer_rate") }
+private val ADVANCED_FLUID_RATE = configReloadable { NovaConfig[Blocks.ADVANCED_CABLE].getLong("fluid_transfer_rate") }
 
-private val ELITE_ENERGY_RATE by configReloadable { NovaConfig[Blocks.ELITE_CABLE].getLong("energy_transfer_rate")!! }
-private val ELITE_ITEM_RATE by configReloadable { NovaConfig[Blocks.ELITE_CABLE].getInt("item_transfer_rate")!! }
-private val ELITE_FLUID_RATE by configReloadable { NovaConfig[Blocks.ELITE_CABLE].getLong("fluid_transfer_rate")!! }
+private val ELITE_ENERGY_RATE = configReloadable { NovaConfig[Blocks.ELITE_CABLE].getLong("energy_transfer_rate") }
+private val ELITE_ITEM_RATE = configReloadable { NovaConfig[Blocks.ELITE_CABLE].getInt("item_transfer_rate") }
+private val ELITE_FLUID_RATE = configReloadable { NovaConfig[Blocks.ELITE_CABLE].getLong("fluid_transfer_rate") }
 
-private val ULTIMATE_ENERGY_RATE by configReloadable { NovaConfig[Blocks.ULTIMATE_CABLE].getLong("energy_transfer_rate")!! }
-private val ULTIMATE_ITEM_RATE by configReloadable { NovaConfig[Blocks.ULTIMATE_CABLE].getInt("item_transfer_rate")!! }
-private val ULTIMATE_FLUID_RATE by configReloadable { NovaConfig[Blocks.ULTIMATE_CABLE].getLong("fluid_transfer_rate")!! }
+private val ULTIMATE_ENERGY_RATE = configReloadable { NovaConfig[Blocks.ULTIMATE_CABLE].getLong("energy_transfer_rate") }
+private val ULTIMATE_ITEM_RATE = configReloadable { NovaConfig[Blocks.ULTIMATE_CABLE].getInt("item_transfer_rate") }
+private val ULTIMATE_FLUID_RATE = configReloadable { NovaConfig[Blocks.ULTIMATE_CABLE].getLong("fluid_transfer_rate") }
 
 class BasicCable(blockState: NovaTileEntityState) : Cable(
     BASIC_ENERGY_RATE,
     BASIC_ITEM_RATE,
     BASIC_FLUID_RATE,
-    blockState,
-    {
-        it.energyTransferRate = BASIC_ENERGY_RATE
-        it.itemTransferRate = BASIC_ITEM_RATE
-        it.fluidTransferRate = BASIC_FLUID_RATE
-    }
+    blockState
 )
 
 class AdvancedCable(blockState: NovaTileEntityState) : Cable(
     ADVANCED_ENERGY_RATE,
     ADVANCED_ITEM_RATE,
     ADVANCED_FLUID_RATE,
-    blockState,
-    {
-        it.energyTransferRate = ADVANCED_ENERGY_RATE
-        it.itemTransferRate = ADVANCED_ITEM_RATE
-        it.fluidTransferRate = ADVANCED_FLUID_RATE
-    }
+    blockState
 )
 
 class EliteCable(blockState: NovaTileEntityState) : Cable(
     ELITE_ENERGY_RATE,
     ELITE_ITEM_RATE,
     ELITE_FLUID_RATE,
-    blockState,
-    {
-        it.energyTransferRate = ELITE_ENERGY_RATE
-        it.itemTransferRate = ELITE_ITEM_RATE
-        it.fluidTransferRate = ELITE_FLUID_RATE
-    }
+    blockState
 )
 
 class UltimateCable(blockState: NovaTileEntityState) : Cable(
     ULTIMATE_ENERGY_RATE,
     ULTIMATE_ITEM_RATE,
     ULTIMATE_FLUID_RATE,
-    blockState,
-    {
-        it.energyTransferRate = ULTIMATE_ENERGY_RATE
-        it.itemTransferRate = ULTIMATE_ITEM_RATE
-        it.fluidTransferRate = ULTIMATE_FLUID_RATE
-    }
+    blockState
 )
 
 class CreativeCable(blockState: NovaTileEntityState) : Cable(
-    Long.MAX_VALUE,
-    Int.MAX_VALUE,
-    Long.MAX_VALUE,
+    notReloadable(Long.MAX_VALUE),
+    notReloadable(Int.MAX_VALUE),
+    notReloadable(Long.MAX_VALUE),
     blockState
 )

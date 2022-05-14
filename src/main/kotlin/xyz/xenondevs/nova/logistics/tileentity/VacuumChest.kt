@@ -22,7 +22,6 @@ import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.item.ItemFilter
 import xyz.xenondevs.nova.tileentity.network.item.holder.NovaItemHolder
 import xyz.xenondevs.nova.tileentity.upgrade.Upgradable
-import xyz.xenondevs.nova.tileentity.upgrade.UpgradeHolder
 import xyz.xenondevs.nova.tileentity.upgrade.UpgradeType
 import xyz.xenondevs.nova.ui.OpenUpgradesItem
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
@@ -52,7 +51,7 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
     ) { createSideConfig(NetworkConnectionType.EXTRACT) }
     
     override val gui = lazy { VacuumChestGUI() }
-    override val upgradeHolder = UpgradeHolder(this, gui, ::handleUpgradeUpdates, UpgradeType.RANGE)
+    override val upgradeHolder = getUpgradeHolder(UpgradeType.RANGE)
     private var filter: ItemFilter? = retrieveOrNull<CompoundElement>("itemFilter")
         ?.let { ItemFilter(it) }
         ?.also { filterInventory.setItemStack(SELF_UPDATE_REASON, 0, it.createFilterItem()) }
@@ -85,7 +84,8 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
         VisualRegion.updateRegion(uuid, region)
     }
     
-    private fun handleUpgradeUpdates() {
+    override fun reload() {
+        super.reload()
         if (range > maxRange) {
             range = maxRange // the setter will update everything else
         } else if (gui.isInitialized()) gui.value.updateRangeItems()

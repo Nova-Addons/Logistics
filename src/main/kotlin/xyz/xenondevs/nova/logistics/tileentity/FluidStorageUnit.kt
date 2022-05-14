@@ -27,7 +27,7 @@ import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
 import xyz.xenondevs.nova.util.center
 import xyz.xenondevs.nova.world.armorstand.FakeArmorStand
 
-private val MAX_CAPACITY by configReloadable { NovaConfig[FLUID_STORAGE_UNIT].getLong("max_capacity") }
+private val MAX_CAPACITY = configReloadable { NovaConfig[FLUID_STORAGE_UNIT].getLong("max_capacity") }
 
 class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState), Reloadable {
     
@@ -38,11 +38,6 @@ class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(bl
     
     init {
         handleFluidUpdate()
-        NovaConfig.reloadables.add(this)
-    }
-    
-    override fun reload() {
-        fluidTank.capacity = MAX_CAPACITY
     }
     
     private fun handleFluidUpdate() {

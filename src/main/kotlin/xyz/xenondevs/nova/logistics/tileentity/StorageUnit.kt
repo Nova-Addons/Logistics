@@ -33,6 +33,7 @@ import xyz.xenondevs.nova.util.runTaskLater
 import kotlin.math.min
 
 private val MAX_ITEMS by configReloadable {  NovaConfig[STORAGE_UNIT].getInt("max_items") }
+
 class StorageUnit(blockState: NovaTileEntityState): NetworkedTileEntity(blockState) {
     
     override val gui = lazy { StorageUnitGUI() }
