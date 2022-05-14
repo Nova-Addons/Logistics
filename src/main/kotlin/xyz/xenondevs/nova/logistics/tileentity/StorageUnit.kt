@@ -18,6 +18,7 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.nova.data.config.NovaConfig
+import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks.STORAGE_UNIT
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
@@ -31,8 +32,7 @@ import xyz.xenondevs.nova.util.item.takeUnlessAir
 import xyz.xenondevs.nova.util.runTaskLater
 import kotlin.math.min
 
-private val MAX_ITEMS = NovaConfig[STORAGE_UNIT].getInt("max_items")
-
+private val MAX_ITEMS by configReloadable {  NovaConfig[STORAGE_UNIT].getInt("max_items") }
 class StorageUnit(blockState: NovaTileEntityState): NetworkedTileEntity(blockState) {
     
     override val gui = lazy { StorageUnitGUI() }

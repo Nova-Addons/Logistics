@@ -8,6 +8,7 @@ import de.studiocode.invui.virtualinventory.VirtualInventory
 import de.studiocode.invui.virtualinventory.event.ItemUpdateEvent
 import org.bukkit.entity.Item
 import xyz.xenondevs.nova.data.config.NovaConfig
+import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.serialization.cbf.element.CompoundElement
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.integration.protection.ProtectionManager
@@ -35,9 +36,9 @@ import xyz.xenondevs.nova.world.region.Region
 import xyz.xenondevs.nova.world.region.VisualRegion
 import de.studiocode.invui.item.Item as UIItem
 
-private val MIN_RANGE = NovaConfig[VACUUM_CHEST].getInt("range.min")
-private val MAX_RANGE = NovaConfig[VACUUM_CHEST].getInt("range.max")
-private val DEFAULT_RANGE = NovaConfig[VACUUM_CHEST].getInt("range.default")
+private val MIN_RANGE by configReloadable { NovaConfig[VACUUM_CHEST].getInt("range.min") }
+private val MAX_RANGE by configReloadable { NovaConfig[VACUUM_CHEST].getInt("range.max") }
+private val DEFAULT_RANGE by configReloadable { NovaConfig[VACUUM_CHEST].getInt("range.default") }
 
 class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState), Upgradable {
     

@@ -12,6 +12,8 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import xyz.xenondevs.nova.data.config.NovaConfig
+import xyz.xenondevs.nova.data.config.Reloadable
+import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.logistics.registry.Blocks.FLUID_STORAGE_UNIT
@@ -25,9 +27,9 @@ import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
 import xyz.xenondevs.nova.util.center
 import xyz.xenondevs.nova.world.armorstand.FakeArmorStand
 
-private val MAX_CAPACITY = NovaConfig[FLUID_STORAGE_UNIT].getLong("max_capacity")
+private val MAX_CAPACITY by configReloadable { NovaConfig[FLUID_STORAGE_UNIT].getLong("max_capacity") }
 
-class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState) {
+class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState), Reloadable {
     
     override val gui = lazy(::FluidStorageUnitGUI)
     private val fluidTank = getFluidContainer("fluid", setOf(FluidType.LAVA, FluidType.WATER), MAX_CAPACITY, 0, ::handleFluidUpdate)
@@ -36,6 +38,11 @@ class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(bl
     
     init {
         handleFluidUpdate()
+        NovaConfig.reloadables.add(this)
+    }
+    
+    override fun reload() {
+        fluidTank.capacity = MAX_CAPACITY
     }
     
     private fun handleFluidUpdate() {

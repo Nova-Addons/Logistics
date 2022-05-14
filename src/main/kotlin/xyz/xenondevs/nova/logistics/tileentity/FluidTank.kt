@@ -4,6 +4,8 @@ import de.studiocode.invui.gui.GUI
 import de.studiocode.invui.gui.builder.GUIBuilder
 import de.studiocode.invui.gui.builder.guitype.GUIType
 import xyz.xenondevs.nova.data.config.NovaConfig
+import xyz.xenondevs.nova.data.config.Reloadable
+import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
@@ -23,14 +25,24 @@ private const val MAX_STATE = 99
 @Suppress("LeakingThis")
 open class FluidTank(
     capacity: Long,
-    blockState: NovaTileEntityState
-) : NetworkedTileEntity(blockState) {
+    blockState: NovaTileEntityState,
+    val onReload: (FluidTank) -> Unit = {}
+) : NetworkedTileEntity(blockState), Reloadable {
     
     override val gui = lazy(::FluidTankGUI)
     
-    private val fluidContainer = getFluidContainer("tank", hashSetOf(FluidType.WATER, FluidType.LAVA), capacity, 0, ::handleFluidUpdate)
+    val fluidContainer = getFluidContainer("tank", hashSetOf(FluidType.WATER, FluidType.LAVA), capacity, 0, ::handleFluidUpdate)
     override val fluidHolder = NovaFluidHolder(this, fluidContainer to NetworkConnectionType.BUFFER) { createSideConfig(NetworkConnectionType.BUFFER) }
     private lateinit var fluidLevel: FakeArmorStand
+    
+    init {
+        NovaConfig.reloadables.add(this)
+    }
+    
+    override fun reload() {
+        onReload(this)
+        updateFluidLevel()
+    }
     
     override fun handleInitialized(first: Boolean) {
         super.handleInitialized(first)
@@ -46,7 +58,7 @@ open class FluidTank(
         updateFluidLevel()
     }
     
-    private fun updateFluidLevel() {
+    fun updateFluidLevel() {
         val stack = if (fluidContainer.hasFluid()) {
             val state = (fluidContainer.amount.toDouble() / fluidContainer.capacity.toDouble() * MAX_STATE.toDouble()).roundToInt()
             when (fluidContainer.type) {
@@ -89,17 +101,17 @@ open class FluidTank(
     
 }
 
-private val BASIC_CAPACITY = NovaConfig[Blocks.BASIC_FLUID_TANK].getLong("capacity")
-private val ADVANCED_CAPACITY = NovaConfig[Blocks.ADVANCED_FLUID_TANK].getLong("capacity")
-private val ELITE_CAPACITY = NovaConfig[Blocks.ELITE_FLUID_TANK].getLong("capacity")
-private val ULTIMATE_CAPACITY = NovaConfig[Blocks.ULTIMATE_FLUID_TANK].getLong("capacity")
+private val BASIC_CAPACITY by configReloadable { NovaConfig[Blocks.BASIC_FLUID_TANK].getLong("capacity") }
+private val ADVANCED_CAPACITY by configReloadable { NovaConfig[Blocks.ADVANCED_FLUID_TANK].getLong("capacity") }
+private val ELITE_CAPACITY by configReloadable { NovaConfig[Blocks.ELITE_FLUID_TANK].getLong("capacity") }
+private val ULTIMATE_CAPACITY by configReloadable { NovaConfig[Blocks.ULTIMATE_FLUID_TANK].getLong("capacity") }
 
-class BasicFluidTank(blockState: NovaTileEntityState) : FluidTank(BASIC_CAPACITY, blockState)
+class BasicFluidTank(blockState: NovaTileEntityState) : FluidTank(BASIC_CAPACITY, blockState, { it.fluidContainer.capacity = BASIC_CAPACITY })
 
-class AdvancedFluidTank(blockState: NovaTileEntityState) : FluidTank(ADVANCED_CAPACITY, blockState)
+class AdvancedFluidTank(blockState: NovaTileEntityState) : FluidTank(ADVANCED_CAPACITY, blockState, { it.fluidContainer.capacity = ADVANCED_CAPACITY })
 
-class EliteFluidTank(blockState: NovaTileEntityState) : FluidTank(ELITE_CAPACITY, blockState)
+class EliteFluidTank(blockState: NovaTileEntityState) : FluidTank(ELITE_CAPACITY, blockState, { it.fluidContainer.capacity = ELITE_CAPACITY })
 
-class UltimateFluidTank(blockState: NovaTileEntityState) : FluidTank(ULTIMATE_CAPACITY, blockState)
+class UltimateFluidTank(blockState: NovaTileEntityState) : FluidTank(ULTIMATE_CAPACITY, blockState, { it.fluidContainer.capacity = ULTIMATE_CAPACITY })
 
 class CreativeFluidTank(blockState: NovaTileEntityState) : FluidTank(Long.MAX_VALUE, blockState)
