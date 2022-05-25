@@ -32,9 +32,9 @@ import xyz.xenondevs.nova.util.item.takeUnlessAir
 import xyz.xenondevs.nova.util.runTaskLater
 import kotlin.math.min
 
-private val MAX_ITEMS by configReloadable {  NovaConfig[STORAGE_UNIT].getInt("max_items") }
+private val MAX_ITEMS by configReloadable { NovaConfig[STORAGE_UNIT].getInt("max_items") }
 
-class StorageUnit(blockState: NovaTileEntityState): NetworkedTileEntity(blockState) {
+class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState) {
     
     override val gui = lazy { StorageUnitGUI() }
     private val inventory = StorageUnitInventory(retrieveOrNull("type"), retrieveOrNull("amount") ?: 0)
@@ -187,6 +187,10 @@ class StorageUnit(blockState: NovaTileEntityState): NetworkedTileEntity(blockSta
             }
             
             if (gui.isInitialized()) gui.value.update()
+        }
+        
+        override fun isFull(): Boolean {
+            return amount >= MAX_ITEMS
         }
         
     }
