@@ -1,5 +1,5 @@
 {
-  "result": "nova:basic_fluid_tank",
+  "result": "logistics:basic_fluid_tank",
   "shape": [
     "ipi",
     "igi",
@@ -7,7 +7,7 @@
   ],
   "ingredients": {
     "i": "minecraft:iron_ingot",
-    "p": "nova:iron_plate",
+    "p": "nova:iron_plate; minecraft:iron_ingot",
     "g": "minecraft:glass_pane"
   }
 }

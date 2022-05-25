@@ -1,5 +1,5 @@
 {
-  "result": "nova:basic_power_cell",
+  "result": "logistics:basic_power_cell",
   "shape": [
     "ici",
     "cfc",
@@ -7,7 +7,7 @@
   ],
   "ingredients": {
     "i": "minecraft:iron_ingot",
-    "c": "nova:basic_cable",
-    "f": "nova:basic_machine_frame"
+    "c": "logistics:basic_cable",
+    "f": "nova:basic_machine_frame; minecraft:redstone_block"
   }
 }

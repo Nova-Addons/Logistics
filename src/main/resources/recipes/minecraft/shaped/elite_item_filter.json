@@ -1,5 +1,5 @@
 {
-  "result": "nova:elite_item_filter",
+  "result": "logistics:elite_item_filter",
   "shape": [
     "gpg",
     "pfp",
@@ -7,7 +7,7 @@
   ],
   "ingredients": {
     "g": "minecraft:glowstone_dust",
-    "f": "nova:advanced_item_filter",
-    "p": "nova:iron_plate"
+    "f": "logistics:advanced_item_filter",
+    "p": "nova:iron_plate; minecraft:iron_ingot"
   }
 }

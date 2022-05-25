@@ -1,5 +1,5 @@
 {
-  "result": "nova:advanced_cable",
+  "result": "logistics:advanced_cable",
   "amount": 3,
   "shape": [
     "ggg",
@@ -8,6 +8,6 @@
   ],
   "ingredients": {
     "g": "minecraft:glowstone_dust",
-    "c": "nova:basic_cable"
+    "c": "logistics:basic_cable"
   }
 }

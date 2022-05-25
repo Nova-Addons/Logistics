@@ -1,5 +1,5 @@
 {
-  "result": "nova:ultimate_power_cell",
+  "result": "logistics:ultimate_power_cell",
   "shape": [
     "pcp",
     "cbc",
@@ -7,8 +7,8 @@
   ],
   "ingredients": {
     "p": "minecraft:iron_ingot",
-    "c": "nova:ultimate_cable",
-    "b": "nova:elite_power_cell",
-    "f": "nova:ultimate_machine_frame"
+    "c": "logistics:ultimate_cable",
+    "b": "logistics:elite_power_cell",
+    "f": "nova:ultimate_machine_frame; logistics:ultimate_cable"
   }
 }

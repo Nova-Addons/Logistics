@@ -1,5 +1,5 @@
 {
-  "result": "nova:trash_can",
+  "result": "logistics:trash_can",
   "shape": [
     "ipi",
     "i i",
@@ -7,6 +7,6 @@
   ],
   "ingredients": {
     "i": "minecraft:iron_ingot",
-    "p": "nova:iron_plate"
+    "p": "nova:iron_plate; minecraft:iron_trapdoor"
   }
 }
