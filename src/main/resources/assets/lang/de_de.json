@@ -69,6 +69,5 @@
     "menu.logistics.storage_unit.item_display_plural": "%s §7Items",
     "menu.logistics.storage_unit.item_display_singular": "%s §7Item",
     "advancement.logistics.root.title": "Logistics",
-    "advancement.logistics.root.description": "",
     "menu.logistics.items.category.logistics": "Logistics"
 }
