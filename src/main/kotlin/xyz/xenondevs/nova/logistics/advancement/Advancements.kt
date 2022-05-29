@@ -13,7 +13,7 @@ object Advancements {
         display {
             icon(Blocks.ULTIMATE_CABLE.clientsideProvider.get())
             title(TranslatableComponent("advancement.logistics.root.title"))
-            description(TranslatableComponent("advancement.logistics.root.description"))
+            description("")
             background("textures/block/tuff.png")
             
             showToast(false)
