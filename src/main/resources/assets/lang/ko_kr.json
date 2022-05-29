@@ -1,0 +1,22 @@
+{
+  "block.logistics.basic_cable": "기본 케이블",
+  "block.logistics.advanced_cable": "고급 케이블",
+  "block.logistics.elite_cable": "엘리트 케이블",
+  "block.logistics.ultimate_cable": "얼티밋 케이블",
+  "block.logistics.creative_cable": "크리에이티브 케이블",
+  "block.logistics.basic_power_cell": "기본 파워 쉘",
+  "block.logistics.advanced_power_cell": "고급 파워 쉘",
+  "block.logistics.elite_power_cell": "엘리트 파워 쉘",
+  "block.logistics.ultimate_power_cell": "얼티밋 파워 쉘",
+  "block.logistics.creative_power_cell": "크리에이티브 파워 셀",
+  "block.logistics.basic_fluid_tank": "기본 액체 탱크",
+  "block.logistics.advanced_fluid_tank": "고급 액체 탱크",
+  "block.logistics.elite_fluid_tank": "엘리트 액체 탱크",
+  "block.logistics.ultimate_fluid_tank": "얼티밋 액체 탱크",
+  "block.logistics.creative_fluid_tank": "크리에이티브 액체 탱크",
+  "block.logistics.storage_unit": "저장 유닛",
+  "block.logistics.fluid_storage_unit": "액체 저장 유닛",
+  "block.logistics.vacuum_chest": "흡수 상자",
+  "block.logistics.trash_can": "쓰레기통",
+  "menu.logistics.item_filter": "아이템 필터"
+}

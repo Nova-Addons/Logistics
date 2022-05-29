@@ -1,0 +1,10 @@
+{
+  "block.logistics.basic_cable": "基本ケーブル",
+  "block.logistics.basic_power_cell": "基礎パワーセル",
+  "block.logistics.basic_fluid_tank": "基本液体タンク",
+  "block.logistics.storage_unit": "ストレージ ユニット",
+  "block.logistics.fluid_storage_unit": "液体ストレージユニット",
+  "block.logistics.vacuum_chest": "吸引チェスト",
+  "block.logistics.trash_can": "ゴミ箱",
+  "menu.logistics.items.category.crafting": "部品"
+}
