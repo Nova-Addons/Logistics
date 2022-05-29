@@ -67,5 +67,8 @@
     "item.logistics.elite_item_filter": "Elite Item Filter",
     "item.logistics.ultimate_item_filter": "Ultimativer Item Filter",
     "menu.logistics.storage_unit.item_display_plural": "%s §7Items",
-    "menu.logistics.storage_unit.item_display_singular": "%s §7Item"
+    "menu.logistics.storage_unit.item_display_singular": "%s §7Item",
+    "advancement.logistics.root.title": "Logistics",
+    "advancement.logistics.root.description": "",
+    "menu.logistics.items.category.logistics": "Logistics"
 }
