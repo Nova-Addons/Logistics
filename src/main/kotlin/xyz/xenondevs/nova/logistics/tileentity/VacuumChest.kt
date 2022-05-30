@@ -9,7 +9,7 @@ import de.studiocode.invui.virtualinventory.event.ItemUpdateEvent
 import org.bukkit.entity.Item
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.configReloadable
-import xyz.xenondevs.nova.data.serialization.cbf.element.CompoundElement
+import xyz.xenondevs.nova.data.serialization.cbf.Compound
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.integration.protection.ProtectionManager
 import xyz.xenondevs.nova.logistics.item.getItemFilterConfig
@@ -52,7 +52,7 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
     
     override val gui = lazy { VacuumChestGUI() }
     override val upgradeHolder = getUpgradeHolder(UpgradeType.RANGE)
-    private var filter: ItemFilter? = retrieveOrNull<CompoundElement>("itemFilter")
+    private var filter: ItemFilter? = retrieveOrNull<Compound>("itemFilter")
         ?.let { ItemFilter(it) }
         ?.also { filterInventory.setItemStack(SELF_UPDATE_REASON, 0, it.createFilterItem()) }
     private val items = ArrayList<Item>()

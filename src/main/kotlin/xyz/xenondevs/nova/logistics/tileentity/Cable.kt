@@ -55,7 +55,7 @@ open class Cable(
     
     override val supportedNetworkTypes = SUPPORTED_NETWORK_TYPES
     override val networks = EnumMap<NetworkType, Network>(NetworkType::class.java)
-    override val bridgeFaces = retrieveEnumCollectionOrNull("bridgeFaces", HashSet()) ?: CUBE_FACES.toHashSet()
+    override val bridgeFaces = retrieveData("bridgeFaces") { CUBE_FACES.toHashSet() }
     override val connectedNodes: MutableMap<NetworkType, MutableMap<BlockFace, NetworkNode>> = emptyEnumMap()
     override val typeId: String
         get() = material.id.toString()
@@ -66,7 +66,7 @@ open class Cable(
     private val hitboxes = ArrayList<Hitbox>()
     private val multiModel = createMultiModel()
     private var modelId = retrieveData("modelId") { 0 }
-    private var attachments: ArrayList<Pair<Int, Int>> = retrieveCollectionOrNull("attachments", ArrayList()) ?: ArrayList()
+    private var attachments: ArrayList<Pair<Int, Int>> = retrieveData("attachments", ::ArrayList)
     
     init {
         if (attachments.isNotEmpty()) {
@@ -83,18 +83,18 @@ open class Cable(
         super.saveData()
         
         storeData("modelId", modelId)
-        storeList("attachments", attachments)
-        storeList("bridgeFaces", bridgeFaces)
-        storeEnumMap("networks", serializeNetworks())
-        storeEnumMap("connectedNodes", serializeConnectedNodes())
+        storeData("attachments", attachments)
+        storeData("bridgeFaces", bridgeFaces)
+        storeData("networks", serializeNetworks())
+        storeData("connectedNodes", serializeConnectedNodes())
     }
     
     override fun retrieveSerializedConnectedNodes(): Map<NetworkType, Map<BlockFace, UUID>>? {
-        return retrieveEnumMapOrNull("connectedNodes")
+        return retrieveOrNull<EnumMap<NetworkType, EnumMap<BlockFace, UUID>>>("connectedNodes")
     }
     
     override fun retrieveSerializedNetworks(): Map<NetworkType, UUID>? {
-        return retrieveEnumMapOrNull("networks")
+        return retrieveOrNull<EnumMap<NetworkType, UUID>>("networks")
     }
     
     override fun handleNetworkUpdate() {
