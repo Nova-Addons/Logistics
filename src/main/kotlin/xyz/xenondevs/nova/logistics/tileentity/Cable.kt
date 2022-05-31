@@ -19,8 +19,9 @@ import xyz.xenondevs.nova.material.CoreItems
 import xyz.xenondevs.nova.tileentity.Model
 import xyz.xenondevs.nova.tileentity.TileEntity
 import xyz.xenondevs.nova.tileentity.network.*
-import xyz.xenondevs.nova.tileentity.network.NetworkType.FLUID
-import xyz.xenondevs.nova.tileentity.network.NetworkType.ITEMS
+import xyz.xenondevs.nova.tileentity.network.NetworkType.Companion.ENERGY
+import xyz.xenondevs.nova.tileentity.network.NetworkType.Companion.FLUID
+import xyz.xenondevs.nova.tileentity.network.NetworkType.Companion.ITEMS
 import xyz.xenondevs.nova.tileentity.network.energy.EnergyBridge
 import xyz.xenondevs.nova.tileentity.network.fluid.FluidBridge
 import xyz.xenondevs.nova.tileentity.network.fluid.holder.FluidHolder
@@ -32,7 +33,7 @@ import xyz.xenondevs.nova.world.block.hitbox.Hitbox
 import xyz.xenondevs.nova.world.point.Point3D
 import java.util.*
 
-private val SUPPORTED_NETWORK_TYPES = NetworkType.values().toHashSet()
+private val SUPPORTED_NETWORK_TYPES = hashSetOf(ENERGY, ITEMS, FLUID)
 private val ATTACHMENTS: IntArray = (64..112).toIntArray()
 
 private val NetworkNode.itemHolder: ItemHolder?
@@ -43,9 +44,9 @@ private val NetworkNode.fluidHolder: FluidHolder?
 
 @Suppress("LeakingThis")
 open class Cable(
-     energyTransferRateDelegate: ValueReloadable<Long>,
-     itemTransferRateDelegate: ValueReloadable<Int>,
-     fluidTransferRateDelegate: ValueReloadable<Long>,
+    energyTransferRateDelegate: ValueReloadable<Long>,
+    itemTransferRateDelegate: ValueReloadable<Int>,
+    fluidTransferRateDelegate: ValueReloadable<Long>,
     blockState: NovaTileEntityState
 ) : TileEntity(blockState), EnergyBridge, ItemBridge, FluidBridge {
     
@@ -54,9 +55,9 @@ open class Cable(
     override val fluidTransferRate by fluidTransferRateDelegate
     
     override val supportedNetworkTypes = SUPPORTED_NETWORK_TYPES
-    override val networks = EnumMap<NetworkType, Network>(NetworkType::class.java)
+    override val networks = HashMap<NetworkType, Network>()
     override val bridgeFaces = retrieveData("bridgeFaces") { CUBE_FACES.toHashSet() }
-    override val connectedNodes: MutableMap<NetworkType, MutableMap<BlockFace, NetworkNode>> = emptyEnumMap()
+    override val connectedNodes = HashMap<NetworkType, MutableMap<BlockFace, NetworkNode>>()
     override val typeId: String
         get() = material.id.toString()
     
@@ -90,11 +91,11 @@ open class Cable(
     }
     
     override fun retrieveSerializedConnectedNodes(): Map<NetworkType, Map<BlockFace, UUID>>? {
-        return retrieveOrNull<EnumMap<NetworkType, EnumMap<BlockFace, UUID>>>("connectedNodes")
+        return retrieveOrNull<HashMap<NetworkType, EnumMap<BlockFace, UUID>>>("connectedNodes")
     }
     
     override fun retrieveSerializedNetworks(): Map<NetworkType, UUID>? {
-        return retrieveOrNull<EnumMap<NetworkType, UUID>>("networks")
+        return retrieveOrNull<HashMap<NetworkType, UUID>>("networks")
     }
     
     override fun handleNetworkUpdate() {
