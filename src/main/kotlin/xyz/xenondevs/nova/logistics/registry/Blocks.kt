@@ -8,7 +8,6 @@ import xyz.xenondevs.nova.material.BlockOptions
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerDefaultItem
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerEnergyTileEntity
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerTileEntity
-import xyz.xenondevs.nova.tileentity.network.fluid.holder.NovaFluidHolder
 import xyz.xenondevs.nova.util.SoundEffect
 import xyz.xenondevs.nova.util.item.ToolCategory
 import xyz.xenondevs.nova.util.item.ToolLevel
@@ -32,11 +31,11 @@ object Blocks {
     val ULTIMATE_POWER_CELL = registerEnergyTileEntity(LOGISTICS, "ultimate_power_cell", POWER_CELL, ::UltimatePowerCell)
     val CREATIVE_POWER_CELL = registerEnergyTileEntity(LOGISTICS, "creative_power_cell", POWER_CELL, ::CreativePowerCell)
     
-    val BASIC_FLUID_TANK = registerTileEntity(LOGISTICS, "basic_fluid_tank", TANK, ::BasicFluidTank, listOf(NovaFluidHolder::modifyItemBuilder))
-    val ADVANCED_FLUID_TANK = registerTileEntity(LOGISTICS, "advanced_fluid_tank", TANK, ::AdvancedFluidTank, listOf(NovaFluidHolder::modifyItemBuilder))
-    val ELITE_FLUID_TANK = registerTileEntity(LOGISTICS, "elite_fluid_tank", TANK, ::EliteFluidTank, listOf(NovaFluidHolder::modifyItemBuilder))
-    val ULTIMATE_FLUID_TANK = registerTileEntity(LOGISTICS, "ultimate_fluid_tank", TANK, ::UltimateFluidTank, listOf(NovaFluidHolder::modifyItemBuilder))
-    val CREATIVE_FLUID_TANK = registerTileEntity(LOGISTICS, "creative_fluid_tank", TANK, ::CreativeFluidTank, listOf(NovaFluidHolder::modifyItemBuilder))
+    val BASIC_FLUID_TANK = registerTileEntity(LOGISTICS, "basic_fluid_tank", TANK, ::BasicFluidTank)
+    val ADVANCED_FLUID_TANK = registerTileEntity(LOGISTICS, "advanced_fluid_tank", TANK, ::AdvancedFluidTank)
+    val ELITE_FLUID_TANK = registerTileEntity(LOGISTICS, "elite_fluid_tank", TANK, ::EliteFluidTank)
+    val ULTIMATE_FLUID_TANK = registerTileEntity(LOGISTICS, "ultimate_fluid_tank", TANK, ::UltimateFluidTank)
+    val CREATIVE_FLUID_TANK = registerTileEntity(LOGISTICS, "creative_fluid_tank", TANK, ::CreativeFluidTank)
     
     val STORAGE_UNIT = registerTileEntity(LOGISTICS, "storage_unit", OTHER, ::StorageUnit)
     val FLUID_STORAGE_UNIT = registerTileEntity(LOGISTICS, "fluid_storage_unit", OTHER, ::FluidStorageUnit)
