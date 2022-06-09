@@ -46,7 +46,7 @@ class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(bl
                 FluidType.LAVA -> Blocks.TANK_LAVA_LEVELS
                 FluidType.WATER -> Blocks.TANK_WATER_LEVELS
                 else -> throw IllegalStateException()
-            }.item.createClientsideItemStack(10)
+            }.clientsideProviders[10].get()
         } else null
         
         fluidLevel.setEquipment(EquipmentSlot.HEAD, stack, true)

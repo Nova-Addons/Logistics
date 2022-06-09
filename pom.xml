@@ -31,13 +31,6 @@
     
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>${spigot.version}</version>
-            <classifier>remapped-mojang</classifier>
-        </dependency>
-
-        <dependency>
             <groupId>xyz.xenondevs.nova</groupId>
             <artifactId>Nova</artifactId>
             <version>0.9-SNAPSHOT</version>

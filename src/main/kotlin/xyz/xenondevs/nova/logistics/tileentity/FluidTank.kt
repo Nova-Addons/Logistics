@@ -61,7 +61,7 @@ open class FluidTank(
                 FluidType.LAVA -> Blocks.TANK_LAVA_LEVELS
                 FluidType.WATER -> Blocks.TANK_WATER_LEVELS
                 else -> throw IllegalStateException()
-            }.item.createClientsideItemStack(state)
+            }.clientsideProviders[state].get()
         } else null
         
         val shouldGlow = fluidContainer.type == FluidType.LAVA

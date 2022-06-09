@@ -17,7 +17,6 @@ import xyz.xenondevs.nova.logistics.item.isItemFilter
 import xyz.xenondevs.nova.logistics.registry.Blocks.VACUUM_CHEST
 import xyz.xenondevs.nova.logistics.registry.GUIMaterials
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
-import xyz.xenondevs.nova.tileentity.SELF_UPDATE_REASON
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.item.ItemFilter
 import xyz.xenondevs.nova.tileentity.network.item.holder.NovaItemHolder
