@@ -41,5 +41,15 @@
   "advancement.logistics.vacuum_chest.title": "To wydaje się bezpieczne",
   "advancement.logistics.vacuum_chest.description": "Wytwórz Skrzynię Odkurzania",
   "advancement.logistics.storage_unit.title": "Nieskończone przedmioty",
-  "advancement.logistics.storage_unit.description": "Stwórz jednostkę magazynującą"
+  "advancement.logistics.storage_unit.description": "Stwórz jednostkę magazynującą",
+  "item.logistics.basic_item_filter": "Zwykły Filtr Przedmiotów",
+  "item.logistics.advanced_item_filter": "Zaawansowany Filtr Przedmiotów",
+  "item.logistics.elite_item_filter": "Elitarny Filtr Przedmiotów",
+  "item.logistics.ultimate_item_filter": "Najlepszy Filtr Przedmiotów",
+  "menu.logistics.items.category.logistics": "Logistyka",
+  "menu.logistics.cable_config.insert_priority": "Wstaw Priorytet: %s",
+  "menu.logistics.cable_config.extract_priority": "Ekstraktuj Priorytet: %s",
+  "menu.logistics.cable_config.channel": "Kanał: %s",
+  "menu.logistics.item_filter.nbt.on": "Dane NBT: nie ignorowane",
+  "menu.logistics.item_filter.nbt.off": "Dane NBT: ignorowane"
 }
