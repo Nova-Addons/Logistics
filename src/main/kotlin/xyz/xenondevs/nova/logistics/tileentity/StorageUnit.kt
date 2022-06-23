@@ -11,7 +11,6 @@ import de.studiocode.invui.virtualinventory.VirtualInventory
 import de.studiocode.invui.virtualinventory.event.ItemUpdateEvent
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.TextComponent
-import net.md_5.bungee.api.chat.TranslatableComponent
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
@@ -27,6 +26,7 @@ import xyz.xenondevs.nova.tileentity.network.item.holder.NovaItemHolder
 import xyz.xenondevs.nova.tileentity.network.item.inventory.NetworkedInventory
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
+import xyz.xenondevs.nova.util.data.localized
 import xyz.xenondevs.nova.util.item.takeUnlessAir
 import xyz.xenondevs.nova.util.runTaskLater
 import kotlin.math.min
@@ -119,7 +119,7 @@ class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
             override fun getItemProvider(): ItemProvider {
                 val type = inventory.type ?: return ItemBuilder(Material.BARRIER).setDisplayName("§r")
                 val amount = inventory.amount
-                val component = TranslatableComponent(
+                val component = localized(ChatColor.GRAY,
                     "menu.logistics.storage_unit.item_display_" + if (amount > 1) "plural" else "singular",
                     TextComponent(amount.toString()).apply { color = ChatColor.GREEN }
                 )

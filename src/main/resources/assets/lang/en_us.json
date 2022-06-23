@@ -37,8 +37,8 @@
   "menu.logistics.item_filter.blacklist": "Currently: Blacklist",
   "menu.logistics.item_filter.nbt.on": "NBT Data: Not Ignored",
   "menu.logistics.item_filter.nbt.off": "NBT Data: Ignored",
-  "menu.logistics.storage_unit.item_display_plural": "%s §7Items",
-  "menu.logistics.storage_unit.item_display_singular": "%s §7Item",
+  "menu.logistics.storage_unit.item_display_plural": "%s Items",
+  "menu.logistics.storage_unit.item_display_singular": "%s Item",
 
   "advancement.logistics.root.title": "Logistics",
   "advancement.logistics.basic_cable.title": "Basic Networking",
