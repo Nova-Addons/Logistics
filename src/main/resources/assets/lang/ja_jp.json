@@ -30,8 +30,8 @@
   "menu.logistics.item_filter.blacklist": "現在のフィルタモード: ブラックリスト",
   "menu.logistics.item_filter.nbt.on": "NBTデータ: 無視しない",
   "menu.logistics.item_filter.nbt.off": "NBTデータ: 無視",
-  "menu.logistics.storage_unit.item_display_plural": "%s §7アイテム",
-  "menu.logistics.storage_unit.item_display_singular": "%s §7アイテム",
+  "menu.logistics.storage_unit.item_display_plural": "%s アイテム",
+  "menu.logistics.storage_unit.item_display_singular": "%s アイテム",
   "advancement.logistics.root.title": "物流",
   "advancement.logistics.basic_cable.title": "ネットワーク構築の基本",
   "block.logistics.elite_cable": "精鋭ケーブル",
@@ -67,7 +67,7 @@
   "advancement.logistics.fluid_storage_unit.description": "液体ストレージユニットを作成する",
   "advancement.logistics.trash_can.title": "もういらない！",
   "advancement.logistics.trash_can.description": "ゴミ箱を作成する",
-  "advancement.logistics.vacuum_chest.title": "ヨシ！",
+  "advancement.logistics.vacuum_chest.title": "たぶん安全",
   "advancement.logistics.vacuum_chest.description": "吸引チェストを作成する",
   "advancement.logistics.storage_unit.title": "無限のアイテム"
 }
