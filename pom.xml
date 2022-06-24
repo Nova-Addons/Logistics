@@ -13,6 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spigot.version>1.19-R0.1-SNAPSHOT</spigot.version>
         <nova.version>0.9</nova.version>
+        <kotlin.version>1.7.0</kotlin.version>
         <dir>${project.build.directory}</dir>
     </properties>
 
@@ -29,7 +30,7 @@
             <url>https://repo.xenondevs.xyz/releases</url>
         </pluginRepository>
     </pluginRepositories>
-    
+
     <dependencies>
         <dependency>
             <groupId>xyz.xenondevs.nova</groupId>
@@ -38,20 +39,82 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>spigot-mapped</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <string.remapper.remap.goal>spigot</string.remapper.remap.goal>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>xyz.xenondevs</groupId>
+                        <artifactId>specialsource-maven-plugin</artifactId>
+                        <version>1.2.4</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>remap</goal>
+                                </goals>
+                                <id>remap-obf</id>
+                                <configuration>
+                                    <srgIn>org.spigotmc:minecraft-server:${spigot.version}:txt:maps-mojang</srgIn>
+                                    <reverse>true</reverse>
+                                    <remappedDependencies>org.spigotmc:spigot:${spigot.version}:jar:remapped-mojang</remappedDependencies>
+                                    <remappedArtifactAttached>false</remappedArtifactAttached>
+                                    <finalName>${project.artifactId}-${project.version}-remapped-obf</finalName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>remap</goal>
+                                </goals>
+                                <id>remap-spigot</id>
+                                <configuration>
+                                    <inputFile>${project.build.directory}/${project.artifactId}-${project.version}-remapped-obf.jar</inputFile>
+                                    <srgIn>org.spigotmc:minecraft-server:${spigot.version}:csrg:maps-spigot</srgIn>
+                                    <remappedDependencies>org.spigotmc:spigot:${spigot.version}:jar:remapped-obf</remappedDependencies>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>mojang-mapped</id>
+            <properties>
+                <string.remapper.remap.goal>mojang</string.remapper.remap.goal>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
-        
+        <testSourceDirectory>src/test/kotlin</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
-                <version>1.6.21</version>
+                <version>${kotlin.version}</version>
                 <executions>
                     <execution>
                         <id>compile</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>test-compile</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -70,41 +133,44 @@
                     <outputDirectory>${dir}</outputDirectory>
                 </configuration>
             </plugin>
+
+            <!-- re-declare to change execution order -->
             <plugin>
                 <groupId>xyz.xenondevs</groupId>
                 <artifactId>specialsource-maven-plugin</artifactId>
                 <version>1.2.4</version>
+            </plugin>
+
+            <plugin>
+                <groupId>xyz.xenondevs</groupId>
+                <artifactId>string-remapper-maven-plugin</artifactId>
+                <version>0.6</version>
+
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <id>remap-strings</id>
                         <goals>
                             <goal>remap</goal>
                         </goals>
-                        <id>remap-obf</id>
                         <configuration>
-                            <srgIn>org.spigotmc:minecraft-server:${spigot.version}:txt:maps-mojang</srgIn>
-                            <reverse>true</reverse>
-                            <remappedDependencies>org.spigotmc:spigot:${spigot.version}:jar:remapped-mojang</remappedDependencies>
-                            <remappedArtifactAttached>false</remappedArtifactAttached>
-                            <finalName>${project.artifactId}-${project.version}-remapped-obf</finalName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>remap</goal>
-                        </goals>
-                        <id>remap-spigot</id>
-                        <configuration>
-                            <inputFile>${project.build.directory}/${project.artifactId}-${project.version}-remapped-obf.jar</inputFile>
-                            <srgIn>org.spigotmc:minecraft-server:${spigot.version}:csrg:maps-spigot</srgIn>
-                            <remappedDependencies>org.spigotmc:spigot:${spigot.version}:jar:remapped-obf</remappedDependencies>
+                            <remapGoal>${string.remapper.remap.goal}</remapGoal>
+                            <classesIn>${project.build.directory}/classes</classesIn>
+                            <classesOut>${project.build.directory}/classes-${string.remapper.remap.goal}</classesOut>
+                            <mapsMojang>org.spigotmc:minecraft-server:txt:maps-mojang:${spigot.version}</mapsMojang>
+                            <mapsSpigot>
+                                <classes>org.spigotmc:minecraft-server:csrg:maps-spigot:${spigot.version}</classes>
+                                <members>org.spigotmc:minecraft-server:csrg:maps-spigot-members:${spigot.version}</members>
+                            </mapsSpigot>
+                            <classes>
+                                <!-- Put your Reflection classes here -->
+                                <!-- Example: <class>xyz.xenondevs.nova.util.reflection.ReflectionRegistry</class> -->
+                            </classes>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
-        
+
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -112,6 +178,5 @@
             </resource>
         </resources>
     </build>
-
 
 </project>
