@@ -10,12 +10,10 @@ import xyz.xenondevs.nova.tileentity.network.item.saveFilterConfig
 import java.util.logging.Logger
 
 lateinit var LOGGER: Logger
-lateinit var LOGISTICS: Logistics
 
-class Logistics : Addon() {
+object Logistics : Addon() {
     
     override fun init() {
-        LOGISTICS = this
         LOGGER = logger
         
         Blocks.init()

@@ -2,7 +2,7 @@ package xyz.xenondevs.nova.logistics.registry
 
 import org.bukkit.Material.*
 import org.bukkit.Sound
-import xyz.xenondevs.nova.logistics.LOGISTICS
+import xyz.xenondevs.nova.logistics.Logistics
 import xyz.xenondevs.nova.logistics.tileentity.*
 import xyz.xenondevs.nova.material.BlockOptions
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerDefaultItem
@@ -19,32 +19,32 @@ object Blocks {
     private val TANK = BlockOptions(2.0, ToolCategory.PICKAXE, ToolLevel.STONE, true, BARRIER, SoundEffect(Sound.BLOCK_GLASS_PLACE), SoundEffect(Sound.BLOCK_GLASS_BREAK), GLASS)
     private val OTHER = BlockOptions(4.0, ToolCategory.PICKAXE, ToolLevel.STONE, true, BARRIER, SoundEffect(Sound.BLOCK_STONE_PLACE), SoundEffect(Sound.BLOCK_STONE_BREAK), COBBLESTONE)
     
-    val BASIC_CABLE = registerTileEntity(LOGISTICS, "basic_cable", CABLE, ::BasicCable, isInteractive = false, properties = emptyList())
-    val ADVANCED_CABLE = registerTileEntity(LOGISTICS, "advanced_cable", CABLE, ::AdvancedCable, isInteractive = false, properties = emptyList())
-    val ELITE_CABLE = registerTileEntity(LOGISTICS, "elite_cable", CABLE, ::EliteCable, isInteractive = false, properties = emptyList())
-    val ULTIMATE_CABLE = registerTileEntity(LOGISTICS, "ultimate_cable", CABLE, ::UltimateCable, isInteractive = false, properties = emptyList())
-    val CREATIVE_CABLE = registerTileEntity(LOGISTICS, "creative_cable", CABLE, ::CreativeCable, isInteractive = false, properties = emptyList())
+    val BASIC_CABLE = registerTileEntity(Logistics, "basic_cable", CABLE, ::BasicCable, isInteractive = false, properties = emptyList())
+    val ADVANCED_CABLE = registerTileEntity(Logistics, "advanced_cable", CABLE, ::AdvancedCable, isInteractive = false, properties = emptyList())
+    val ELITE_CABLE = registerTileEntity(Logistics, "elite_cable", CABLE, ::EliteCable, isInteractive = false, properties = emptyList())
+    val ULTIMATE_CABLE = registerTileEntity(Logistics, "ultimate_cable", CABLE, ::UltimateCable, isInteractive = false, properties = emptyList())
+    val CREATIVE_CABLE = registerTileEntity(Logistics, "creative_cable", CABLE, ::CreativeCable, isInteractive = false, properties = emptyList())
     
-    val BASIC_POWER_CELL = registerEnergyTileEntity(LOGISTICS, "basic_power_cell", POWER_CELL, ::BasicPowerCell)
-    val ADVANCED_POWER_CELL = registerEnergyTileEntity(LOGISTICS, "advanced_power_cell", POWER_CELL, ::AdvancedPowerCell)
-    val ELITE_POWER_CELL = registerEnergyTileEntity(LOGISTICS, "elite_power_cell", POWER_CELL, ::ElitePowerCell)
-    val ULTIMATE_POWER_CELL = registerEnergyTileEntity(LOGISTICS, "ultimate_power_cell", POWER_CELL, ::UltimatePowerCell)
-    val CREATIVE_POWER_CELL = registerEnergyTileEntity(LOGISTICS, "creative_power_cell", POWER_CELL, ::CreativePowerCell)
+    val BASIC_POWER_CELL = registerEnergyTileEntity(Logistics, "basic_power_cell", POWER_CELL, ::BasicPowerCell)
+    val ADVANCED_POWER_CELL = registerEnergyTileEntity(Logistics, "advanced_power_cell", POWER_CELL, ::AdvancedPowerCell)
+    val ELITE_POWER_CELL = registerEnergyTileEntity(Logistics, "elite_power_cell", POWER_CELL, ::ElitePowerCell)
+    val ULTIMATE_POWER_CELL = registerEnergyTileEntity(Logistics, "ultimate_power_cell", POWER_CELL, ::UltimatePowerCell)
+    val CREATIVE_POWER_CELL = registerEnergyTileEntity(Logistics, "creative_power_cell", POWER_CELL, ::CreativePowerCell)
     
-    val BASIC_FLUID_TANK = registerTileEntity(LOGISTICS, "basic_fluid_tank", TANK, ::BasicFluidTank)
-    val ADVANCED_FLUID_TANK = registerTileEntity(LOGISTICS, "advanced_fluid_tank", TANK, ::AdvancedFluidTank)
-    val ELITE_FLUID_TANK = registerTileEntity(LOGISTICS, "elite_fluid_tank", TANK, ::EliteFluidTank)
-    val ULTIMATE_FLUID_TANK = registerTileEntity(LOGISTICS, "ultimate_fluid_tank", TANK, ::UltimateFluidTank)
-    val CREATIVE_FLUID_TANK = registerTileEntity(LOGISTICS, "creative_fluid_tank", TANK, ::CreativeFluidTank)
+    val BASIC_FLUID_TANK = registerTileEntity(Logistics, "basic_fluid_tank", TANK, ::BasicFluidTank)
+    val ADVANCED_FLUID_TANK = registerTileEntity(Logistics, "advanced_fluid_tank", TANK, ::AdvancedFluidTank)
+    val ELITE_FLUID_TANK = registerTileEntity(Logistics, "elite_fluid_tank", TANK, ::EliteFluidTank)
+    val ULTIMATE_FLUID_TANK = registerTileEntity(Logistics, "ultimate_fluid_tank", TANK, ::UltimateFluidTank)
+    val CREATIVE_FLUID_TANK = registerTileEntity(Logistics, "creative_fluid_tank", TANK, ::CreativeFluidTank)
     
-    val STORAGE_UNIT = registerTileEntity(LOGISTICS, "storage_unit", OTHER, ::StorageUnit)
-    val FLUID_STORAGE_UNIT = registerTileEntity(LOGISTICS, "fluid_storage_unit", OTHER, ::FluidStorageUnit)
-    val VACUUM_CHEST = registerTileEntity(LOGISTICS, "vacuum_chest", OTHER, ::VacuumChest)
-    val TRASH_CAN = registerTileEntity(LOGISTICS, "trash_can", OTHER, ::TrashCan)
+    val STORAGE_UNIT = registerTileEntity(Logistics, "storage_unit", OTHER, ::StorageUnit)
+    val FLUID_STORAGE_UNIT = registerTileEntity(Logistics, "fluid_storage_unit", OTHER, ::FluidStorageUnit)
+    val VACUUM_CHEST = registerTileEntity(Logistics, "vacuum_chest", OTHER, ::VacuumChest)
+    val TRASH_CAN = registerTileEntity(Logistics, "trash_can", OTHER, ::TrashCan)
     
     // Move these somewhere else?
-    val TANK_WATER_LEVELS = registerDefaultItem(LOGISTICS, "tank_water_levels")
-    val TANK_LAVA_LEVELS = registerDefaultItem(LOGISTICS, "tank_lava_levels")
+    val TANK_WATER_LEVELS = registerDefaultItem(Logistics, "tank_water_levels")
+    val TANK_LAVA_LEVELS = registerDefaultItem(Logistics, "tank_lava_levels")
     
     fun init() = Unit
     
