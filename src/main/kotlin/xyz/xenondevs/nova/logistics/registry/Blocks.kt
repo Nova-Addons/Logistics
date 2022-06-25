@@ -6,7 +6,6 @@ import xyz.xenondevs.nova.logistics.Logistics
 import xyz.xenondevs.nova.logistics.tileentity.*
 import xyz.xenondevs.nova.material.BlockOptions
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerDefaultItem
-import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerEnergyTileEntity
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerTileEntity
 import xyz.xenondevs.nova.util.SoundEffect
 import xyz.xenondevs.nova.util.item.ToolCategory
@@ -25,11 +24,11 @@ object Blocks {
     val ULTIMATE_CABLE = registerTileEntity(Logistics, "ultimate_cable", CABLE, ::UltimateCable, isInteractive = false, properties = emptyList())
     val CREATIVE_CABLE = registerTileEntity(Logistics, "creative_cable", CABLE, ::CreativeCable, isInteractive = false, properties = emptyList())
     
-    val BASIC_POWER_CELL = registerEnergyTileEntity(Logistics, "basic_power_cell", POWER_CELL, ::BasicPowerCell)
-    val ADVANCED_POWER_CELL = registerEnergyTileEntity(Logistics, "advanced_power_cell", POWER_CELL, ::AdvancedPowerCell)
-    val ELITE_POWER_CELL = registerEnergyTileEntity(Logistics, "elite_power_cell", POWER_CELL, ::ElitePowerCell)
-    val ULTIMATE_POWER_CELL = registerEnergyTileEntity(Logistics, "ultimate_power_cell", POWER_CELL, ::UltimatePowerCell)
-    val CREATIVE_POWER_CELL = registerEnergyTileEntity(Logistics, "creative_power_cell", POWER_CELL, ::CreativePowerCell)
+    val BASIC_POWER_CELL = registerTileEntity(Logistics, "basic_power_cell", POWER_CELL, ::BasicPowerCell)
+    val ADVANCED_POWER_CELL = registerTileEntity(Logistics, "advanced_power_cell", POWER_CELL, ::AdvancedPowerCell)
+    val ELITE_POWER_CELL = registerTileEntity(Logistics, "elite_power_cell", POWER_CELL, ::ElitePowerCell)
+    val ULTIMATE_POWER_CELL = registerTileEntity(Logistics, "ultimate_power_cell", POWER_CELL, ::UltimatePowerCell)
+    val CREATIVE_POWER_CELL = registerTileEntity(Logistics, "creative_power_cell", POWER_CELL, ::CreativePowerCell)
     
     val BASIC_FLUID_TANK = registerTileEntity(Logistics, "basic_fluid_tank", TANK, ::BasicFluidTank)
     val ADVANCED_FLUID_TANK = registerTileEntity(Logistics, "advanced_fluid_tank", TANK, ::AdvancedFluidTank)
