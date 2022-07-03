@@ -18,5 +18,10 @@
   "block.logistics.fluid_storage_unit": "액체 저장 유닛",
   "block.logistics.vacuum_chest": "흡수 상자",
   "block.logistics.trash_can": "쓰레기통",
-  "menu.logistics.item_filter": "아이템 필터"
+  "menu.logistics.item_filter": "아이템 필터",
+  "item.logistics.advanced_item_filter": "고급 아이템 필터",
+  "item.logistics.ultimate_item_filter": "얼티밋 아이템 필터",
+  "menu.logistics.items.category.logistics": "물류",
+  "item.logistics.basic_item_filter": "기본 아이템 필터",
+  "item.logistics.elite_item_filter": "엘리트 아이템 필터"
 }
