@@ -12,6 +12,7 @@ import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.ValueReloadable
 import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.config.notReloadable
+import xyz.xenondevs.nova.data.resources.model.data.ArmorStandBlockModelData
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.gui.cable.CableConfigGUI
 import xyz.xenondevs.nova.logistics.registry.Blocks
@@ -180,7 +181,7 @@ open class Cable(
         val models = ArrayList<Model>()
         
         attachments.forEach { (id, face) ->
-            val attachmentStack = material.blockProviders[ATTACHMENTS[id]].get()
+            val attachmentStack = (material.block as ArmorStandBlockModelData)[ATTACHMENTS[id]].get()
             models += Model(attachmentStack, location.clone().center().apply { yaw = BlockFace.values()[face].rotationValues.second * 90f })
         }
         multiModel.replaceModels(models)

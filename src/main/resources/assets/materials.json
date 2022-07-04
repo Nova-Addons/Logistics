@@ -9,11 +9,6 @@
     "advanced_item_filter": "item/item_filter/advanced",
     "elite_item_filter": "item/item_filter/elite",
     "ultimate_item_filter": "item/item_filter/ultimate",
-    "basic_power_cell": "block/power_cell/basic",
-    "advanced_power_cell": "block/power_cell/advanced",
-    "elite_power_cell": "block/power_cell/elite",
-    "ultimate_power_cell": "block/power_cell/ultimate",
-    "creative_power_cell": "block/power_cell/creative",
     "basic_fluid_tank": "block/fluid_tank/basic",
     "advanced_fluid_tank": "block/fluid_tank/advanced",
     "elite_fluid_tank": "block/fluid_tank/elite",
@@ -23,6 +18,31 @@
     "fluid_storage_unit": "block/fluid_storage_unit",
     "vacuum_chest": "block/vacuum_chest",
     "trash_can": "block/trash_can",
+    "basic_power_cell": {
+        "item": "block/power_cell/basic",
+        "block_type": "solid",
+        "block_priority": 1
+    },
+    "advanced_power_cell": {
+        "item": "block/power_cell/advanced",
+        "block_type": "solid",
+        "block_priority": 1
+    },
+    "elite_power_cell": {
+        "item": "block/power_cell/elite",
+        "block_type": "solid",
+        "block_priority": 1
+    },
+    "ultimate_power_cell": {
+        "item": "block/power_cell/ultimate",
+        "block_type": "solid",
+        "block_priority": 1
+    },
+    "creative_power_cell": {
+        "item": "block/power_cell/creative",
+        "block_type": "solid",
+        "block_priority": 1
+    },
     "basic_cable": {
         "item": "item/cable/basic",
         "block": {
@@ -69,13 +89,11 @@
         }
     },
     "tank_water_levels": {
-        "item_type": "translucent",
         "item": {
             "block/fluid_levels/tank/water/%s": [0, 99]
         }
     },
     "tank_lava_levels": {
-        "item_type": "translucent",
         "item": {
             "block/fluid_levels/tank/lava/%s": [0, 99]
         }
