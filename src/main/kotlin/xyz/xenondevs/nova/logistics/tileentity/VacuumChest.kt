@@ -150,7 +150,7 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
             .addIngredient('s', OpenSideConfigItem(sideConfigGUI))
             .addIngredient('u', OpenUpgradesItem(upgradeHolder))
             .addIngredient('r', VisualizeRegionItem(uuid) { region })
-            .addIngredient('f', VISlotElement(filterInventory, 0, GUIMaterials.ITEM_FILTER_PLACEHOLDER.createBasicItemBuilder()))
+            .addIngredient('f', VISlotElement(filterInventory, 0, GUIMaterials.ITEM_FILTER_PLACEHOLDER.createClientsideItemBuilder()))
             .addIngredient('p', AddNumberItem({ MIN_RANGE..maxRange }, { range }, { range = it }).also(rangeItems::add))
             .addIngredient('m', RemoveNumberItem({ MIN_RANGE..maxRange }, { range }, { range = it }).also(rangeItems::add))
             .addIngredient('d', DisplayNumberItem { range }.also(rangeItems::add))
