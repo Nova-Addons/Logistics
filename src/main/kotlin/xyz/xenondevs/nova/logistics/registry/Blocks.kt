@@ -31,16 +31,16 @@ object Blocks {
     val ULTIMATE_POWER_CELL = registerTileEntity(Logistics, "ultimate_power_cell", POWER_CELL, ::UltimatePowerCell, properties = listOf(Directional.NORMAL))
     val CREATIVE_POWER_CELL = registerTileEntity(Logistics, "creative_power_cell", POWER_CELL, ::CreativePowerCell, properties = listOf(Directional.NORMAL))
     
-    val BASIC_FLUID_TANK = registerTileEntity(Logistics, "basic_fluid_tank", TANK, ::BasicFluidTank)
-    val ADVANCED_FLUID_TANK = registerTileEntity(Logistics, "advanced_fluid_tank", TANK, ::AdvancedFluidTank)
-    val ELITE_FLUID_TANK = registerTileEntity(Logistics, "elite_fluid_tank", TANK, ::EliteFluidTank)
-    val ULTIMATE_FLUID_TANK = registerTileEntity(Logistics, "ultimate_fluid_tank", TANK, ::UltimateFluidTank)
-    val CREATIVE_FLUID_TANK = registerTileEntity(Logistics, "creative_fluid_tank", TANK, ::CreativeFluidTank)
+    val BASIC_FLUID_TANK = registerTileEntity(Logistics, "basic_fluid_tank", TANK, ::BasicFluidTank, properties = listOf(Directional.NORMAL))
+    val ADVANCED_FLUID_TANK = registerTileEntity(Logistics, "advanced_fluid_tank", TANK, ::AdvancedFluidTank, properties = listOf(Directional.NORMAL))
+    val ELITE_FLUID_TANK = registerTileEntity(Logistics, "elite_fluid_tank", TANK, ::EliteFluidTank, properties = listOf(Directional.NORMAL))
+    val ULTIMATE_FLUID_TANK = registerTileEntity(Logistics, "ultimate_fluid_tank", TANK, ::UltimateFluidTank, properties = listOf(Directional.NORMAL))
+    val CREATIVE_FLUID_TANK = registerTileEntity(Logistics, "creative_fluid_tank", TANK, ::CreativeFluidTank, properties = listOf(Directional.NORMAL))
     
-    val STORAGE_UNIT = registerTileEntity(Logistics, "storage_unit", OTHER, ::StorageUnit)
-    val FLUID_STORAGE_UNIT = registerTileEntity(Logistics, "fluid_storage_unit", OTHER, ::FluidStorageUnit)
-    val VACUUM_CHEST = registerTileEntity(Logistics, "vacuum_chest", OTHER, ::VacuumChest)
-    val TRASH_CAN = registerTileEntity(Logistics, "trash_can", OTHER, ::TrashCan)
+    val STORAGE_UNIT = registerTileEntity(Logistics, "storage_unit", OTHER, ::StorageUnit, properties = listOf(Directional.NORMAL))
+    val FLUID_STORAGE_UNIT = registerTileEntity(Logistics, "fluid_storage_unit", OTHER, ::FluidStorageUnit, properties = listOf(Directional.NORMAL))
+    val VACUUM_CHEST = registerTileEntity(Logistics, "vacuum_chest", OTHER, ::VacuumChest, properties = listOf(Directional.NORMAL))
+    val TRASH_CAN = registerTileEntity(Logistics, "trash_can", OTHER, ::TrashCan, properties = listOf(Directional.NORMAL))
     
     // Move these somewhere else?
     val TANK_WATER_LEVELS = registerDefaultItem(Logistics, "tank_water_levels")
