@@ -33,6 +33,7 @@ import xyz.xenondevs.nova.util.item.novaMaterial
 import xyz.xenondevs.nova.world.block.hitbox.Hitbox
 import xyz.xenondevs.nova.world.point.Point3D
 import java.util.*
+import kotlin.collections.flatMapTo
 
 private val SUPPORTED_NETWORK_TYPES = hashSetOf(ENERGY, ITEMS, FLUID)
 private val ATTACHMENTS: IntArray = (64..112).toIntArray()
