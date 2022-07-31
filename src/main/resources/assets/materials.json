@@ -21,36 +21,31 @@
     "basic_power_cell": {
         "item": "block/power_cell/basic",
         "block": {
-            "type": "solid",
-            "directions": "nesw"
+            "type": "solid"
         }
     },
     "advanced_power_cell": {
         "item": "block/power_cell/advanced",
         "block": {
-            "type": "solid",
-            "directions": "nesw"
+            "type": "solid"
         }
     },
     "elite_power_cell": {
         "item": "block/power_cell/elite",
         "block": {
-            "type": "solid",
-            "directions": "nesw"
+            "type": "solid"
         }
     },
     "ultimate_power_cell": {
         "item": "block/power_cell/ultimate",
         "block": {
-            "type": "solid",
-            "directions": "nesw"
+            "type": "solid"
         }
     },
     "creative_power_cell": {
         "item": "block/power_cell/creative",
         "block": {
-            "type": "solid",
-            "directions": "nesw"
+            "type": "solid"
         }
     },
     "basic_cable": {

@@ -3,8 +3,27 @@ package xyz.xenondevs.nova.logistics.registry
 import org.bukkit.Material.*
 import org.bukkit.Sound
 import xyz.xenondevs.nova.data.world.block.property.Directional
+import xyz.xenondevs.nova.data.world.block.property.LegacyDirectional
 import xyz.xenondevs.nova.logistics.Logistics
-import xyz.xenondevs.nova.logistics.tileentity.*
+import xyz.xenondevs.nova.logistics.tileentity.AdvancedCable
+import xyz.xenondevs.nova.logistics.tileentity.AdvancedFluidTank
+import xyz.xenondevs.nova.logistics.tileentity.AdvancedPowerCell
+import xyz.xenondevs.nova.logistics.tileentity.BasicCable
+import xyz.xenondevs.nova.logistics.tileentity.BasicFluidTank
+import xyz.xenondevs.nova.logistics.tileentity.BasicPowerCell
+import xyz.xenondevs.nova.logistics.tileentity.CreativeCable
+import xyz.xenondevs.nova.logistics.tileentity.CreativeFluidTank
+import xyz.xenondevs.nova.logistics.tileentity.CreativePowerCell
+import xyz.xenondevs.nova.logistics.tileentity.EliteCable
+import xyz.xenondevs.nova.logistics.tileentity.EliteFluidTank
+import xyz.xenondevs.nova.logistics.tileentity.ElitePowerCell
+import xyz.xenondevs.nova.logistics.tileentity.FluidStorageUnit
+import xyz.xenondevs.nova.logistics.tileentity.StorageUnit
+import xyz.xenondevs.nova.logistics.tileentity.TrashCan
+import xyz.xenondevs.nova.logistics.tileentity.UltimateCable
+import xyz.xenondevs.nova.logistics.tileentity.UltimateFluidTank
+import xyz.xenondevs.nova.logistics.tileentity.UltimatePowerCell
+import xyz.xenondevs.nova.logistics.tileentity.VacuumChest
 import xyz.xenondevs.nova.material.BlockOptions
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerDefaultItem
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerTileEntity
@@ -25,21 +44,21 @@ object Blocks {
     val ULTIMATE_CABLE = registerTileEntity(Logistics, "ultimate_cable", CABLE, ::UltimateCable, isInteractive = false)
     val CREATIVE_CABLE = registerTileEntity(Logistics, "creative_cable", CABLE, ::CreativeCable, isInteractive = false)
     
-    val BASIC_POWER_CELL = registerTileEntity(Logistics, "basic_power_cell", POWER_CELL, ::BasicPowerCell, properties = listOf(Directional.NORMAL))
-    val ADVANCED_POWER_CELL = registerTileEntity(Logistics, "advanced_power_cell", POWER_CELL, ::AdvancedPowerCell, properties = listOf(Directional.NORMAL))
-    val ELITE_POWER_CELL = registerTileEntity(Logistics, "elite_power_cell", POWER_CELL, ::ElitePowerCell, properties = listOf(Directional.NORMAL))
-    val ULTIMATE_POWER_CELL = registerTileEntity(Logistics, "ultimate_power_cell", POWER_CELL, ::UltimatePowerCell, properties = listOf(Directional.NORMAL))
-    val CREATIVE_POWER_CELL = registerTileEntity(Logistics, "creative_power_cell", POWER_CELL, ::CreativePowerCell, properties = listOf(Directional.NORMAL))
+    val BASIC_POWER_CELL = registerTileEntity(Logistics, "basic_power_cell", POWER_CELL, ::BasicPowerCell, properties = listOf(LegacyDirectional))
+    val ADVANCED_POWER_CELL = registerTileEntity(Logistics, "advanced_power_cell", POWER_CELL, ::AdvancedPowerCell, properties = listOf(LegacyDirectional))
+    val ELITE_POWER_CELL = registerTileEntity(Logistics, "elite_power_cell", POWER_CELL, ::ElitePowerCell, properties = listOf(LegacyDirectional))
+    val ULTIMATE_POWER_CELL = registerTileEntity(Logistics, "ultimate_power_cell", POWER_CELL, ::UltimatePowerCell, properties = listOf(LegacyDirectional))
+    val CREATIVE_POWER_CELL = registerTileEntity(Logistics, "creative_power_cell", POWER_CELL, ::CreativePowerCell, properties = listOf(LegacyDirectional))
     
-    val BASIC_FLUID_TANK = registerTileEntity(Logistics, "basic_fluid_tank", TANK, ::BasicFluidTank, properties = listOf(Directional.NORMAL))
-    val ADVANCED_FLUID_TANK = registerTileEntity(Logistics, "advanced_fluid_tank", TANK, ::AdvancedFluidTank, properties = listOf(Directional.NORMAL))
-    val ELITE_FLUID_TANK = registerTileEntity(Logistics, "elite_fluid_tank", TANK, ::EliteFluidTank, properties = listOf(Directional.NORMAL))
-    val ULTIMATE_FLUID_TANK = registerTileEntity(Logistics, "ultimate_fluid_tank", TANK, ::UltimateFluidTank, properties = listOf(Directional.NORMAL))
-    val CREATIVE_FLUID_TANK = registerTileEntity(Logistics, "creative_fluid_tank", TANK, ::CreativeFluidTank, properties = listOf(Directional.NORMAL))
+    val BASIC_FLUID_TANK = registerTileEntity(Logistics, "basic_fluid_tank", TANK, ::BasicFluidTank, properties = listOf(LegacyDirectional))
+    val ADVANCED_FLUID_TANK = registerTileEntity(Logistics, "advanced_fluid_tank", TANK, ::AdvancedFluidTank, properties = listOf(LegacyDirectional))
+    val ELITE_FLUID_TANK = registerTileEntity(Logistics, "elite_fluid_tank", TANK, ::EliteFluidTank, properties = listOf(LegacyDirectional))
+    val ULTIMATE_FLUID_TANK = registerTileEntity(Logistics, "ultimate_fluid_tank", TANK, ::UltimateFluidTank, properties = listOf(LegacyDirectional))
+    val CREATIVE_FLUID_TANK = registerTileEntity(Logistics, "creative_fluid_tank", TANK, ::CreativeFluidTank, properties = listOf(LegacyDirectional))
     
-    val STORAGE_UNIT = registerTileEntity(Logistics, "storage_unit", OTHER, ::StorageUnit, properties = listOf(Directional.NORMAL))
-    val FLUID_STORAGE_UNIT = registerTileEntity(Logistics, "fluid_storage_unit", OTHER, ::FluidStorageUnit, properties = listOf(Directional.NORMAL))
-    val VACUUM_CHEST = registerTileEntity(Logistics, "vacuum_chest", OTHER, ::VacuumChest, properties = listOf(Directional.NORMAL))
+    val STORAGE_UNIT = registerTileEntity(Logistics, "storage_unit", OTHER, ::StorageUnit, properties = listOf(LegacyDirectional))
+    val FLUID_STORAGE_UNIT = registerTileEntity(Logistics, "fluid_storage_unit", OTHER, ::FluidStorageUnit, properties = listOf(LegacyDirectional))
+    val VACUUM_CHEST = registerTileEntity(Logistics, "vacuum_chest", OTHER, ::VacuumChest, properties = listOf(LegacyDirectional))
     val TRASH_CAN = registerTileEntity(Logistics, "trash_can", OTHER, ::TrashCan, properties = listOf(Directional.NORMAL))
     
     // Move these somewhere else?
