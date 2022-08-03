@@ -51,6 +51,7 @@
     "basic_cable": {
         "item": "item/cable/basic",
         "block": {
+            "hitbox": "structure_void",
             "models": {
                 "block/cable/basic/%s": [0, 63],
                 "block/cable/attachments/horizontal/%s": [0, 15],
@@ -62,6 +63,7 @@
     "advanced_cable": {
         "item": "item/cable/advanced",
         "block": {
+            "hitbox": "structure_void",
             "models": {
                 "block/cable/advanced/%s": [0, 63],
                 "block/cable/attachments/horizontal/%s": [0, 15],
@@ -73,6 +75,7 @@
     "elite_cable": {
         "item": "item/cable/elite",
         "block": {
+            "hitbox": "structure_void",
             "models": {
                 "block/cable/elite/%s": [0, 63],
                 "block/cable/attachments/horizontal/%s": [0, 15],
@@ -84,6 +87,7 @@
     "ultimate_cable": {
         "item": "item/cable/ultimate",
         "block": {
+            "hitbox": "structure_void",
             "models": {
                 "block/cable/ultimate/%s": [0, 63],
                 "block/cable/attachments/horizontal/%s": [0, 15],
@@ -95,6 +99,7 @@
     "creative_cable": {
         "item": "item/cable/creative",
         "block": {
+            "hitbox": "structure_void",
             "models": {
                 "block/cable/creative/%s": [0, 63],
                 "block/cable/attachments/horizontal/%s": [0, 15],
