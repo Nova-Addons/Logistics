@@ -9,7 +9,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import xyz.xenondevs.nova.material.CoreGUIMaterial
-import xyz.xenondevs.nova.ui.config.side.BUTTON_COLORS
+import xyz.xenondevs.nova.ui.item.BUTTON_COLORS
 import xyz.xenondevs.nova.util.data.setLocalizedName
 import xyz.xenondevs.nova.util.notifyWindows
 
@@ -34,7 +34,7 @@ abstract class BaseCableConfigGUI(private val channelAmount: Int) {
         
         override fun getItemProvider(): ItemProvider =
             (if (insertState) CoreGUIMaterial.GREEN_BTN else CoreGUIMaterial.GRAY_BTN)
-                .createBasicItemBuilder().setLocalizedName("menu.logistics.cable_config.insert")
+                .createClientsideItemBuilder().setLocalizedName("menu.logistics.cable_config.insert")
         
         override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {
             if (!allowsInsert) return
@@ -50,7 +50,7 @@ abstract class BaseCableConfigGUI(private val channelAmount: Int) {
         
         override fun getItemProvider(): ItemProvider =
             (if (extractState) CoreGUIMaterial.GREEN_BTN else CoreGUIMaterial.GRAY_BTN)
-                .createBasicItemBuilder().setLocalizedName("menu.logistics.cable_config.extract")
+                .createClientsideItemBuilder().setLocalizedName("menu.logistics.cable_config.extract")
         
         override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {
             if (!allowsExtract) return
@@ -65,7 +65,7 @@ abstract class BaseCableConfigGUI(private val channelAmount: Int) {
     protected inner class SwitchChannelItem : BaseItem() {
         
         override fun getItemProvider(): ItemProvider {
-            return BUTTON_COLORS[channel].createBasicItemBuilder()
+            return BUTTON_COLORS[channel].createClientsideItemBuilder()
                 .setDisplayName(TranslatableComponent("menu.logistics.cable_config.channel", channel + 1))
         }
         

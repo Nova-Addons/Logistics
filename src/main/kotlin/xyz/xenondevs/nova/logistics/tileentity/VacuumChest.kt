@@ -9,7 +9,6 @@ import de.studiocode.invui.virtualinventory.event.ItemUpdateEvent
 import org.bukkit.entity.Item
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.configReloadable
-import xyz.xenondevs.nova.data.serialization.cbf.Compound
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.integration.protection.ProtectionManager
 import xyz.xenondevs.nova.logistics.item.getItemFilterConfig
@@ -51,8 +50,7 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
     
     override val gui = lazy { VacuumChestGUI() }
     override val upgradeHolder = getUpgradeHolder(UpgradeType.RANGE)
-    private var filter: ItemFilter? = retrieveOrNull<Compound>("itemFilter")
-        ?.let { ItemFilter(it) }
+    private var filter: ItemFilter? = retrieveDataOrNull<ItemFilter>("itemFilter")
         ?.also { filterInventory.setItemStack(SELF_UPDATE_REASON, 0, it.createFilterItem()) }
     private val items = ArrayList<Item>()
     
@@ -74,7 +72,7 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
     
     override fun saveData() {
         storeData("range", range)
-        storeData("itemFilter", filter?.compound)
+        storeData("itemFilter", filter)
         super.saveData()
     }
     
@@ -150,7 +148,7 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
             .addIngredient('s', OpenSideConfigItem(sideConfigGUI))
             .addIngredient('u', OpenUpgradesItem(upgradeHolder))
             .addIngredient('r', VisualizeRegionItem(uuid) { region })
-            .addIngredient('f', VISlotElement(filterInventory, 0, GUIMaterials.ITEM_FILTER_PLACEHOLDER.createBasicItemBuilder()))
+            .addIngredient('f', VISlotElement(filterInventory, 0, GUIMaterials.ITEM_FILTER_PLACEHOLDER.createClientsideItemBuilder()))
             .addIngredient('p', AddNumberItem({ MIN_RANGE..maxRange }, { range }, { range = it }).also(rangeItems::add))
             .addIngredient('m', RemoveNumberItem({ MIN_RANGE..maxRange }, { range }, { range = it }).also(rangeItems::add))
             .addIngredient('d', DisplayNumberItem { range }.also(rangeItems::add))

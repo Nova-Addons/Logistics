@@ -51,7 +51,7 @@ class TrashCan(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState
                 "1 - - - - - - - 2",
                 "| s # # i # # # |",
                 "3 - - - - - - - 4")
-            .addIngredient('i', VISlotElement(inventory, 0, GUIMaterials.TRASH_CAN_PLACEHOLDER.itemProvider))
+            .addIngredient('i', VISlotElement(inventory, 0, GUIMaterials.TRASH_CAN_PLACEHOLDER.clientsideProvider))
             .addIngredient('s', OpenSideConfigItem(sideConfigGUI))
             .build()
         

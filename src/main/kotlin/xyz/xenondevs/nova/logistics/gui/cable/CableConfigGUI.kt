@@ -42,14 +42,14 @@ class CableConfigGUI(
                     if (it.currentTab == 0)
                         CoreGUIMaterial.ITEM_BTN_SELECTED
                     else CoreGUIMaterial.ITEM_BTN_ON
-                } else CoreGUIMaterial.ITEM_BTN_OFF).itemProvider
+                } else CoreGUIMaterial.ITEM_BTN_OFF).clientsideProvider
             })
             .addIngredient('f', ClickyTabItem(1) {
                 (if (fluidConfigGUI != null) {
                     if (it.currentTab == 1)
                         CoreGUIMaterial.FLUID_BTN_SELECTED
                     else CoreGUIMaterial.FLUID_BTN_ON
-                } else CoreGUIMaterial.FLUID_BTN_OFF).itemProvider
+                } else CoreGUIMaterial.FLUID_BTN_OFF).clientsideProvider
             })
             .setGUIs(listOf(itemConfigGUI?.gui, fluidConfigGUI?.gui))
             .build()

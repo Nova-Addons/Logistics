@@ -12,6 +12,7 @@ import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.ValueReloadable
 import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.config.notReloadable
+import xyz.xenondevs.nova.data.resources.model.data.ArmorStandBlockModelData
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.gui.cable.CableConfigGUI
 import xyz.xenondevs.nova.logistics.registry.Blocks
@@ -32,6 +33,7 @@ import xyz.xenondevs.nova.util.item.novaMaterial
 import xyz.xenondevs.nova.world.block.hitbox.Hitbox
 import xyz.xenondevs.nova.world.point.Point3D
 import java.util.*
+import kotlin.collections.flatMapTo
 
 private val SUPPORTED_NETWORK_TYPES = hashSetOf(ENERGY, ITEMS, FLUID)
 private val ATTACHMENTS: IntArray = (64..112).toIntArray()
@@ -91,11 +93,11 @@ open class Cable(
     }
     
     override fun retrieveSerializedConnectedNodes(): Map<NetworkType, Map<BlockFace, UUID>>? {
-        return retrieveOrNull<HashMap<NetworkType, EnumMap<BlockFace, UUID>>>("connectedNodes")
+        return retrieveDataOrNull<HashMap<NetworkType, EnumMap<BlockFace, UUID>>>("connectedNodes")
     }
     
     override fun retrieveSerializedNetworks(): Map<NetworkType, UUID>? {
-        return retrieveOrNull<HashMap<NetworkType, UUID>>("networks")
+        return retrieveDataOrNull<HashMap<NetworkType, UUID>>("networks")
     }
     
     override fun handleNetworkUpdate() {
@@ -180,7 +182,7 @@ open class Cable(
         val models = ArrayList<Model>()
         
         attachments.forEach { (id, face) ->
-            val attachmentStack = material.blockProviders[ATTACHMENTS[id]].get()
+            val attachmentStack = (material.block as ArmorStandBlockModelData)[ATTACHMENTS[id]].get()
             models += Model(attachmentStack, location.clone().center().apply { yaw = BlockFace.values()[face].rotationValues.second * 90f })
         }
         multiModel.replaceModels(models)

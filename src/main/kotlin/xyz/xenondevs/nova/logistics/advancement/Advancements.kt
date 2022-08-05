@@ -1,7 +1,7 @@
 package xyz.xenondevs.nova.logistics.advancement
 
 import net.md_5.bungee.api.chat.TranslatableComponent
-import xyz.xenondevs.kadvancements.adapter.version.AdvancementLoader
+import xyz.xenondevs.nmsutils.advancement.AdvancementLoader
 import xyz.xenondevs.nova.logistics.Logistics
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.util.advancement

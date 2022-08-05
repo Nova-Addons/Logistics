@@ -99,8 +99,8 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
     private inner class SwitchModeItem : BaseItem() {
         
         override fun getItemProvider(): ItemProvider =
-            if (itemFilter.whitelist) GUIMaterials.WHITELIST_BTN.createBasicItemBuilder().setLocalizedName("menu.logistics.item_filter.whitelist")
-            else GUIMaterials.BLACKLIST_BTN.createBasicItemBuilder().setLocalizedName("menu.logistics.item_filter.blacklist")
+            if (itemFilter.whitelist) GUIMaterials.WHITELIST_BTN.createClientsideItemBuilder().setLocalizedName("menu.logistics.item_filter.whitelist")
+            else GUIMaterials.BLACKLIST_BTN.createClientsideItemBuilder().setLocalizedName("menu.logistics.item_filter.blacklist")
         
         override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {
             itemFilter.whitelist = !itemFilter.whitelist
@@ -113,7 +113,7 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
         
         override fun getItemProvider(): ItemProvider {
             return (if (itemFilter.nbt) GUIMaterials.NBT_BTN_ON else GUIMaterials.NBT_BTN_OFF)
-                .createBasicItemBuilder().setLocalizedName("menu.logistics.item_filter.nbt." + if (itemFilter.nbt) "on" else "off")
+                .createClientsideItemBuilder().setLocalizedName("menu.logistics.item_filter.nbt." + if (itemFilter.nbt) "on" else "off")
         }
         
         override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {
