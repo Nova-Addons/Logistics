@@ -36,7 +36,7 @@ private val MAX_ITEMS by configReloadable { NovaConfig[STORAGE_UNIT].getInt("max
 class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState) {
     
     override val gui = lazy { StorageUnitGUI() }
-    private val inventory = StorageUnitInventory(retrieveOrNull("type"), retrieveOrNull("amount") ?: 0)
+    private val inventory = StorageUnitInventory(retrieveDataOrNull("type"), retrieveDataOrNull("amount") ?: 0)
     private val inputInventory = VirtualInventory(null, 1).apply { setItemUpdateHandler(::handleInputInventoryUpdate) }
     private val outputInventory = VirtualInventory(null, 1).apply { setItemUpdateHandler(::handleOutputInventoryUpdate) }
     override val itemHolder = NovaItemHolder(

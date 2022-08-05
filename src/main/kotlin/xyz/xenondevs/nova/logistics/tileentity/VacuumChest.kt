@@ -50,7 +50,7 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
     
     override val gui = lazy { VacuumChestGUI() }
     override val upgradeHolder = getUpgradeHolder(UpgradeType.RANGE)
-    private var filter: ItemFilter? = retrieveOrNull<ItemFilter>("itemFilter")
+    private var filter: ItemFilter? = retrieveDataOrNull<ItemFilter>("itemFilter")
         ?.also { filterInventory.setItemStack(SELF_UPDATE_REASON, 0, it.createFilterItem()) }
     private val items = ArrayList<Item>()
     

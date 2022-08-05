@@ -93,11 +93,11 @@ open class Cable(
     }
     
     override fun retrieveSerializedConnectedNodes(): Map<NetworkType, Map<BlockFace, UUID>>? {
-        return retrieveOrNull<HashMap<NetworkType, EnumMap<BlockFace, UUID>>>("connectedNodes")
+        return retrieveDataOrNull<HashMap<NetworkType, EnumMap<BlockFace, UUID>>>("connectedNodes")
     }
     
     override fun retrieveSerializedNetworks(): Map<NetworkType, UUID>? {
-        return retrieveOrNull<HashMap<NetworkType, UUID>>("networks")
+        return retrieveDataOrNull<HashMap<NetworkType, UUID>>("networks")
     }
     
     override fun handleNetworkUpdate() {
