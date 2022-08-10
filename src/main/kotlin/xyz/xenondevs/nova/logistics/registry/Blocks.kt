@@ -4,7 +4,9 @@ import org.bukkit.Material.*
 import org.bukkit.Sound
 import xyz.xenondevs.nova.data.world.block.property.Directional
 import xyz.xenondevs.nova.data.world.block.property.LegacyDirectional
+import xyz.xenondevs.nova.item.NovaItem
 import xyz.xenondevs.nova.logistics.Logistics
+import xyz.xenondevs.nova.logistics.item.StorageUnitItemBehavior
 import xyz.xenondevs.nova.logistics.tileentity.AdvancedCable
 import xyz.xenondevs.nova.logistics.tileentity.AdvancedFluidTank
 import xyz.xenondevs.nova.logistics.tileentity.AdvancedPowerCell
@@ -30,6 +32,7 @@ import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerTileEntity
 import xyz.xenondevs.nova.util.SoundEffect
 import xyz.xenondevs.nova.util.item.ToolCategory
 import xyz.xenondevs.nova.util.item.ToolLevel
+import xyz.xenondevs.nova.world.block.TileEntityBlock
 
 object Blocks {
     
@@ -56,7 +59,7 @@ object Blocks {
     val ULTIMATE_FLUID_TANK = registerTileEntity(Logistics, "ultimate_fluid_tank", TANK, ::UltimateFluidTank, properties = listOf(LegacyDirectional))
     val CREATIVE_FLUID_TANK = registerTileEntity(Logistics, "creative_fluid_tank", TANK, ::CreativeFluidTank, properties = listOf(LegacyDirectional))
     
-    val STORAGE_UNIT = registerTileEntity(Logistics, "storage_unit", OTHER, ::StorageUnit, properties = listOf(LegacyDirectional))
+    val STORAGE_UNIT = registerTileEntity(Logistics, "storage_unit", OTHER, ::StorageUnit, NovaItem(StorageUnitItemBehavior), TileEntityBlock.INTERACTIVE, properties = listOf(LegacyDirectional))
     val FLUID_STORAGE_UNIT = registerTileEntity(Logistics, "fluid_storage_unit", OTHER, ::FluidStorageUnit, properties = listOf(LegacyDirectional))
     val VACUUM_CHEST = registerTileEntity(Logistics, "vacuum_chest", OTHER, ::VacuumChest, properties = listOf(LegacyDirectional))
     val TRASH_CAN = registerTileEntity(Logistics, "trash_can", OTHER, ::TrashCan, properties = listOf(Directional.NORMAL))
