@@ -1,6 +1,11 @@
 package xyz.xenondevs.nova.logistics.item
 
 import de.studiocode.invui.item.builder.ItemBuilder
+import net.md_5.bungee.api.ChatColor
+import net.md_5.bungee.api.chat.BaseComponent
+import net.md_5.bungee.api.chat.ComponentBuilder
+import net.md_5.bungee.api.chat.TextComponent
+import net.md_5.bungee.api.chat.TranslatableComponent
 import org.bukkit.entity.Player
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
@@ -15,6 +20,8 @@ import xyz.xenondevs.nova.material.ItemNovaMaterial
 import xyz.xenondevs.nova.tileentity.network.item.ItemFilter
 import xyz.xenondevs.nova.tileentity.network.item.getOrCreateFilterConfig
 import xyz.xenondevs.nova.tileentity.network.item.saveFilterConfig
+import xyz.xenondevs.nova.util.data.localized
+import xyz.xenondevs.nova.util.item.localizedName
 import xyz.xenondevs.nova.util.item.novaMaterial
 
 private val FILTER_MATERIALS = hashMapOf(
@@ -60,6 +67,43 @@ abstract class ItemFilterBehavior(size: ValueReloadable<Int>) : ItemBehavior() {
     
     fun getFilterConfig(itemStack: ItemStack): ItemFilter =
         itemStack.getOrCreateFilterConfig(size)
+    
+    override fun getLore(itemStack: ItemStack): List<Array<BaseComponent>>? {
+        val filterConfig = itemStack.getItemFilterConfig() ?: return null
+        val lines = ArrayList<Array<BaseComponent>>()
+        
+        val whitelist = filterConfig.whitelist
+        lines += arrayOf(localized(
+            ChatColor.GRAY,
+            "item.logistics.item_filter.lore.type",
+            localized(
+                if (whitelist) ChatColor.GREEN else ChatColor.RED,
+                "item.logistics.item_filter.lore.type.${if (whitelist) "whitelist" else "blacklist"}"
+            )
+        ))
+        
+        val nbt = filterConfig.nbt
+        lines += arrayOf(localized(
+            ChatColor.GRAY,
+            "item.logistics.item_filter.lore.nbt",
+            localized(
+                if (nbt) ChatColor.GREEN else ChatColor.RED,
+                "item.logistics.item_filter.lore.nbt.${if (nbt) "on" else "off"}"
+            )
+        ))
+        
+        lines += arrayOf(TextComponent())
+        
+        lines += arrayOf(localized(ChatColor.GRAY, "item.logistics.item_filter.lore.contents", filterConfig.items.count { it != null }))
+        filterConfig.items.filterNotNull().forEach {
+            lines += ComponentBuilder("- ")
+                .color(ChatColor.DARK_GRAY)
+                .append(TranslatableComponent(it.localizedName ?: "Unknown Name"))
+                .create()
+        }
+        
+        return lines
+    }
     
 }
 

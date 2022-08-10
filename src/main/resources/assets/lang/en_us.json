@@ -24,6 +24,14 @@
   "item.logistics.elite_item_filter": "Elite Item Filter",
   "item.logistics.ultimate_item_filter": "Ultimate Item Filter",
   
+  "item.logistics.item_filter.lore.type": "Type: %s",
+  "item.logistics.item_filter.lore.type.whitelist": "Whitelist",
+  "item.logistics.item_filter.lore.type.blacklist": "Blacklist",
+  "item.logistics.item_filter.lore.nbt": "NBT Data: %s",
+  "item.logistics.item_filter.lore.nbt.on": "Not Ignored",
+  "item.logistics.item_filter.lore.nbt.off": "Ignored",
+  "item.logistics.item_filter.lore.contents": "Contents (%s):",
+  
   "menu.logistics.items.category.logistics": "Logistics",
   "menu.logistics.items.category.crafting": "Crafting Components",
   "menu.logistics.cable_config": "Config",
