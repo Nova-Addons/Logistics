@@ -19,7 +19,11 @@ import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.material.CoreItems
 import xyz.xenondevs.nova.tileentity.Model
 import xyz.xenondevs.nova.tileentity.TileEntity
-import xyz.xenondevs.nova.tileentity.network.*
+import xyz.xenondevs.nova.tileentity.network.Network
+import xyz.xenondevs.nova.tileentity.network.NetworkEndPoint
+import xyz.xenondevs.nova.tileentity.network.NetworkManager
+import xyz.xenondevs.nova.tileentity.network.NetworkNode
+import xyz.xenondevs.nova.tileentity.network.NetworkType
 import xyz.xenondevs.nova.tileentity.network.NetworkType.Companion.ENERGY
 import xyz.xenondevs.nova.tileentity.network.NetworkType.Companion.FLUID
 import xyz.xenondevs.nova.tileentity.network.NetworkType.Companion.ITEMS
@@ -28,12 +32,20 @@ import xyz.xenondevs.nova.tileentity.network.fluid.FluidBridge
 import xyz.xenondevs.nova.tileentity.network.fluid.holder.FluidHolder
 import xyz.xenondevs.nova.tileentity.network.item.ItemBridge
 import xyz.xenondevs.nova.tileentity.network.item.holder.ItemHolder
-import xyz.xenondevs.nova.util.*
+import xyz.xenondevs.nova.util.CUBE_FACES
+import xyz.xenondevs.nova.util.MathUtils
+import xyz.xenondevs.nova.util.center
+import xyz.xenondevs.nova.util.emptyEnumMap
+import xyz.xenondevs.nova.util.handItems
+import xyz.xenondevs.nova.util.hasInventoryOpen
+import xyz.xenondevs.nova.util.isRightClick
 import xyz.xenondevs.nova.util.item.novaMaterial
+import xyz.xenondevs.nova.util.rotationValues
+import xyz.xenondevs.nova.util.runTask
+import xyz.xenondevs.nova.util.toIntArray
 import xyz.xenondevs.nova.world.block.hitbox.Hitbox
 import xyz.xenondevs.nova.world.point.Point3D
 import java.util.*
-import kotlin.collections.flatMapTo
 
 private val SUPPORTED_NETWORK_TYPES = hashSetOf(ENERGY, ITEMS, FLUID)
 private val ATTACHMENTS: IntArray = (64..112).toIntArray()
@@ -58,7 +70,7 @@ open class Cable(
     
     override val supportedNetworkTypes = SUPPORTED_NETWORK_TYPES
     override val networks = HashMap<NetworkType, Network>()
-    override val bridgeFaces = retrieveData("bridgeFaces") { CUBE_FACES.toHashSet() }
+    override val bridgeFaces by storedValue("bridgeFaces") { CUBE_FACES.toHashSet() }
     override val connectedNodes = HashMap<NetworkType, MutableMap<BlockFace, NetworkNode>>()
     override val typeId: String
         get() = material.id.toString()
@@ -68,8 +80,8 @@ open class Cable(
     
     private val hitboxes = ArrayList<Hitbox>()
     private val multiModel = createMultiModel()
-    private var modelId = retrieveData("modelId") { 0 }
-    private var attachments: ArrayList<Pair<Int, Int>> = retrieveData("attachments", ::ArrayList)
+    private var modelId by storedValue("modelId") { 0 }
+    private var attachments: ArrayList<Pair<Int, Int>> by storedValue("attachments", ::ArrayList)
     
     init {
         if (attachments.isNotEmpty()) {
@@ -85,9 +97,6 @@ open class Cable(
     override fun saveData() {
         super.saveData()
         
-        storeData("modelId", modelId)
-        storeData("attachments", attachments)
-        storeData("bridgeFaces", bridgeFaces)
         storeData("networks", serializeNetworks())
         storeData("connectedNodes", serializeConnectedNodes())
     }

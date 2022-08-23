@@ -24,73 +24,34 @@ import xyz.xenondevs.nova.tileentity.upgrade.UpgradeType
 import xyz.xenondevs.nova.ui.OpenUpgradesItem
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
-import xyz.xenondevs.nova.ui.item.AddNumberItem
-import xyz.xenondevs.nova.ui.item.DisplayNumberItem
-import xyz.xenondevs.nova.ui.item.RemoveNumberItem
-import xyz.xenondevs.nova.ui.item.VisualizeRegionItem
 import xyz.xenondevs.nova.util.item.novaMaterial
-import xyz.xenondevs.nova.world.region.Region
-import xyz.xenondevs.nova.world.region.VisualRegion
-import de.studiocode.invui.item.Item as UIItem
+import xyz.xenondevs.nova.util.serverTick
 
-private val MIN_RANGE by configReloadable { NovaConfig[VACUUM_CHEST].getInt("range.min") }
-private val MAX_RANGE by configReloadable { NovaConfig[VACUUM_CHEST].getInt("range.max") }
+private val MIN_RANGE = configReloadable { NovaConfig[VACUUM_CHEST].getInt("range.min") }
+private val MAX_RANGE = configReloadable { NovaConfig[VACUUM_CHEST].getInt("range.max") }
 private val DEFAULT_RANGE by configReloadable { NovaConfig[VACUUM_CHEST].getInt("range.default") }
 
 class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState), Upgradable {
     
-    private val inventory: VirtualInventory = getInventory("inventory", 9) {}
-    private val filterInventory: VirtualInventory = VirtualInventory(null, 1, arrayOfNulls(1), intArrayOf(1)).apply {
-        setItemUpdateHandler(::handleFilterInventoryUpdate)
-    }
+    private val inventory: VirtualInventory = getInventory("inventory", 9)
+    private val filterInventory: VirtualInventory = VirtualInventory(null, 1, arrayOfNulls(1), intArrayOf(1))
     override val itemHolder: NovaItemHolder = NovaItemHolder(
         this,
         inventory to NetworkConnectionType.BUFFER
     ) { createSideConfig(NetworkConnectionType.EXTRACT) }
-    
     override val gui = lazy { VacuumChestGUI() }
     override val upgradeHolder = getUpgradeHolder(UpgradeType.RANGE)
-    private var filter: ItemFilter? = retrieveDataOrNull<ItemFilter>("itemFilter")
-        ?.also { filterInventory.setItemStack(SELF_UPDATE_REASON, 0, it.createFilterItem()) }
+    
+    private var filter: ItemFilter? by storedValue("itemFilter")
+    private val region = getUpgradableRegion(UpgradeType.RANGE, MIN_RANGE, MAX_RANGE, DEFAULT_RANGE) { getSurroundingRegion(it) }
+    
     private val items = ArrayList<Item>()
     
-    private lateinit var region: Region
-    private var range = retrieveData("range") { DEFAULT_RANGE }
-        set(value) {
-            field = value
-            updateRegion()
-            if (gui.isInitialized()) gui.value.updateRangeItems()
-        }
-    private val maxRange: Int
-        get() = MAX_RANGE + upgradeHolder.getValue(UpgradeType.RANGE)
-    
-    private var tick = 0
-    
     init {
-        updateRegion()
-    }
-    
-    override fun saveData() {
-        storeData("range", range)
-        storeData("itemFilter", filter)
-        super.saveData()
-    }
-    
-    private fun updateRegion() {
-        region = getSurroundingRegion(range)
-        VisualRegion.updateRegion(uuid, region)
-    }
-    
-    override fun reload() {
-        super.reload()
-        if (range > maxRange) {
-            range = maxRange // the setter will update everything else
-        } else if (gui.isInitialized()) gui.value.updateRangeItems()
-    }
-    
-    override fun handleRemoved(unload: Boolean) {
-        super.handleRemoved(unload)
-        VisualRegion.removeRegion(uuid)
+        filter?.let { filterInventory.setItemStack(SELF_UPDATE_REASON, 0, it.createFilterItem()) }
+        
+        filterInventory.setItemUpdateHandler(::handleFilterInventoryUpdate)
+        filterInventory.guiShiftPriority = 1
     }
     
     override fun handleTick() {
@@ -106,8 +67,7 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
         
         items.clear()
         
-        if (++tick == 10) {
-            tick = 0
+        if (serverTick % 10 == 0) {
             world.entities.forEach {
                 if (it is Item
                     && it.location in region
@@ -135,8 +95,6 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
             listOf(itemHolder.getNetworkedInventory(inventory) to "inventory.nova.default")
         ) { openWindow(it) }
         
-        private val rangeItems = ArrayList<UIItem>()
-        
         override val gui: GUI = GUIBuilder(GUIType.NORMAL)
             .setStructure(
                 "1 - - - - - - - 2",
@@ -147,16 +105,12 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
             .addIngredient('i', inventory)
             .addIngredient('s', OpenSideConfigItem(sideConfigGUI))
             .addIngredient('u', OpenUpgradesItem(upgradeHolder))
-            .addIngredient('r', VisualizeRegionItem(uuid) { region })
-            .addIngredient('f', VISlotElement(filterInventory, 0, GUIMaterials.ITEM_FILTER_PLACEHOLDER.createClientsideItemBuilder()))
-            .addIngredient('p', AddNumberItem({ MIN_RANGE..maxRange }, { range }, { range = it }).also(rangeItems::add))
-            .addIngredient('m', RemoveNumberItem({ MIN_RANGE..maxRange }, { range }, { range = it }).also(rangeItems::add))
-            .addIngredient('d', DisplayNumberItem { range }.also(rangeItems::add))
+            .addIngredient('r', region.visualizeRegionItem)
+            .addIngredient('f', VISlotElement(filterInventory, 0, GUIMaterials.ITEM_FILTER_PLACEHOLDER.clientsideProvider))
+            .addIngredient('p', region.increaseSizeItem)
+            .addIngredient('m', region.decreaseSizeItem)
+            .addIngredient('d', region.displaySizeItem)
             .build()
-        
-        fun updateRangeItems() {
-            rangeItems.forEach(UIItem::notifyWindows)
-        }
         
     }
     
