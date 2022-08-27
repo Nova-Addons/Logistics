@@ -1,7 +1,7 @@
 id: logistics
 name: Logistics
-version: "${project.version}"
+version: "${version}"
 main: xyz.xenondevs.nova.logistics.Logistics
-novaVersion: "${nova.version}"
+novaVersion: "${novaVersion}"
 authors: [ "StudioCode", "ByteZ1337", "Javahase" ]
 spigotResourceId: 102713

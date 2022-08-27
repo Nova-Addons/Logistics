@@ -7,7 +7,6 @@ import org.bukkit.block.BlockFace
 import org.bukkit.block.data.Orientable
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.player.PlayerInteractEvent
-import xyz.xenondevs.nova.NOVA
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.ValueReloadable
 import xyz.xenondevs.nova.data.config.configReloadable
@@ -110,7 +109,7 @@ open class Cable(
     
     override fun handleNetworkUpdate() {
         // assume that we have NetworkManager.LOCK
-        if (isValid && NOVA.isEnabled) {
+        if (isValid) {
             calculateCableModelId()
             calculateAttachmentModelIds()
             blockState.modelProvider.update(modelId)
