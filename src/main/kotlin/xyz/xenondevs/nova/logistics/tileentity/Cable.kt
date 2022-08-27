@@ -56,7 +56,6 @@ private val NetworkNode.itemHolder: ItemHolder?
 private val NetworkNode.fluidHolder: FluidHolder?
     get() = if (this is NetworkEndPoint) holders[FLUID] as FluidHolder? else null
 
-@Suppress("LeakingThis")
 open class Cable(
     energyTransferRateDelegate: ValueReloadable<Long>,
     itemTransferRateDelegate: ValueReloadable<Int>,
