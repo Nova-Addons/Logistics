@@ -22,6 +22,10 @@
             <id>xenondevs</id>
             <url>https://repo.xenondevs.xyz/releases</url>
         </repository>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -34,8 +38,16 @@
     <dependencies>
         <dependency>
             <groupId>xyz.xenondevs.nova</groupId>
-            <artifactId>Nova</artifactId>
+            <artifactId>nova</artifactId>
             <version>${nova.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>${spigot.version}</version>
+            <classifier>remapped-mojang</classifier>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
