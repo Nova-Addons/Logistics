@@ -3,7 +3,11 @@ package xyz.xenondevs.nova.logistics.tileentity
 import de.studiocode.invui.gui.GUI
 import de.studiocode.invui.gui.builder.GUIBuilder
 import de.studiocode.invui.gui.builder.guitype.GUIType
-import xyz.xenondevs.nova.data.config.*
+import xyz.xenondevs.nova.data.config.NovaConfig
+import xyz.xenondevs.nova.data.config.Reloadable
+import xyz.xenondevs.nova.data.config.ValueReloadable
+import xyz.xenondevs.nova.data.config.configReloadable
+import xyz.xenondevs.nova.data.config.notReloadable
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
@@ -13,14 +17,13 @@ import xyz.xenondevs.nova.ui.EnergyBar
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
 
-@Suppress("LeakingThis")
-open class PowerCell(
+class PowerCell(
     creative: Boolean,
     maxEnergy: ValueReloadable<Long>,
     blockState: NovaTileEntityState
 ) : NetworkedTileEntity(blockState), Reloadable {
     
-    final override val energyHolder = BufferEnergyHolder(this, maxEnergy, creative) { createSideConfig(BUFFER) }
+    override val energyHolder = BufferEnergyHolder(this, maxEnergy, creative) { createSideConfig(BUFFER) }
     
     override val gui = lazy(::PowerCellGUI)
     
@@ -45,36 +48,36 @@ open class PowerCell(
     
 }
 
-private val BASIC_CAPACITY = configReloadable { NovaConfig[Blocks.BASIC_POWER_CELL].getLong("capacity") }
-private val ADVANCED_CAPACITY = configReloadable { NovaConfig[Blocks.ADVANCED_POWER_CELL].getLong("capacity") }
-private val ELITE_CAPACITY = configReloadable { NovaConfig[Blocks.ELITE_POWER_CELL].getLong("capacity") }
-private val ULTIMATE_CAPACITY = configReloadable { NovaConfig[Blocks.ULTIMATE_POWER_CELL].getLong("capacity") }
+private val BASIC_CAPACITY: ValueReloadable<Long> = configReloadable { NovaConfig[Blocks.BASIC_POWER_CELL].getLong("capacity") }
+private val ADVANCED_CAPACITY: ValueReloadable<Long> = configReloadable { NovaConfig[Blocks.ADVANCED_POWER_CELL].getLong("capacity") }
+private val ELITE_CAPACITY: ValueReloadable<Long> = configReloadable { NovaConfig[Blocks.ELITE_POWER_CELL].getLong("capacity") }
+private val ULTIMATE_CAPACITY: ValueReloadable<Long> = configReloadable { NovaConfig[Blocks.ULTIMATE_POWER_CELL].getLong("capacity") }
 
-class BasicPowerCell(blockState: NovaTileEntityState) : PowerCell(
+fun createBasicPowerCell(blockState: NovaTileEntityState) = PowerCell(
     false,
     BASIC_CAPACITY,
     blockState
 )
 
-class AdvancedPowerCell(blockState: NovaTileEntityState) : PowerCell(
+fun createAdvancedPowerCell(blockState: NovaTileEntityState) = PowerCell(
     false,
     ADVANCED_CAPACITY,
     blockState
 )
 
-class ElitePowerCell(blockState: NovaTileEntityState) : PowerCell(
+fun createElitePowerCell(blockState: NovaTileEntityState) = PowerCell(
     false,
     ELITE_CAPACITY,
     blockState
 )
 
-class UltimatePowerCell(blockState: NovaTileEntityState) : PowerCell(
+fun createUltimatePowerCell(blockState: NovaTileEntityState) = PowerCell(
     false,
     ULTIMATE_CAPACITY,
     blockState
 )
 
-class CreativePowerCell(blockState: NovaTileEntityState) : PowerCell(
+fun createCreativePowerCell(blockState: NovaTileEntityState) = PowerCell(
     true,
     notReloadable(Long.MAX_VALUE),
     blockState

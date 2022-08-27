@@ -9,23 +9,23 @@ import xyz.xenondevs.nova.logistics.Logistics
 import xyz.xenondevs.nova.logistics.item.StorageUnitItemBehavior
 import xyz.xenondevs.nova.logistics.tileentity.AdvancedCable
 import xyz.xenondevs.nova.logistics.tileentity.AdvancedFluidTank
-import xyz.xenondevs.nova.logistics.tileentity.AdvancedPowerCell
 import xyz.xenondevs.nova.logistics.tileentity.BasicCable
 import xyz.xenondevs.nova.logistics.tileentity.BasicFluidTank
-import xyz.xenondevs.nova.logistics.tileentity.BasicPowerCell
 import xyz.xenondevs.nova.logistics.tileentity.CreativeCable
 import xyz.xenondevs.nova.logistics.tileentity.CreativeFluidTank
-import xyz.xenondevs.nova.logistics.tileentity.CreativePowerCell
 import xyz.xenondevs.nova.logistics.tileentity.EliteCable
 import xyz.xenondevs.nova.logistics.tileentity.EliteFluidTank
-import xyz.xenondevs.nova.logistics.tileentity.ElitePowerCell
 import xyz.xenondevs.nova.logistics.tileentity.FluidStorageUnit
 import xyz.xenondevs.nova.logistics.tileentity.StorageUnit
 import xyz.xenondevs.nova.logistics.tileentity.TrashCan
 import xyz.xenondevs.nova.logistics.tileentity.UltimateCable
 import xyz.xenondevs.nova.logistics.tileentity.UltimateFluidTank
-import xyz.xenondevs.nova.logistics.tileentity.UltimatePowerCell
 import xyz.xenondevs.nova.logistics.tileentity.VacuumChest
+import xyz.xenondevs.nova.logistics.tileentity.createAdvancedPowerCell
+import xyz.xenondevs.nova.logistics.tileentity.createBasicPowerCell
+import xyz.xenondevs.nova.logistics.tileentity.createCreativePowerCell
+import xyz.xenondevs.nova.logistics.tileentity.createElitePowerCell
+import xyz.xenondevs.nova.logistics.tileentity.createUltimatePowerCell
 import xyz.xenondevs.nova.material.BlockOptions
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerDefaultItem
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerTileEntity
@@ -47,11 +47,11 @@ object Blocks {
     val ULTIMATE_CABLE = registerTileEntity(Logistics, "ultimate_cable", CABLE, ::UltimateCable, isInteractive = false)
     val CREATIVE_CABLE = registerTileEntity(Logistics, "creative_cable", CABLE, ::CreativeCable, isInteractive = false)
     
-    val BASIC_POWER_CELL = registerTileEntity(Logistics, "basic_power_cell", POWER_CELL, ::BasicPowerCell, properties = listOf(LegacyDirectional))
-    val ADVANCED_POWER_CELL = registerTileEntity(Logistics, "advanced_power_cell", POWER_CELL, ::AdvancedPowerCell, properties = listOf(LegacyDirectional))
-    val ELITE_POWER_CELL = registerTileEntity(Logistics, "elite_power_cell", POWER_CELL, ::ElitePowerCell, properties = listOf(LegacyDirectional))
-    val ULTIMATE_POWER_CELL = registerTileEntity(Logistics, "ultimate_power_cell", POWER_CELL, ::UltimatePowerCell, properties = listOf(LegacyDirectional))
-    val CREATIVE_POWER_CELL = registerTileEntity(Logistics, "creative_power_cell", POWER_CELL, ::CreativePowerCell, properties = listOf(LegacyDirectional))
+    val BASIC_POWER_CELL = registerTileEntity(Logistics, "basic_power_cell", POWER_CELL, ::createBasicPowerCell, properties = listOf(LegacyDirectional))
+    val ADVANCED_POWER_CELL = registerTileEntity(Logistics, "advanced_power_cell", POWER_CELL, ::createAdvancedPowerCell, properties = listOf(LegacyDirectional))
+    val ELITE_POWER_CELL = registerTileEntity(Logistics, "elite_power_cell", POWER_CELL, ::createElitePowerCell, properties = listOf(LegacyDirectional))
+    val ULTIMATE_POWER_CELL = registerTileEntity(Logistics, "ultimate_power_cell", POWER_CELL, ::createUltimatePowerCell, properties = listOf(LegacyDirectional))
+    val CREATIVE_POWER_CELL = registerTileEntity(Logistics, "creative_power_cell", POWER_CELL, ::createCreativePowerCell, properties = listOf(LegacyDirectional))
     
     val BASIC_FLUID_TANK = registerTileEntity(Logistics, "basic_fluid_tank", TANK, ::BasicFluidTank, properties = listOf(LegacyDirectional))
     val ADVANCED_FLUID_TANK = registerTileEntity(Logistics, "advanced_fluid_tank", TANK, ::AdvancedFluidTank, properties = listOf(LegacyDirectional))
