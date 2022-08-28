@@ -1,4 +1,4 @@
-rootProject.name = "Logistics"
+rootProject.name = "logistics"
 
 enableFeaturePreview("VERSION_CATALOGS")
 dependencyResolutionManagement {
@@ -6,7 +6,7 @@ dependencyResolutionManagement {
         create("deps") {
             version("nova", "0.11-SNAPSHOT")
             version("spigot", "1.19.2-R0.1-SNAPSHOT")
-    
+            
             library("nova", "xyz.xenondevs.nova", "nova").versionRef("nova")
             library("spigot", "org.spigotmc", "spigot").versionRef("spigot")
         }

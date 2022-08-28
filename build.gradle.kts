@@ -1,5 +1,7 @@
+import org.gradle.configurationcache.extensions.capitalized
+
 group = "xyz.xenondevs.nova"
-version = project.properties["version"] as String
+version = "0.2"
 
 val mojangMapped = System.getProperty("mojang-mapped") != null
 
@@ -18,23 +20,27 @@ repositories {
 }
 
 dependencies {
-    compileOnly(deps.nova)
-    compileOnly(variantOf(deps.spigot) { classifier("remapped-mojang") })
+    implementation(deps.nova)
+    implementation(variantOf(deps.spigot) { classifier("remapped-mojang") })
+}
+
+addon {
+    id.set(project.name)
+    name.set(project.name.capitalized())
+    version.set(project.version.toString())
+    novaVersion.set(deps.versions.nova)
+    main.set("xyz.xenondevs.nova.logistics.Logistics")
+    authors.set(listOf("StudioCode", "ByteZ", "Javahase"))
+    spigotResourceId.set(102713)
 }
 
 tasks {
-    register<Copy>("remappedJar") {
+    register<Copy>("addonJar") {
         group = "build"
-        dependsOn(if (mojangMapped) "jar" else "remapObfToSpigot")
-    
+        dependsOn("addon", if (mojangMapped) "jar" else "remapObfToSpigot")
+        
         from(File(File(project.buildDir, "libs"), "${project.name}-${project.version}.jar"))
         into(System.getProperty("outDir")?.let(::File) ?: project.buildDir)
-    }
-    
-    withType<ProcessResources> {
-        filesMatching(listOf("addon.yml")) {
-            expand(project.properties + mapOf("novaVersion" to deps.versions.nova.get()))
-        }
     }
 }
 
@@ -51,6 +57,5 @@ remapStrings {
 }
 
 generateWailaTextures {
-    novaVersion.set(deps.versions.nova)
     filter.set { !it.name.contains(Regex("\\d")) }
 }

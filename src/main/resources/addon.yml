@@ -1,7 +1,0 @@
-id: logistics
-name: Logistics
-version: "${version}"
-main: xyz.xenondevs.nova.logistics.Logistics
-novaVersion: "${novaVersion}"
-authors: [ "StudioCode", "ByteZ1337", "Javahase" ]
-spigotResourceId: 102713

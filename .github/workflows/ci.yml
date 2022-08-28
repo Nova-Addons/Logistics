@@ -27,7 +27,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Build Spigot-Mapped
-        run: ./gradlew remappedJar "-DoutDir=artifacts/"
+        run: ./gradlew addonJar "-DoutDir=artifacts/"
 
       - name: Upload Artifacts
         id: upload
