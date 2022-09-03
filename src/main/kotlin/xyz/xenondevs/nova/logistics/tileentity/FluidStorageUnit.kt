@@ -25,7 +25,7 @@ import xyz.xenondevs.nova.ui.FluidBar
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
 import xyz.xenondevs.nova.util.center
-import xyz.xenondevs.nova.world.armorstand.FakeArmorStand
+import xyz.xenondevs.nova.world.fakeentity.impl.FakeArmorStand
 
 private val MAX_CAPACITY = configReloadable { NovaConfig[FLUID_STORAGE_UNIT].getLong("max_capacity") }
 
@@ -33,7 +33,7 @@ class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(bl
     
     override val gui = lazy(::FluidStorageUnitGUI)
     private val fluidTank = getFluidContainer("fluid", setOf(FluidType.LAVA, FluidType.WATER), MAX_CAPACITY, 0, ::handleFluidUpdate)
-    private val fluidLevel = FakeArmorStand(pos.location.center()) { _, data -> data.invisible = true; data.marker = true }
+    private val fluidLevel = FakeArmorStand(pos.location.center()) { _, data -> data.isInvisible = true; data.isMarker = true }
     override val fluidHolder = NovaFluidHolder(this, fluidTank to NetworkConnectionType.BUFFER) { createSideConfig(NetworkConnectionType.BUFFER) }
     
     init {

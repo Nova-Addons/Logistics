@@ -17,7 +17,7 @@ import xyz.xenondevs.nova.ui.FluidBar
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
 import xyz.xenondevs.nova.util.center
-import xyz.xenondevs.nova.world.armorstand.FakeArmorStand
+import xyz.xenondevs.nova.world.fakeentity.impl.FakeArmorStand
 import kotlin.math.roundToInt
 import net.minecraft.world.entity.EquipmentSlot as NMSEquipmentSlot
 
@@ -37,7 +37,7 @@ open class FluidTank(
     
     override fun handleInitialized(first: Boolean) {
         super.handleInitialized(first)
-        fluidLevel = FakeArmorStand(pos.location.center()) { _, data -> data.invisible = true; data.marker = true }
+        fluidLevel = FakeArmorStand(pos.location.center()) { _, data -> data.isInvisible = true; data.isMarker = true }
         updateFluidLevel()
     }
     
@@ -65,7 +65,7 @@ open class FluidTank(
         } else null
         
         val shouldGlow = fluidContainer.type == FluidType.LAVA
-        fluidLevel.updateEntityData(true) { onFire = shouldGlow }
+        fluidLevel.updateEntityData(true) { isOnFire = shouldGlow }
         fluidLevel.setEquipment(NMSEquipmentSlot.HEAD, stack, true)
     }
     
