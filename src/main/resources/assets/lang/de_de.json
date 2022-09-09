@@ -69,5 +69,12 @@
   "menu.logistics.storage_unit.item_display_plural": "%s Items",
   "menu.logistics.storage_unit.item_display_singular": "%s Item",
   "advancement.logistics.root.title": "Logistics",
-  "menu.logistics.items.category.logistics": "Logistics"
+  "menu.logistics.items.category.logistics": "Logistics",
+  "item.logistics.item_filter.lore.type": "Typ: %s",
+  "item.logistics.item_filter.lore.type.whitelist": "Weiße Liste",
+  "item.logistics.item_filter.lore.type.blacklist": "Schwarze Liste",
+  "item.logistics.item_filter.lore.nbt": "NBT-Daten: %s",
+  "item.logistics.item_filter.lore.nbt.on": "Nicht Ignoriert",
+  "item.logistics.item_filter.lore.nbt.off": "Ignoriert",
+  "item.logistics.item_filter.lore.contents": "Inhalte (%s):"
 }
