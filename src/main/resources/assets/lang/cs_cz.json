@@ -69,5 +69,12 @@
   "item.logistics.elite_item_filter": "Elitní Filtr Předmětů",
   "item.logistics.ultimate_item_filter": "Ultimátní Filtr Předmětů",
   "menu.logistics.items.category.logistics": "Logistika",
-  "advancement.logistics.root.title": "Logistika"
+  "advancement.logistics.root.title": "Logistika",
+  "item.logistics.item_filter.lore.nbt.off": "Je Ignorován",
+  "item.logistics.item_filter.lore.type": "Typ: %s",
+  "item.logistics.item_filter.lore.type.whitelist": "Filtr Povolených",
+  "item.logistics.item_filter.lore.type.blacklist": "Filtr Zakázaných",
+  "item.logistics.item_filter.lore.nbt": "NBT Data :%s",
+  "item.logistics.item_filter.lore.nbt.on": "Není Ignorován",
+  "item.logistics.item_filter.lore.contents": "Obsah (%s):"
 }
