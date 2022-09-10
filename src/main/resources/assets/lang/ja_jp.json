@@ -69,5 +69,12 @@
   "advancement.logistics.trash_can.description": "ゴミ箱を作成する",
   "advancement.logistics.vacuum_chest.title": "たぶん安全",
   "advancement.logistics.vacuum_chest.description": "吸引チェストを作成する",
-  "advancement.logistics.storage_unit.title": "無限のアイテム"
+  "advancement.logistics.storage_unit.title": "無限のアイテム",
+  "item.logistics.item_filter.lore.type": "タイプ: %s",
+  "item.logistics.item_filter.lore.contents": "内容(%s):",
+  "item.logistics.item_filter.lore.type.whitelist": "ホワイトリスト",
+  "item.logistics.item_filter.lore.type.blacklist": "ブラックリスト",
+  "item.logistics.item_filter.lore.nbt": "NBTデータ: %s",
+  "item.logistics.item_filter.lore.nbt.on": "無視しない",
+  "item.logistics.item_filter.lore.nbt.off": "無視する"
 }
