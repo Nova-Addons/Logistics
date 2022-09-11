@@ -69,5 +69,12 @@
   "item.logistics.elite_item_filter": "Элитный Предметный Фильтр",
   "item.logistics.ultimate_item_filter": "Совершенный Предметный Фильтр",
   "advancement.logistics.root.title": "Логистика",
-  "menu.logistics.items.category.logistics": "Логистика"
+  "menu.logistics.items.category.logistics": "Логистика",
+  "item.logistics.item_filter.lore.type": "Тип: %s",
+  "item.logistics.item_filter.lore.nbt": "NBT данные: %s",
+  "item.logistics.item_filter.lore.type.whitelist": "Белый список",
+  "item.logistics.item_filter.lore.type.blacklist": "Черный список",
+  "item.logistics.item_filter.lore.nbt.on": "Не игнорируются",
+  "item.logistics.item_filter.lore.nbt.off": "Игнорируются",
+  "item.logistics.item_filter.lore.contents": "Содержит (%s):"
 }
