@@ -5,6 +5,8 @@ import org.bukkit.Sound
 import xyz.xenondevs.nova.data.world.block.property.Directional
 import xyz.xenondevs.nova.data.world.block.property.LegacyDirectional
 import xyz.xenondevs.nova.item.NovaItem
+import xyz.xenondevs.nova.item.tool.ToolCategory
+import xyz.xenondevs.nova.item.tool.ToolLevel
 import xyz.xenondevs.nova.logistics.Logistics
 import xyz.xenondevs.nova.logistics.item.StorageUnitItemBehavior
 import xyz.xenondevs.nova.logistics.tileentity.AdvancedCable
@@ -30,8 +32,6 @@ import xyz.xenondevs.nova.material.BlockOptions
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerDefaultItem
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerTileEntity
 import xyz.xenondevs.nova.util.SoundEffect
-import xyz.xenondevs.nova.util.item.ToolCategory
-import xyz.xenondevs.nova.util.item.ToolLevel
 import xyz.xenondevs.nova.world.block.TileEntityBlock
 
 object Blocks {
