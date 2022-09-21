@@ -69,5 +69,12 @@
   "item.logistics.elite_item_filter": "精良物品篩",
   "item.logistics.ultimate_item_filter": "終極物品篩",
   "menu.logistics.items.category.logistics": "物流",
-  "advancement.logistics.root.title": "物流"
+  "advancement.logistics.root.title": "物流",
+  "item.logistics.item_filter.lore.type": "類型: %s",
+  "item.logistics.item_filter.lore.nbt.on": "未忽略",
+  "item.logistics.item_filter.lore.type.whitelist": "白名單",
+  "item.logistics.item_filter.lore.type.blacklist": "黑名單",
+  "item.logistics.item_filter.lore.nbt": "NBT 資料: %s",
+  "item.logistics.item_filter.lore.nbt.off": "已忽略",
+  "item.logistics.item_filter.lore.contents": "內容物 (%s):"
 }
