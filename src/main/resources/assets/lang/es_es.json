@@ -62,5 +62,7 @@
   "advancement.logistics.vacuum_chest.description": "Crea un Cofre de Vacío",
   "advancement.logistics.storage_unit.title": "Ítems Infinitos",
   "advancement.logistics.storage_unit.description": "Crea una Unidad de Almacenamiento",
-  "item.logistics.basic_item_filter": "Filtro Básico de Ítems"
+  "item.logistics.basic_item_filter": "Filtro de Ítems Básico",
+  "item.logistics.advanced_item_filter": "Filtro de Ítems Avanzado",
+  "item.logistics.elite_item_filter": "Filtro de Ítems Elite"
 }
