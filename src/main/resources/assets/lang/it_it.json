@@ -69,5 +69,12 @@
   "item.logistics.ultimate_item_filter": "Filtro Oggetti Ultimate",
   "menu.logistics.items.category.logistics": "Logistica",
   "advancement.logistics.root.title": "Logistica",
-  "item.logistics.basic_item_filter": "Filtro Oggetti Base"
+  "item.logistics.basic_item_filter": "Filtro Oggetti Base",
+  "item.logistics.item_filter.lore.type": "Tipo: %s",
+  "item.logistics.item_filter.lore.type.whitelist": "Whitelist",
+  "item.logistics.item_filter.lore.type.blacklist": "Blacklist",
+  "item.logistics.item_filter.lore.nbt": "Data NBT: %s",
+  "item.logistics.item_filter.lore.nbt.on": "Non ignorato",
+  "item.logistics.item_filter.lore.nbt.off": "Ignorato",
+  "item.logistics.item_filter.lore.contents": "Contenuto (%s):"
 }
