@@ -1,1 +1,18 @@
-{}
+{
+  "block.logistics.advanced_cable": "Pažangus kabelis",
+  "menu.logistics.items.category.crafting": "Gaminimo komponentas",
+  "item.logistics.item_filter.lore.nbt": "NBT Data: %s",
+  "advancement.logistics.elite_fluid_tank.description": "Pagamink elitinę skysčių talpyklą",
+  "advancement.logistics.ultimate_fluid_tank.description": "Pagamink maksimalią skysčių talpą",
+  "advancement.logistics.fluid_storage_unit.description": "Pagamink skysčių talpos elementą",
+  "advancement.logistics.vacuum_chest.description": "Pagamink vakuuminę skrynią",
+  "advancement.logistics.trash_can.description": "Pagamink šiukšledėžę",
+  "advancement.logistics.storage_unit.description": "Pagamink talpos elementą",
+  "block.logistics.basic_cable": "Paprastas kabelis",
+  "block.logistics.elite_cable": "Elitinis kabelis",
+  "block.logistics.ultimate_cable": "Maksimalusis kabelis",
+  "block.logistics.ultimate_fluid_tank": "Maksimali skysčių talpykla",
+  "item.logistics.elite_item_filter": "Elitinis daiktų filtras",
+  "menu.logistics.item_filter.blacklist": "Šiuo metu: Juodasis sąrašas",
+  "advancement.logistics.advanced_fluid_tank.description": "Pagamink patobulintą skysčių talpyklą"
+}
