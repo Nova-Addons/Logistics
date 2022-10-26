@@ -287,7 +287,9 @@ open class Cable(
         if (!event.player.hasInventoryOpen) {
             event.isCancelled = true
             NetworkManager.queueSync {
-                val endPoint = getConnectedNode(face) as NetworkEndPoint
+                val endPoint = getConnectedNode(face) as? NetworkEndPoint
+                    ?: return@queueSync
+                
                 configGUIs.getOrPut(face) { CableConfigGUI(endPoint, endPoint.itemHolder, endPoint.fluidHolder, face.oppositeFace) }.openWindow(event.player)
             }
         }
