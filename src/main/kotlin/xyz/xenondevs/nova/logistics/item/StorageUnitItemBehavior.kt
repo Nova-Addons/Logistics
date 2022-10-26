@@ -6,19 +6,19 @@ import net.md_5.bungee.api.chat.TranslatableComponent
 import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.cbf.Compound
 import xyz.xenondevs.nova.data.serialization.persistentdata.get
-import xyz.xenondevs.nova.item.ItemDisplayData
+import xyz.xenondevs.nova.item.PacketItemData
 import xyz.xenondevs.nova.item.behavior.ItemBehavior
 import xyz.xenondevs.nova.tileentity.TileEntity
 import xyz.xenondevs.nova.util.item.localizedName
 
 object StorageUnitItemBehavior : ItemBehavior() {
     
-    override fun updateItemDisplay(itemStack: ItemStack, display: ItemDisplayData) {
+    override fun updatePacketItemData(itemStack: ItemStack, itemData: PacketItemData) {
         val data: Compound = itemStack.itemMeta?.persistentDataContainer?.get(TileEntity.TILE_ENTITY_KEY) ?: return
         val type = data.get<ItemStack>("type") ?: return
         val amount = data.get<Int>("amount") ?: return
-        
-        display.addLore(
+    
+        itemData.addLore(
             ComponentBuilder()
                 .append("${amount}x ")
                 .color(ChatColor.GRAY)

@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.ValueReloadable
 import xyz.xenondevs.nova.data.config.configReloadable
-import xyz.xenondevs.nova.item.ItemDisplayData
+import xyz.xenondevs.nova.item.PacketItemData
 import xyz.xenondevs.nova.item.behavior.ItemBehavior
 import xyz.xenondevs.nova.logistics.gui.itemfilter.ItemFilterWindow
 import xyz.xenondevs.nova.logistics.registry.Items
@@ -69,7 +69,7 @@ abstract class ItemFilterBehavior(size: ValueReloadable<Int>) : ItemBehavior() {
     fun getFilterConfig(itemStack: ItemStack): ItemFilter =
         itemStack.getOrCreateFilterConfig(size)
     
-    override fun updateItemDisplay(itemStack: ItemStack, display: ItemDisplayData) {
+    override fun updatePacketItemData(itemStack: ItemStack, itemData: PacketItemData) {
         val filterConfig = itemStack.getItemFilterConfig() ?: return
         val lines = ArrayList<Array<BaseComponent>>()
         
@@ -103,7 +103,7 @@ abstract class ItemFilterBehavior(size: ValueReloadable<Int>) : ItemBehavior() {
                 .create()
         }
         
-        display.addLore(lines)
+        itemData.addLore(lines)
     }
     
 }
