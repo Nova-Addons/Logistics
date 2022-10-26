@@ -1,10 +1,11 @@
 package xyz.xenondevs.nova.logistics.registry
 
 import org.bukkit.Material.*
-import org.bukkit.Sound
 import xyz.xenondevs.nova.data.world.block.property.Directional
 import xyz.xenondevs.nova.data.world.block.property.LegacyDirectional
 import xyz.xenondevs.nova.item.NovaItem
+import xyz.xenondevs.nova.item.tool.ToolCategory
+import xyz.xenondevs.nova.item.tool.ToolLevel
 import xyz.xenondevs.nova.logistics.Logistics
 import xyz.xenondevs.nova.logistics.item.StorageUnitItemBehavior
 import xyz.xenondevs.nova.logistics.tileentity.AdvancedCable
@@ -29,17 +30,15 @@ import xyz.xenondevs.nova.logistics.tileentity.createUltimatePowerCell
 import xyz.xenondevs.nova.material.BlockOptions
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerDefaultItem
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerTileEntity
-import xyz.xenondevs.nova.util.SoundEffect
-import xyz.xenondevs.nova.util.item.ToolCategory
-import xyz.xenondevs.nova.util.item.ToolLevel
 import xyz.xenondevs.nova.world.block.TileEntityBlock
+import xyz.xenondevs.nova.world.block.sound.SoundGroup
 
 object Blocks {
     
-    private val CABLE = BlockOptions(0.0, null, null, false, SoundEffect(Sound.BLOCK_STONE_PLACE), SoundEffect(Sound.BLOCK_STONE_BREAK))
-    private val POWER_CELL = BlockOptions(4.0, ToolCategory.PICKAXE, ToolLevel.STONE, true, SoundEffect(Sound.BLOCK_METAL_PLACE), SoundEffect(Sound.BLOCK_METAL_BREAK), IRON_BLOCK)
-    private val TANK = BlockOptions(2.0, ToolCategory.PICKAXE, ToolLevel.STONE, true, SoundEffect(Sound.BLOCK_GLASS_PLACE), SoundEffect(Sound.BLOCK_GLASS_BREAK), GLASS)
-    private val OTHER = BlockOptions(4.0, ToolCategory.PICKAXE, ToolLevel.STONE, true, SoundEffect(Sound.BLOCK_STONE_PLACE), SoundEffect(Sound.BLOCK_STONE_BREAK), COBBLESTONE)
+    private val CABLE = BlockOptions(0.0, null, null, false, SoundGroup.STONE)
+    private val POWER_CELL = BlockOptions(4.0, ToolCategory.PICKAXE, ToolLevel.STONE, true, SoundGroup.METAL, IRON_BLOCK)
+    private val TANK = BlockOptions(2.0, ToolCategory.PICKAXE, ToolLevel.STONE, true, SoundGroup.GLASS, GLASS)
+    private val OTHER = BlockOptions(4.0, ToolCategory.PICKAXE, ToolLevel.STONE, true, SoundGroup.STONE, COBBLESTONE)
     
     val BASIC_CABLE = registerTileEntity(Logistics, "basic_cable", CABLE, ::BasicCable, isInteractive = false)
     val ADVANCED_CABLE = registerTileEntity(Logistics, "advanced_cable", CABLE, ::AdvancedCable, isInteractive = false)
@@ -59,7 +58,7 @@ object Blocks {
     val ULTIMATE_FLUID_TANK = registerTileEntity(Logistics, "ultimate_fluid_tank", TANK, ::UltimateFluidTank, properties = listOf(LegacyDirectional))
     val CREATIVE_FLUID_TANK = registerTileEntity(Logistics, "creative_fluid_tank", TANK, ::CreativeFluidTank, properties = listOf(LegacyDirectional))
     
-    val STORAGE_UNIT = registerTileEntity(Logistics, "storage_unit", OTHER, ::StorageUnit, NovaItem(StorageUnitItemBehavior), TileEntityBlock.INTERACTIVE, properties = listOf(LegacyDirectional))
+    val STORAGE_UNIT = registerTileEntity(Logistics, "storage_unit", OTHER, ::StorageUnit, NovaItem(StorageUnitItemBehavior), block = TileEntityBlock.INTERACTIVE, properties = listOf(LegacyDirectional))
     val FLUID_STORAGE_UNIT = registerTileEntity(Logistics, "fluid_storage_unit", OTHER, ::FluidStorageUnit, properties = listOf(LegacyDirectional))
     val VACUUM_CHEST = registerTileEntity(Logistics, "vacuum_chest", OTHER, ::VacuumChest, properties = listOf(LegacyDirectional))
     val TRASH_CAN = registerTileEntity(Logistics, "trash_can", OTHER, ::TrashCan, properties = listOf(Directional.NORMAL))
