@@ -69,5 +69,11 @@
   "item.logistics.elite_item_filter": "精英物品筛选器",
   "item.logistics.ultimate_item_filter": "究极物品筛选器",
   "menu.logistics.items.category.logistics": "物流",
-  "advancement.logistics.root.title": "物流"
+  "advancement.logistics.root.title": "物流",
+  "item.logistics.item_filter.lore.type": "类别: %s",
+  "item.logistics.item_filter.lore.type.whitelist": "白名单",
+  "item.logistics.item_filter.lore.type.blacklist": "黑名单",
+  "item.logistics.item_filter.lore.nbt": "NBT数据: %s",
+  "item.logistics.item_filter.lore.nbt.on": "检查",
+  "item.logistics.item_filter.lore.contents": "内容 (%s项):"
 }
