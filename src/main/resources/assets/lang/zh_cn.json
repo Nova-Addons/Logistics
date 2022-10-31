@@ -75,5 +75,6 @@
   "item.logistics.item_filter.lore.type.blacklist": "黑名单",
   "item.logistics.item_filter.lore.nbt": "NBT数据: %s",
   "item.logistics.item_filter.lore.nbt.on": "检查",
-  "item.logistics.item_filter.lore.contents": "内容 (%s项):"
+  "item.logistics.item_filter.lore.contents": "内容 (%s项):",
+  "item.logistics.item_filter.lore.nbt.off": "忽略"
 }
