@@ -11,8 +11,8 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.nova.data.config.NovaConfig
-import xyz.xenondevs.nova.data.config.ValueReloadable
 import xyz.xenondevs.nova.data.config.configReloadable
+import xyz.xenondevs.nova.data.provider.Provider
 import xyz.xenondevs.nova.item.PacketItemData
 import xyz.xenondevs.nova.item.behavior.ItemBehavior
 import xyz.xenondevs.nova.logistics.gui.itemfilter.ItemFilterWindow
@@ -48,7 +48,7 @@ fun findCorrectFilterMaterial(itemFilter: ItemFilter): ItemNovaMaterial {
     return FILTER_MATERIALS[itemFilter.size] ?: Items.BASIC_ITEM_FILTER
 }
 
-abstract class ItemFilterBehavior(size: ValueReloadable<Int>) : ItemBehavior() {
+abstract class ItemFilterBehavior(size: Provider<Int>) : ItemBehavior() {
     
     val size by size
     

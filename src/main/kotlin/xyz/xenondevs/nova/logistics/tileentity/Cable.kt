@@ -8,9 +8,9 @@ import org.bukkit.block.data.Orientable
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import xyz.xenondevs.nova.data.config.NovaConfig
-import xyz.xenondevs.nova.data.config.ValueReloadable
 import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.config.notReloadable
+import xyz.xenondevs.nova.data.provider.Provider
 import xyz.xenondevs.nova.data.resources.model.data.ArmorStandBlockModelData
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.gui.cable.CableConfigGUI
@@ -56,9 +56,9 @@ private val NetworkNode.fluidHolder: FluidHolder?
     get() = if (this is NetworkEndPoint) holders[FLUID] as FluidHolder? else null
 
 open class Cable(
-    energyTransferRateDelegate: ValueReloadable<Long>,
-    itemTransferRateDelegate: ValueReloadable<Int>,
-    fluidTransferRateDelegate: ValueReloadable<Long>,
+    energyTransferRateDelegate: Provider<Long>,
+    itemTransferRateDelegate: Provider<Int>,
+    fluidTransferRateDelegate: Provider<Long>,
     blockState: NovaTileEntityState
 ) : TileEntity(blockState), EnergyBridge, ItemBridge, FluidBridge {
     

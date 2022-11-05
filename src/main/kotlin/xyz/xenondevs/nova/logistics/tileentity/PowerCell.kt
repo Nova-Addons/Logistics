@@ -5,9 +5,9 @@ import de.studiocode.invui.gui.builder.GUIBuilder
 import de.studiocode.invui.gui.builder.guitype.GUIType
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.Reloadable
-import xyz.xenondevs.nova.data.config.ValueReloadable
 import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.config.notReloadable
+import xyz.xenondevs.nova.data.provider.Provider
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
@@ -19,7 +19,7 @@ import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
 
 class PowerCell(
     creative: Boolean,
-    maxEnergy: ValueReloadable<Long>,
+    maxEnergy: Provider<Long>,
     blockState: NovaTileEntityState
 ) : NetworkedTileEntity(blockState), Reloadable {
     
@@ -48,10 +48,10 @@ class PowerCell(
     
 }
 
-private val BASIC_CAPACITY: ValueReloadable<Long> = configReloadable { NovaConfig[Blocks.BASIC_POWER_CELL].getLong("capacity") }
-private val ADVANCED_CAPACITY: ValueReloadable<Long> = configReloadable { NovaConfig[Blocks.ADVANCED_POWER_CELL].getLong("capacity") }
-private val ELITE_CAPACITY: ValueReloadable<Long> = configReloadable { NovaConfig[Blocks.ELITE_POWER_CELL].getLong("capacity") }
-private val ULTIMATE_CAPACITY: ValueReloadable<Long> = configReloadable { NovaConfig[Blocks.ULTIMATE_POWER_CELL].getLong("capacity") }
+private val BASIC_CAPACITY: Provider<Long> = configReloadable { NovaConfig[Blocks.BASIC_POWER_CELL].getLong("capacity") }
+private val ADVANCED_CAPACITY: Provider<Long> = configReloadable { NovaConfig[Blocks.ADVANCED_POWER_CELL].getLong("capacity") }
+private val ELITE_CAPACITY: Provider<Long> = configReloadable { NovaConfig[Blocks.ELITE_POWER_CELL].getLong("capacity") }
+private val ULTIMATE_CAPACITY: Provider<Long> = configReloadable { NovaConfig[Blocks.ULTIMATE_POWER_CELL].getLong("capacity") }
 
 fun createBasicPowerCell(blockState: NovaTileEntityState) = PowerCell(
     false,

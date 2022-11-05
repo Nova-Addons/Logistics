@@ -4,9 +4,9 @@ import de.studiocode.invui.gui.GUI
 import de.studiocode.invui.gui.builder.GUIBuilder
 import de.studiocode.invui.gui.builder.guitype.GUIType
 import xyz.xenondevs.nova.data.config.NovaConfig
-import xyz.xenondevs.nova.data.config.ValueReloadable
 import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.config.notReloadable
+import xyz.xenondevs.nova.data.provider.Provider
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
@@ -25,7 +25,7 @@ private const val MAX_STATE = 99
 
 @Suppress("LeakingThis")
 open class FluidTank(
-    capacity: ValueReloadable<Long>,
+    capacity: Provider<Long>,
     blockState: NovaTileEntityState
 ) : NetworkedTileEntity(blockState) {
     
