@@ -9,8 +9,8 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.configReloadable
-import xyz.xenondevs.nova.data.config.notReloadable
 import xyz.xenondevs.nova.data.provider.Provider
+import xyz.xenondevs.nova.data.provider.provider
 import xyz.xenondevs.nova.data.resources.model.data.ArmorStandBlockModelData
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.gui.cable.CableConfigGUI
@@ -365,8 +365,8 @@ class UltimateCable(blockState: NovaTileEntityState) : Cable(
 )
 
 class CreativeCable(blockState: NovaTileEntityState) : Cable(
-    notReloadable(Long.MAX_VALUE),
-    notReloadable(Int.MAX_VALUE),
-    notReloadable(Long.MAX_VALUE),
+    provider(Long.MAX_VALUE),
+    provider(Int.MAX_VALUE),
+    provider(Long.MAX_VALUE),
     blockState
 )

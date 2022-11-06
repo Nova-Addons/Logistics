@@ -5,8 +5,8 @@ import de.studiocode.invui.gui.builder.GUIBuilder
 import de.studiocode.invui.gui.builder.guitype.GUIType
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.configReloadable
-import xyz.xenondevs.nova.data.config.notReloadable
 import xyz.xenondevs.nova.data.provider.Provider
+import xyz.xenondevs.nova.data.provider.provider
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
@@ -110,4 +110,4 @@ class EliteFluidTank(blockState: NovaTileEntityState) : FluidTank(ELITE_CAPACITY
 
 class UltimateFluidTank(blockState: NovaTileEntityState) : FluidTank(ULTIMATE_CAPACITY, blockState)
 
-class CreativeFluidTank(blockState: NovaTileEntityState) : FluidTank(notReloadable(Long.MAX_VALUE), blockState)
+class CreativeFluidTank(blockState: NovaTileEntityState) : FluidTank(provider(Long.MAX_VALUE), blockState)
