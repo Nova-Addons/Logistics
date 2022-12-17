@@ -45,10 +45,10 @@ object Blocks {
     val CREATIVE_CABLE = tileEntity(Logistics, "creative_cable", ::CreativeCable).blockOptions(CABLE).interactive(false).register()
     
     val BASIC_POWER_CELL = tileEntity(Logistics, "basic_power_cell", ::createBasicPowerCell).blockOptions(POWER_CELL).properties(LegacyDirectional).register()
-    val ADVANCED_POWER_CELL = tileEntity(Logistics, "basic_power_cell", ::createAdvancedPowerCell).blockOptions(POWER_CELL).properties(LegacyDirectional).register()
-    val ELITE_POWER_CELL = tileEntity(Logistics, "basic_power_cell", ::createElitePowerCell).blockOptions(POWER_CELL).properties(LegacyDirectional).register()
-    val ULTIMATE_POWER_CELL = tileEntity(Logistics, "basic_power_cell", ::createUltimatePowerCell).blockOptions(POWER_CELL).properties(LegacyDirectional).register()
-    val CREATIVE_POWER_CELL = tileEntity(Logistics, "basic_power_cell", ::createCreativePowerCell).blockOptions(POWER_CELL).properties(LegacyDirectional).register()
+    val ADVANCED_POWER_CELL = tileEntity(Logistics, "advanced_power_cell", ::createAdvancedPowerCell).blockOptions(POWER_CELL).properties(LegacyDirectional).register()
+    val ELITE_POWER_CELL = tileEntity(Logistics, "elite_power_cell", ::createElitePowerCell).blockOptions(POWER_CELL).properties(LegacyDirectional).register()
+    val ULTIMATE_POWER_CELL = tileEntity(Logistics, "ultimate_power_cell", ::createUltimatePowerCell).blockOptions(POWER_CELL).properties(LegacyDirectional).register()
+    val CREATIVE_POWER_CELL = tileEntity(Logistics, "creative_power_cell", ::createCreativePowerCell).blockOptions(POWER_CELL).properties(LegacyDirectional).register()
     
     val BASIC_FLUID_TANK = tileEntity(Logistics, "basic_fluid_tank", ::BasicFluidTank).blockOptions(TANK).properties(LegacyDirectional).register()
     val ADVANCED_FLUID_TANK = tileEntity(Logistics, "advanced_fluid_tank", ::AdvancedFluidTank).blockOptions(TANK).properties(LegacyDirectional).register()
