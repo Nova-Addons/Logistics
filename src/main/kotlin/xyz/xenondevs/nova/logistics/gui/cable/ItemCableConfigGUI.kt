@@ -10,7 +10,6 @@ import org.bukkit.block.BlockFace
 import xyz.xenondevs.nova.logistics.item.getItemFilterConfig
 import xyz.xenondevs.nova.logistics.item.isItemFilter
 import xyz.xenondevs.nova.logistics.registry.GUIMaterials
-import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.NetworkManager
 import xyz.xenondevs.nova.tileentity.network.item.ItemNetwork
 import xyz.xenondevs.nova.tileentity.network.item.holder.ItemHolder
@@ -21,9 +20,9 @@ import xyz.xenondevs.nova.util.item.novaMaterial
 import xyz.xenondevs.nova.util.putOrRemove
 
 class ItemCableConfigGUI(
-    val itemHolder: ItemHolder,
-    private val face: BlockFace
-) : BaseCableConfigGUI(ItemNetwork.CHANNEL_AMOUNT) {
+    holder: ItemHolder,
+    face: BlockFace
+) : BaseCableConfigGUI<ItemHolder>(holder, face, ItemNetwork.CHANNEL_AMOUNT) {
     
     val gui: GUI
     private val insertFilterInventory = VirtualInventory(null, 1, arrayOfNulls(1), intArrayOf(1))
@@ -54,31 +53,20 @@ class ItemCableConfigGUI(
     }
     
     override fun updateValues(updateButtons: Boolean) {
+        updateCoreValues()
+        
         NetworkManager.execute { // TODO: queueSync / queueAsync ?
-            val allowedConnections = itemHolder.allowedConnectionTypes[itemHolder.inventories[face]]!!
-            allowsExtract = allowedConnections.extract
-            allowsInsert = allowedConnections.insert
-            
-            insertPriority = itemHolder.insertPriorities[face]!!
-            extractPriority = itemHolder.extractPriorities[face]!!
-            insertState = itemHolder.connectionConfig[face]!!.insert
-            extractState = itemHolder.connectionConfig[face]!!.extract
-            channel = itemHolder.channels[face]!!
-            
-            insertFilterInventory.setItemStackSilently(0, itemHolder.insertFilters[face]?.createFilterItem())
-            extractFilterInventory.setItemStackSilently(0, itemHolder.extractFilters[face]?.createFilterItem())
+            insertFilterInventory.setItemStackSilently(0, holder.insertFilters[face]?.createFilterItem())
+            extractFilterInventory.setItemStackSilently(0, holder.extractFilters[face]?.createFilterItem())
         }
         
         if (updateButtons) updateButtons()
     }
     
     override fun writeChanges() {
-        itemHolder.insertPriorities[face] = insertPriority
-        itemHolder.extractPriorities[face] = extractPriority
-        itemHolder.channels[face] = channel
-        itemHolder.connectionConfig[face] = NetworkConnectionType.of(insertState, extractState)
-        itemHolder.insertFilters.putOrRemove(face, insertFilterInventory.getUnsafeItemStack(0)?.getItemFilterConfig())
-        itemHolder.extractFilters.putOrRemove(face, extractFilterInventory.getUnsafeItemStack(0)?.getItemFilterConfig())
+        super.writeChanges()
+        holder.insertFilters.putOrRemove(face, insertFilterInventory.getUnsafeItemStack(0)?.getItemFilterConfig())
+        holder.extractFilters.putOrRemove(face, extractFilterInventory.getUnsafeItemStack(0)?.getItemFilterConfig())
     }
     
     private fun checkItem(event: ItemUpdateEvent) {

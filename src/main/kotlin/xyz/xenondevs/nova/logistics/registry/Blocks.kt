@@ -4,7 +4,7 @@ import org.bukkit.Material.*
 import xyz.xenondevs.nova.data.world.block.property.Directional
 import xyz.xenondevs.nova.data.world.block.property.LegacyDirectional
 import xyz.xenondevs.nova.item.tool.ToolCategory
-import xyz.xenondevs.nova.item.tool.ToolLevel
+import xyz.xenondevs.nova.item.tool.ToolTier
 import xyz.xenondevs.nova.logistics.Logistics
 import xyz.xenondevs.nova.logistics.item.StorageUnitItemBehavior
 import xyz.xenondevs.nova.logistics.tileentity.AdvancedCable
@@ -26,17 +26,17 @@ import xyz.xenondevs.nova.logistics.tileentity.createBasicPowerCell
 import xyz.xenondevs.nova.logistics.tileentity.createCreativePowerCell
 import xyz.xenondevs.nova.logistics.tileentity.createElitePowerCell
 import xyz.xenondevs.nova.logistics.tileentity.createUltimatePowerCell
-import xyz.xenondevs.nova.material.BlockOptions
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerUnnamedItem
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.tileEntity
+import xyz.xenondevs.nova.material.options.BlockOptions
 import xyz.xenondevs.nova.world.block.sound.SoundGroup
 
 object Blocks {
     
-    private val CABLE = BlockOptions(0.0, null, null, false, SoundGroup.STONE)
-    private val POWER_CELL = BlockOptions(4.0, ToolCategory.PICKAXE, ToolLevel.STONE, true, SoundGroup.METAL, IRON_BLOCK)
-    private val TANK = BlockOptions(2.0, ToolCategory.PICKAXE, ToolLevel.STONE, true, SoundGroup.GLASS, GLASS)
-    private val OTHER = BlockOptions(4.0, ToolCategory.PICKAXE, ToolLevel.STONE, true, SoundGroup.STONE, COBBLESTONE)
+    private val CABLE = BlockOptions(0.0, SoundGroup.STONE)
+    private val POWER_CELL = BlockOptions(4.0, ToolCategory.PICKAXE, ToolTier.STONE, true, SoundGroup.METAL, IRON_BLOCK)
+    private val TANK = BlockOptions(2.0, ToolCategory.PICKAXE, ToolTier.STONE, true, SoundGroup.GLASS, GLASS)
+    private val OTHER = BlockOptions(4.0, ToolCategory.PICKAXE, ToolTier.STONE, true, SoundGroup.STONE, COBBLESTONE)
     
     val BASIC_CABLE = tileEntity(Logistics, "basic_cable", ::BasicCable).blockOptions(CABLE).interactive(false).register()
     val ADVANCED_CABLE = tileEntity(Logistics, "advanced_cable", ::AdvancedCable).blockOptions(CABLE).interactive(false).register()
