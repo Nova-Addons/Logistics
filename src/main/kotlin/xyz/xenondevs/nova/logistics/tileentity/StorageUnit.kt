@@ -27,7 +27,7 @@ import xyz.xenondevs.nova.tileentity.network.item.inventory.NetworkedInventory
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
 import xyz.xenondevs.nova.util.data.localized
-import xyz.xenondevs.nova.util.item.takeUnlessAir
+import xyz.xenondevs.nova.util.item.takeUnlessEmpty
 import xyz.xenondevs.nova.util.runTaskLater
 import kotlin.math.min
 
@@ -171,10 +171,12 @@ class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
             return remaining
         }
         
-        override fun setItem(slot: Int, item: ItemStack?) {
-            amount = item?.takeUnlessAir()?.amount ?: 0
+        override fun setItem(slot: Int, item: ItemStack?): Boolean {
+            amount = item?.takeUnlessEmpty()?.amount ?: 0
             type = if (amount != 0) item else null
             if (gui.isInitialized()) gui.value.update()
+            
+            return true
         }
         
         override fun decrementByOne(slot: Int) {
