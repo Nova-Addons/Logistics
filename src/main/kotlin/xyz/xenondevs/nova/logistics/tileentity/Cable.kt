@@ -44,7 +44,6 @@ import xyz.xenondevs.nova.util.runTask
 import xyz.xenondevs.nova.util.toIntArray
 import xyz.xenondevs.nova.world.block.hitbox.Hitbox
 import xyz.xenondevs.nova.world.point.Point3D
-import java.util.*
 
 private val SUPPORTED_NETWORK_TYPES = hashSetOf(ENERGY, ITEMS, FLUID)
 private val ATTACHMENTS: IntArray = (64..112).toIntArray()
@@ -66,6 +65,7 @@ open class Cable(
     override val itemTransferRate by itemTransferRateDelegate
     override val fluidTransferRate by fluidTransferRateDelegate
     
+    override var isNetworkInitialized = false
     override val supportedNetworkTypes = SUPPORTED_NETWORK_TYPES
     override val networks = HashMap<NetworkType, Network>()
     override val bridgeFaces by storedValue("bridgeFaces") { CUBE_FACES.toHashSet() }
@@ -94,17 +94,8 @@ open class Cable(
     
     override fun saveData() {
         super.saveData()
-        
-        storeData("networks", serializeNetworks())
-        storeData("connectedNodes", serializeConnectedNodes())
-    }
-    
-    override fun retrieveSerializedConnectedNodes(): Map<NetworkType, Map<BlockFace, UUID>>? {
-        return retrieveDataOrNull<HashMap<NetworkType, EnumMap<BlockFace, UUID>>>("connectedNodes")
-    }
-    
-    override fun retrieveSerializedNetworks(): Map<NetworkType, UUID>? {
-        return retrieveDataOrNull<HashMap<NetworkType, UUID>>("networks")
+        serializeNetworks()
+        serializeConnectedNodes()
     }
     
     override fun handleNetworkUpdate() {
