@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.provider.Provider
+import xyz.xenondevs.nova.data.serialization.cbf.NamespacedCompound
 import xyz.xenondevs.nova.item.PacketItemData
 import xyz.xenondevs.nova.item.behavior.ItemBehavior
 import xyz.xenondevs.nova.logistics.gui.itemfilter.ItemFilterWindow
@@ -69,8 +70,8 @@ abstract class ItemFilterBehavior(size: Provider<Int>) : ItemBehavior() {
     fun getFilterConfig(itemStack: ItemStack): ItemFilter =
         itemStack.getOrCreateFilterConfig(size)
     
-    override fun updatePacketItemData(itemStack: ItemStack, itemData: PacketItemData) {
-        val filterConfig = itemStack.getItemFilterConfig() ?: return
+    override fun updatePacketItemData(data: NamespacedCompound, itemData: PacketItemData) {
+        val filterConfig = data.get<ItemFilter>(ItemFilter.ITEM_FILTER_KEY) ?: return
         val lines = ArrayList<Array<BaseComponent>>()
         
         val whitelist = filterConfig.whitelist
