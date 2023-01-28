@@ -1,16 +1,15 @@
 package xyz.xenondevs.nova.logistics.tileentity
 
-import de.studiocode.invui.gui.GUI
-import de.studiocode.invui.gui.builder.GUIBuilder
-import de.studiocode.invui.gui.builder.guitype.GUIType
-import de.studiocode.invui.item.ItemProvider
-import de.studiocode.invui.item.builder.ItemBuilder
-import de.studiocode.invui.item.impl.BaseItem
 import net.minecraft.world.entity.EquipmentSlot
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
+import xyz.xenondevs.invui.gui.builder.GuiBuilder
+import xyz.xenondevs.invui.gui.builder.guitype.GuiType
+import xyz.xenondevs.invui.item.ItemProvider
+import xyz.xenondevs.invui.item.builder.ItemBuilder
+import xyz.xenondevs.invui.item.impl.BaseItem
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.Reloadable
 import xyz.xenondevs.nova.data.config.configReloadable
@@ -23,7 +22,7 @@ import xyz.xenondevs.nova.tileentity.network.fluid.FluidType
 import xyz.xenondevs.nova.tileentity.network.fluid.holder.NovaFluidHolder
 import xyz.xenondevs.nova.ui.FluidBar
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
-import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
+import xyz.xenondevs.nova.ui.config.side.SideConfigGui
 import xyz.xenondevs.nova.util.center
 import xyz.xenondevs.nova.world.fakeentity.impl.FakeArmorStand
 
@@ -31,7 +30,7 @@ private val MAX_CAPACITY = configReloadable { NovaConfig[FLUID_STORAGE_UNIT].get
 
 class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState), Reloadable {
     
-    override val gui = lazy(::FluidStorageUnitGUI)
+    override val gui = lazy(::FluidStorageUnitGui)
     private val fluidTank = getFluidContainer("fluid", setOf(FluidType.LAVA, FluidType.WATER), MAX_CAPACITY, 0, ::handleFluidUpdate)
     private val fluidLevel = FakeArmorStand(pos.location.center()) { _, data -> data.isInvisible = true; data.isMarker = true }
     override val fluidHolder = NovaFluidHolder(this, fluidTank to NetworkConnectionType.BUFFER) { createSideConfig(NetworkConnectionType.BUFFER) }
@@ -57,22 +56,22 @@ class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(bl
         fluidLevel.remove()
     }
     
-    inner class FluidStorageUnitGUI : TileEntityGUI() {
+    inner class FluidStorageUnitGui : TileEntityGui() {
         
-        private val sideConfigGUI = SideConfigGUI(
+        private val sideConfigGui = SideConfigGui(
             this@FluidStorageUnit,
             fluidContainerNames = listOf(fluidTank to "container.nova.fluid_tank"),
             openPrevious = ::openWindow
         )
         
-        override val gui: GUI = GUIBuilder(GUIType.NORMAL)
+        override val gui = GuiBuilder(GuiType.NORMAL)
             .setStructure(
                 "1 - - - - - - - 2",
                 "| s # # # # # f |",
                 "| # # # d # # f |",
                 "| # # # # # # f |",
                 "3 - - - - - - - 4")
-            .addIngredient('s', OpenSideConfigItem(sideConfigGUI))
+            .addIngredient('s', OpenSideConfigItem(sideConfigGui))
             .addIngredient('d', FluidStorageUnitDisplay())
             .addIngredient('f', FluidBar(3, fluidHolder, fluidTank))
             .build()

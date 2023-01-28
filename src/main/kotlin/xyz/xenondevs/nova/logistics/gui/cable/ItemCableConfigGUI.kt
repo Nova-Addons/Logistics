@@ -1,15 +1,16 @@
 package xyz.xenondevs.nova.logistics.gui.cable
 
-import de.studiocode.invui.gui.GUI
-import de.studiocode.invui.gui.SlotElement.VISlotElement
-import de.studiocode.invui.gui.builder.GUIBuilder
-import de.studiocode.invui.gui.builder.guitype.GUIType
-import de.studiocode.invui.virtualinventory.VirtualInventory
-import de.studiocode.invui.virtualinventory.event.ItemUpdateEvent
 import org.bukkit.block.BlockFace
+import xyz.xenondevs.commons.collections.putOrRemove
+import xyz.xenondevs.invui.gui.Gui
+import xyz.xenondevs.invui.gui.SlotElement.VISlotElement
+import xyz.xenondevs.invui.gui.builder.GuiBuilder
+import xyz.xenondevs.invui.gui.builder.guitype.GuiType
+import xyz.xenondevs.invui.virtualinventory.VirtualInventory
+import xyz.xenondevs.invui.virtualinventory.event.ItemUpdateEvent
 import xyz.xenondevs.nova.logistics.item.getItemFilterConfig
 import xyz.xenondevs.nova.logistics.item.isItemFilter
-import xyz.xenondevs.nova.logistics.registry.GUIMaterials
+import xyz.xenondevs.nova.logistics.registry.GuiMaterials
 import xyz.xenondevs.nova.tileentity.network.NetworkManager
 import xyz.xenondevs.nova.tileentity.network.item.ItemNetwork
 import xyz.xenondevs.nova.tileentity.network.item.holder.ItemHolder
@@ -17,14 +18,13 @@ import xyz.xenondevs.nova.ui.item.AddNumberItem
 import xyz.xenondevs.nova.ui.item.DisplayNumberItem
 import xyz.xenondevs.nova.ui.item.RemoveNumberItem
 import xyz.xenondevs.nova.util.item.novaMaterial
-import xyz.xenondevs.nova.util.putOrRemove
 
-class ItemCableConfigGUI(
+class ItemCableConfigGui(
     holder: ItemHolder,
     face: BlockFace
-) : BaseCableConfigGUI<ItemHolder>(holder, face, ItemNetwork.CHANNEL_AMOUNT) {
+) : BaseCableConfigGui<ItemHolder>(holder, face, ItemNetwork.CHANNEL_AMOUNT) {
     
-    val gui: GUI
+    val gui: Gui
     private val insertFilterInventory = VirtualInventory(null, 1, arrayOfNulls(1), intArrayOf(1))
         .apply { setItemUpdateHandler(::checkItem) }
     private val extractFilterInventory = VirtualInventory(null, 1, arrayOfNulls(1), intArrayOf(1))
@@ -33,15 +33,15 @@ class ItemCableConfigGUI(
     init {
         updateValues(false)
         
-        gui = GUIBuilder(GUIType.NORMAL)
+        gui = GuiBuilder(GuiType.NORMAL)
             .setStructure(
                 "# p # # c # # P #",
                 "# d # e # i # D #",
                 "# m # E # I # M #")
             .addIngredient('i', InsertItem().also(updatableItems::add))
             .addIngredient('e', ExtractItem().also(updatableItems::add))
-            .addIngredient('I', VISlotElement(insertFilterInventory, 0, GUIMaterials.ITEM_FILTER_PLACEHOLDER.clientsideProvider))
-            .addIngredient('E', VISlotElement(extractFilterInventory, 0, GUIMaterials.ITEM_FILTER_PLACEHOLDER.clientsideProvider))
+            .addIngredient('I', VISlotElement(insertFilterInventory, 0, GuiMaterials.ITEM_FILTER_PLACEHOLDER.clientsideProvider))
+            .addIngredient('E', VISlotElement(extractFilterInventory, 0, GuiMaterials.ITEM_FILTER_PLACEHOLDER.clientsideProvider))
             .addIngredient('P', AddNumberItem({ 0..100 }, { insertPriority }, { insertPriority = it; updateButtons() }).also(updatableItems::add))
             .addIngredient('M', RemoveNumberItem({ 0..100 }, { insertPriority }, { insertPriority = it; updateButtons() }).also(updatableItems::add))
             .addIngredient('D', DisplayNumberItem({ insertPriority }, "menu.logistics.cable_config.insert_priority").also(updatableItems::add))

@@ -1,22 +1,22 @@
 package xyz.xenondevs.nova.logistics.gui.itemfilter
 
-import de.studiocode.invui.gui.GUI
-import de.studiocode.invui.gui.builder.GUIBuilder
-import de.studiocode.invui.gui.builder.guitype.GUIType
-import de.studiocode.invui.item.ItemProvider
-import de.studiocode.invui.item.impl.BaseItem
-import de.studiocode.invui.virtualinventory.VirtualInventory
-import de.studiocode.invui.virtualinventory.event.ItemUpdateEvent
-import de.studiocode.invui.virtualinventory.event.UpdateReason
-import de.studiocode.invui.window.Window
-import de.studiocode.invui.window.impl.single.SimpleWindow
 import net.md_5.bungee.api.chat.TranslatableComponent
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
+import xyz.xenondevs.invui.gui.Gui
+import xyz.xenondevs.invui.gui.builder.GuiBuilder
+import xyz.xenondevs.invui.gui.builder.guitype.GuiType
+import xyz.xenondevs.invui.item.ItemProvider
+import xyz.xenondevs.invui.item.impl.BaseItem
+import xyz.xenondevs.invui.virtualinventory.VirtualInventory
+import xyz.xenondevs.invui.virtualinventory.event.ItemUpdateEvent
+import xyz.xenondevs.invui.virtualinventory.event.UpdateReason
+import xyz.xenondevs.invui.window.Window
+import xyz.xenondevs.invui.window.builder.WindowType
 import xyz.xenondevs.nova.logistics.item.isItemFilter
-import xyz.xenondevs.nova.logistics.registry.GUIMaterials
+import xyz.xenondevs.nova.logistics.registry.GuiMaterials
 import xyz.xenondevs.nova.material.ItemNovaMaterial
 import xyz.xenondevs.nova.tileentity.network.item.getOrCreateFilterConfig
 import xyz.xenondevs.nova.tileentity.network.item.saveFilterConfig
@@ -44,14 +44,14 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
         
     }
     
-    private val gui: GUI
+    private val gui: Gui
     private val window: Window
     
     init {
         val rows = ceil(itemFilter.items.size / 7.0).toInt()
         
         if (rows > 3) {
-            gui = GUIBuilder(GUIType.SCROLL_INVENTORY)
+            gui = GuiBuilder(GuiType.SCROLL_INVENTORY)
                 .setStructure(
                     "1 - - - - - - - 2",
                     "| # # m # n # # |",
@@ -62,10 +62,10 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
                 )
                 .addIngredient('m', SwitchModeItem())
                 .addIngredient('n', SwitchNBTItem())
-                .setInventory(filterInventory)
+                .addContent(filterInventory)
                 .build()
         } else {
-            gui = GUIBuilder(GUIType.NORMAL)
+            gui = GuiBuilder(GuiType.NORMAL)
                 .setStructure(9, 3 + rows,
                     "1 - - - - - - - 2" +
                         "| # # m # n # # |" +
@@ -77,10 +77,14 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
             gui.fillRectangle(1, 2, 7, filterInventory, true)
         }
         
-        window = SimpleWindow(player, arrayOf(TranslatableComponent(material.localizedName)), gui)
         filterInventory.setItemUpdateHandler(::handleInventoryUpdate)
-        window.addCloseHandler(::saveFilterConfig)
-        window.show()
+        
+        window = WindowType.NORMAL.createWindow {
+            it.setGui(gui)
+            it.setViewer(player)
+            it.setTitle(arrayOf(TranslatableComponent(material.localizedName)))
+            it.addCloseHandler(::saveFilterConfig)
+        }.apply { show() }
     }
     
     private fun saveFilterConfig() {
@@ -99,8 +103,8 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
     private inner class SwitchModeItem : BaseItem() {
         
         override fun getItemProvider(): ItemProvider =
-            if (itemFilter.whitelist) GUIMaterials.WHITELIST_BTN.createClientsideItemBuilder().setLocalizedName("menu.logistics.item_filter.whitelist")
-            else GUIMaterials.BLACKLIST_BTN.createClientsideItemBuilder().setLocalizedName("menu.logistics.item_filter.blacklist")
+            if (itemFilter.whitelist) GuiMaterials.WHITELIST_BTN.createClientsideItemBuilder().setLocalizedName("menu.logistics.item_filter.whitelist")
+            else GuiMaterials.BLACKLIST_BTN.createClientsideItemBuilder().setLocalizedName("menu.logistics.item_filter.blacklist")
         
         override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {
             itemFilter.whitelist = !itemFilter.whitelist
@@ -112,7 +116,7 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
     private inner class SwitchNBTItem : BaseItem() {
         
         override fun getItemProvider(): ItemProvider {
-            return (if (itemFilter.nbt) GUIMaterials.NBT_BTN_ON else GUIMaterials.NBT_BTN_OFF)
+            return (if (itemFilter.nbt) GuiMaterials.NBT_BTN_ON else GuiMaterials.NBT_BTN_OFF)
                 .createClientsideItemBuilder().setLocalizedName("menu.logistics.item_filter.nbt." + if (itemFilter.nbt) "on" else "off")
         }
         

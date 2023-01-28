@@ -7,13 +7,14 @@ import org.bukkit.block.BlockFace
 import org.bukkit.block.data.Orientable
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import xyz.xenondevs.commons.collections.enumMap
+import xyz.xenondevs.commons.provider.Provider
+import xyz.xenondevs.commons.provider.immutable.provider
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.configReloadable
-import xyz.xenondevs.nova.data.provider.Provider
-import xyz.xenondevs.nova.data.provider.provider
 import xyz.xenondevs.nova.data.resources.model.data.ArmorStandBlockModelData
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
-import xyz.xenondevs.nova.logistics.gui.cable.CableConfigGUI
+import xyz.xenondevs.nova.logistics.gui.cable.CableConfigGui
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.material.CoreItems
 import xyz.xenondevs.nova.tileentity.Model
@@ -34,7 +35,6 @@ import xyz.xenondevs.nova.tileentity.network.item.holder.ItemHolder
 import xyz.xenondevs.nova.util.CUBE_FACES
 import xyz.xenondevs.nova.util.MathUtils
 import xyz.xenondevs.nova.util.center
-import xyz.xenondevs.nova.util.emptyEnumMap
 import xyz.xenondevs.nova.util.handItems
 import xyz.xenondevs.nova.util.hasInventoryOpen
 import xyz.xenondevs.nova.util.isRightClick
@@ -73,8 +73,8 @@ open class Cable(
     override val typeId: String
         get() = material.id.toString()
     
-    override val gui: Lazy<TileEntityGUI>? = null
-    private val configGUIs = emptyEnumMap<BlockFace, CableConfigGUI>()
+    override val gui: Lazy<TileEntityGui>? = null
+    private val configGuis = enumMap<BlockFace, CableConfigGui>()
     
     private val hitboxes = ArrayList<Hitbox>()
     private val multiModel = createMultiModel()
@@ -106,12 +106,12 @@ open class Cable(
             blockState.modelProvider.update(modelId)
             updateAttachmentModels()
             
-            configGUIs.forEach { (face, gui) ->
+            configGuis.forEach { (face, gui) ->
                 val neighbor = connectedNodes[ITEMS]?.get(face)
                 
                 fun closeAndRemove() {
                     runTask { gui.closeForAllViewers() }
-                    configGUIs.remove(face)
+                    configGuis.remove(face)
                 }
                 
                 if (neighbor is NetworkEndPoint) {
@@ -137,7 +137,7 @@ open class Cable(
         hitboxes.forEach { it.remove() }
         if (!unload) {
             NetworkManager.queueAsync { it.removeBridge(this) }
-            configGUIs.values.forEach(CableConfigGUI::closeForAllViewers)
+            configGuis.values.forEach(CableConfigGui::closeForAllViewers)
         }
     }
     
@@ -281,7 +281,7 @@ open class Cable(
                 val endPoint = getConnectedNode(face) as? NetworkEndPoint
                     ?: return@queueSync
                 
-                configGUIs.getOrPut(face) { CableConfigGUI(endPoint, endPoint.itemHolder, endPoint.fluidHolder, face.oppositeFace) }.openWindow(event.player)
+                configGuis.getOrPut(face) { CableConfigGui(endPoint, endPoint.itemHolder, endPoint.fluidHolder, face.oppositeFace) }.openWindow(event.player)
             }
         }
     }

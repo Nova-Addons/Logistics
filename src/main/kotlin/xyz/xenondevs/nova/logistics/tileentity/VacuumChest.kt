@@ -1,12 +1,11 @@
 package xyz.xenondevs.nova.logistics.tileentity
 
-import de.studiocode.invui.gui.GUI
-import de.studiocode.invui.gui.SlotElement.VISlotElement
-import de.studiocode.invui.gui.builder.GUIBuilder
-import de.studiocode.invui.gui.builder.guitype.GUIType
-import de.studiocode.invui.virtualinventory.VirtualInventory
-import de.studiocode.invui.virtualinventory.event.ItemUpdateEvent
 import org.bukkit.entity.Item
+import xyz.xenondevs.invui.gui.SlotElement.VISlotElement
+import xyz.xenondevs.invui.gui.builder.GuiBuilder
+import xyz.xenondevs.invui.gui.builder.guitype.GuiType
+import xyz.xenondevs.invui.virtualinventory.VirtualInventory
+import xyz.xenondevs.invui.virtualinventory.event.ItemUpdateEvent
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
@@ -14,18 +13,18 @@ import xyz.xenondevs.nova.integration.protection.ProtectionManager
 import xyz.xenondevs.nova.logistics.item.getItemFilterConfig
 import xyz.xenondevs.nova.logistics.item.isItemFilter
 import xyz.xenondevs.nova.logistics.registry.Blocks.VACUUM_CHEST
-import xyz.xenondevs.nova.logistics.registry.GUIMaterials
+import xyz.xenondevs.nova.logistics.registry.GuiMaterials
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.item.ItemFilter
 import xyz.xenondevs.nova.tileentity.network.item.holder.NovaItemHolder
 import xyz.xenondevs.nova.tileentity.upgrade.Upgradable
-import xyz.xenondevs.nova.tileentity.upgrade.UpgradeType
 import xyz.xenondevs.nova.ui.OpenUpgradesItem
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
-import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
+import xyz.xenondevs.nova.ui.config.side.SideConfigGui
 import xyz.xenondevs.nova.util.item.novaMaterial
 import xyz.xenondevs.nova.util.serverTick
+import xyz.xenondevs.simpleupgrades.registry.UpgradeTypes
 
 private val MIN_RANGE = configReloadable { NovaConfig[VACUUM_CHEST].getInt("range.min") }
 private val MAX_RANGE = configReloadable { NovaConfig[VACUUM_CHEST].getInt("range.max") }
@@ -39,11 +38,11 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
         this,
         inventory to NetworkConnectionType.BUFFER
     ) { createSideConfig(NetworkConnectionType.EXTRACT) }
-    override val gui = lazy { VacuumChestGUI() }
-    override val upgradeHolder = getUpgradeHolder(UpgradeType.RANGE)
+    override val gui = lazy { VacuumChestGui() }
+    override val upgradeHolder = getUpgradeHolder(UpgradeTypes.RANGE)
     
     private var filter: ItemFilter? by storedValue("itemFilter")
-    private val region = getUpgradableRegion(UpgradeType.RANGE, MIN_RANGE, MAX_RANGE, DEFAULT_RANGE) { getSurroundingRegion(it) }
+    private val region = getUpgradableRegion(UpgradeTypes.RANGE, MIN_RANGE, MAX_RANGE, DEFAULT_RANGE) { getSurroundingRegion(it) }
     
     private val items = ArrayList<Item>()
     
@@ -88,14 +87,14 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
         else if (newStack != null) event.isCancelled = true
     }
     
-    inner class VacuumChestGUI : TileEntityGUI() {
+    inner class VacuumChestGui : TileEntityGui() {
         
-        private val sideConfigGUI = SideConfigGUI(
+        private val sideConfigGui = SideConfigGui(
             this@VacuumChest,
             listOf(itemHolder.getNetworkedInventory(inventory) to "inventory.nova.default")
         ) { openWindow(it) }
         
-        override val gui: GUI = GUIBuilder(GUIType.NORMAL)
+        override val gui = GuiBuilder(GuiType.NORMAL)
             .setStructure(
                 "1 - - - - - - - 2",
                 "| s u # i i i p |",
@@ -103,10 +102,10 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
                 "| f # # i i i m |",
                 "3 - - - - - - - 4")
             .addIngredient('i', inventory)
-            .addIngredient('s', OpenSideConfigItem(sideConfigGUI))
+            .addIngredient('s', OpenSideConfigItem(sideConfigGui))
             .addIngredient('u', OpenUpgradesItem(upgradeHolder))
             .addIngredient('r', region.visualizeRegionItem)
-            .addIngredient('f', VISlotElement(filterInventory, 0, GUIMaterials.ITEM_FILTER_PLACEHOLDER.clientsideProvider))
+            .addIngredient('f', VISlotElement(filterInventory, 0, GuiMaterials.ITEM_FILTER_PLACEHOLDER.clientsideProvider))
             .addIngredient('p', region.increaseSizeItem)
             .addIngredient('m', region.decreaseSizeItem)
             .addIngredient('d', region.displaySizeItem)

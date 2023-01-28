@@ -1,26 +1,26 @@
 package xyz.xenondevs.nova.logistics.gui.cable
 
-import de.studiocode.invui.gui.GUI
-import de.studiocode.invui.gui.builder.GUIBuilder
-import de.studiocode.invui.gui.builder.guitype.GUIType
 import org.bukkit.block.BlockFace
+import xyz.xenondevs.invui.gui.Gui
+import xyz.xenondevs.invui.gui.builder.GuiBuilder
+import xyz.xenondevs.invui.gui.builder.guitype.GuiType
 import xyz.xenondevs.nova.tileentity.network.fluid.FluidNetwork
 import xyz.xenondevs.nova.tileentity.network.fluid.holder.FluidHolder
 import xyz.xenondevs.nova.ui.item.AddNumberItem
 import xyz.xenondevs.nova.ui.item.DisplayNumberItem
 import xyz.xenondevs.nova.ui.item.RemoveNumberItem
 
-class FluidCableConfigGUI(
+class FluidCableConfigGui(
      holder: FluidHolder,
      face: BlockFace
-) : BaseCableConfigGUI<FluidHolder>(holder, face, FluidNetwork.CHANNEL_AMOUNT) {
+) : BaseCableConfigGui<FluidHolder>(holder, face, FluidNetwork.CHANNEL_AMOUNT) {
     
-    val gui: GUI
+    val gui: Gui
     
     init {
         updateValues(false)
         
-        gui = GUIBuilder(GUIType.NORMAL)
+        gui = GuiBuilder(GuiType.NORMAL)
             .setStructure(
                 "# p # # # # # P #",
                 "# d # e c i # D #",

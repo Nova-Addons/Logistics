@@ -1,23 +1,23 @@
 package xyz.xenondevs.nova.logistics.gui.cable
 
-import de.studiocode.invui.item.Item
-import de.studiocode.invui.item.ItemProvider
-import de.studiocode.invui.item.impl.BaseItem
 import net.md_5.bungee.api.chat.TranslatableComponent
 import org.bukkit.Sound
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
-import xyz.xenondevs.nova.material.CoreGUIMaterial
+import xyz.xenondevs.invui.item.Item
+import xyz.xenondevs.invui.item.ItemProvider
+import xyz.xenondevs.invui.item.impl.BaseItem
+import xyz.xenondevs.invui.item.notifyWindows
+import xyz.xenondevs.nova.material.CoreGuiMaterial
 import xyz.xenondevs.nova.tileentity.network.ContainerEndPointDataHolder
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.NetworkManager
 import xyz.xenondevs.nova.ui.item.BUTTON_COLORS
 import xyz.xenondevs.nova.util.data.setLocalizedName
-import xyz.xenondevs.nova.util.notifyWindows
 
-abstract class BaseCableConfigGUI<H : ContainerEndPointDataHolder<*>>(
+abstract class BaseCableConfigGui<H : ContainerEndPointDataHolder<*>>(
     val holder: H,
     val face: BlockFace,
     private val channelAmount: Int
@@ -62,7 +62,7 @@ abstract class BaseCableConfigGUI<H : ContainerEndPointDataHolder<*>>(
     protected inner class InsertItem : BaseItem() {
         
         override fun getItemProvider(): ItemProvider =
-            (if (insertState) CoreGUIMaterial.GREEN_BTN else CoreGUIMaterial.GRAY_BTN)
+            (if (insertState) CoreGuiMaterial.GREEN_BTN else CoreGuiMaterial.GRAY_BTN)
                 .createClientsideItemBuilder().setLocalizedName("menu.logistics.cable_config.insert")
         
         override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {
@@ -78,7 +78,7 @@ abstract class BaseCableConfigGUI<H : ContainerEndPointDataHolder<*>>(
     protected inner class ExtractItem : BaseItem() {
         
         override fun getItemProvider(): ItemProvider =
-            (if (extractState) CoreGUIMaterial.GREEN_BTN else CoreGUIMaterial.GRAY_BTN)
+            (if (extractState) CoreGuiMaterial.GREEN_BTN else CoreGuiMaterial.GRAY_BTN)
                 .createClientsideItemBuilder().setLocalizedName("menu.logistics.cable_config.extract")
         
         override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {

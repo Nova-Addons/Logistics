@@ -1,64 +1,67 @@
 package xyz.xenondevs.nova.logistics.gui.cable
 
-import de.studiocode.invui.gui.GUI
-import de.studiocode.invui.gui.builder.GUIBuilder
-import de.studiocode.invui.gui.builder.guitype.GUIType
-import de.studiocode.invui.window.impl.single.SimpleWindow
 import net.md_5.bungee.api.chat.TranslatableComponent
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
-import xyz.xenondevs.nova.material.CoreGUIMaterial
+import xyz.xenondevs.invui.gui.Gui
+import xyz.xenondevs.invui.gui.builder.GuiBuilder
+import xyz.xenondevs.invui.gui.builder.guitype.GuiType
+import xyz.xenondevs.invui.window.builder.WindowType
+import xyz.xenondevs.nova.material.CoreGuiMaterial
 import xyz.xenondevs.nova.tileentity.network.NetworkEndPoint
 import xyz.xenondevs.nova.tileentity.network.NetworkManager
 import xyz.xenondevs.nova.tileentity.network.fluid.holder.FluidHolder
 import xyz.xenondevs.nova.tileentity.network.item.holder.ItemHolder
 import xyz.xenondevs.nova.ui.item.ClickyTabItem
 
-class CableConfigGUI(
+class CableConfigGui(
     val endPoint: NetworkEndPoint,
     val itemHolder: ItemHolder?,
     val fluidHolder: FluidHolder?,
     private val face: BlockFace
 ) {
     
-    private val gui: GUI
+    private val gui: Gui
     
-    private val itemConfigGUI = itemHolder?.let { ItemCableConfigGUI(it, face) }
-    private val fluidConfigGUI = fluidHolder?.let { FluidCableConfigGUI(it, face) }
+    private val itemConfigGui = itemHolder?.let { ItemCableConfigGui(it, face) }
+    private val fluidConfigGui = fluidHolder?.let { FluidCableConfigGui(it, face) }
     
     init {
-        require(itemConfigGUI != null || fluidConfigGUI != null)
+        require(itemConfigGui != null || fluidConfigGui != null)
         
-        gui = GUIBuilder(GUIType.TAB)
+        gui = GuiBuilder(GuiType.TAB)
             .setStructure(
-                "# # # i # f # # #" ,
-                "- - - - - - - - -" ,
-                "x x x x x x x x x" ,
-                "x x x x x x x x x" ,
+                "# # # i # f # # #",
+                "- - - - - - - - -",
+                "x x x x x x x x x",
+                "x x x x x x x x x",
                 "x x x x x x x x x"
             )
             .addIngredient('i', ClickyTabItem(0) {
-                (if (itemConfigGUI != null) {
+                (if (itemConfigGui != null) {
                     if (it.currentTab == 0)
-                        CoreGUIMaterial.ITEM_BTN_SELECTED
-                    else CoreGUIMaterial.ITEM_BTN_ON
-                } else CoreGUIMaterial.ITEM_BTN_OFF).clientsideProvider
+                        CoreGuiMaterial.ITEM_BTN_SELECTED
+                    else CoreGuiMaterial.ITEM_BTN_ON
+                } else CoreGuiMaterial.ITEM_BTN_OFF).clientsideProvider
             })
             .addIngredient('f', ClickyTabItem(1) {
-                (if (fluidConfigGUI != null) {
+                (if (fluidConfigGui != null) {
                     if (it.currentTab == 1)
-                        CoreGUIMaterial.FLUID_BTN_SELECTED
-                    else CoreGUIMaterial.FLUID_BTN_ON
-                } else CoreGUIMaterial.FLUID_BTN_OFF).clientsideProvider
+                        CoreGuiMaterial.FLUID_BTN_SELECTED
+                    else CoreGuiMaterial.FLUID_BTN_ON
+                } else CoreGuiMaterial.FLUID_BTN_OFF).clientsideProvider
             })
-            .setGUIs(listOf(itemConfigGUI?.gui, fluidConfigGUI?.gui))
+            .setContent(listOf(itemConfigGui?.gui, fluidConfigGui?.gui))
             .build()
     }
     
     fun openWindow(player: Player) {
-        SimpleWindow(player, arrayOf(TranslatableComponent("menu.logistics.cable_config")), gui)
-            .also { it.addCloseHandler(::writeChanges) }
-            .show()
+        WindowType.NORMAL.createWindow {
+            it.setViewer(player)
+            it.setTitle(arrayOf(TranslatableComponent("menu.logistics.cable_config")))
+            it.setGui(gui)
+            it.addCloseHandler(::writeChanges)
+        }.show()
     }
     
     fun closeForAllViewers() {
@@ -66,16 +69,16 @@ class CableConfigGUI(
     }
     
     fun updateValues(updateButtons: Boolean = true) {
-        itemConfigGUI?.updateValues(updateButtons)
-        fluidConfigGUI?.updateValues(updateButtons)
+        itemConfigGui?.updateValues(updateButtons)
+        fluidConfigGui?.updateValues(updateButtons)
     }
     
     private fun writeChanges() {
         NetworkManager.queueAsync {
             it.removeEndPoint(endPoint, false)
-    
-            itemConfigGUI?.writeChanges()
-            fluidConfigGUI?.writeChanges()
+            
+            itemConfigGui?.writeChanges()
+            fluidConfigGui?.writeChanges()
             
             it.addEndPoint(endPoint, false).thenRun { endPoint.updateNearbyBridges() }
         }

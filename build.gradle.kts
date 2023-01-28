@@ -8,7 +8,7 @@ val mojangMapped = System.getProperty("mojang-mapped") != null
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    kotlin("jvm") version "1.7.22"
+    kotlin("jvm") version "1.8.0"
     id("xyz.xenondevs.specialsource-gradle-plugin") version "1.0.0"
     id("xyz.xenondevs.string-remapper-gradle-plugin") version "1.0.0"
     id("xyz.xenondevs.nova.nova-gradle-plugin") version libs.versions.nova
@@ -24,6 +24,7 @@ repositories {
 dependencies {
     implementation(libs.nova)
     implementation(variantOf(libs.spigot) { classifier("remapped-mojang") })
+    implementation("xyz.xenondevs:simple-upgrades:1.0-SNAPSHOT")
 }
 
 addon {
@@ -32,6 +33,7 @@ addon {
     version.set(project.version.toString())
     novaVersion.set(libs.versions.nova)
     main.set("xyz.xenondevs.nova.logistics.Logistics")
+    depend.add("simple_upgrades")
     authors.set(listOf("StudioCode", "ByteZ", "Javahase"))
     spigotResourceId.set(102713)
 }

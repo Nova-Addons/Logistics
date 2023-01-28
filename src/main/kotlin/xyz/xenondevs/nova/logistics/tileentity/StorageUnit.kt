@@ -1,14 +1,5 @@
 package xyz.xenondevs.nova.logistics.tileentity
 
-import de.studiocode.invui.gui.GUI
-import de.studiocode.invui.gui.SlotElement.VISlotElement
-import de.studiocode.invui.gui.builder.GUIBuilder
-import de.studiocode.invui.gui.builder.guitype.GUIType
-import de.studiocode.invui.item.ItemProvider
-import de.studiocode.invui.item.builder.ItemBuilder
-import de.studiocode.invui.item.impl.BaseItem
-import de.studiocode.invui.virtualinventory.VirtualInventory
-import de.studiocode.invui.virtualinventory.event.ItemUpdateEvent
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
@@ -16,6 +7,14 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
+import xyz.xenondevs.invui.gui.SlotElement.VISlotElement
+import xyz.xenondevs.invui.gui.builder.GuiBuilder
+import xyz.xenondevs.invui.gui.builder.guitype.GuiType
+import xyz.xenondevs.invui.item.ItemProvider
+import xyz.xenondevs.invui.item.builder.ItemBuilder
+import xyz.xenondevs.invui.item.impl.BaseItem
+import xyz.xenondevs.invui.virtualinventory.VirtualInventory
+import xyz.xenondevs.invui.virtualinventory.event.ItemUpdateEvent
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
@@ -25,7 +24,7 @@ import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.item.holder.NovaItemHolder
 import xyz.xenondevs.nova.tileentity.network.item.inventory.NetworkedInventory
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
-import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
+import xyz.xenondevs.nova.ui.config.side.SideConfigGui
 import xyz.xenondevs.nova.util.data.localized
 import xyz.xenondevs.nova.util.item.takeUnlessEmpty
 import xyz.xenondevs.nova.util.runTaskLater
@@ -35,7 +34,7 @@ private val MAX_ITEMS by configReloadable { NovaConfig[STORAGE_UNIT].getInt("max
 
 class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState) {
     
-    override val gui = lazy { StorageUnitGUI() }
+    override val gui = lazy { StorageUnitGui() }
     private val inventory = StorageUnitInventory(retrieveDataOrNull("type"), retrieveDataOrNull("amount") ?: 0)
     private val inputInventory = VirtualInventory(null, 1).apply { setItemUpdateHandler(::handleInputInventoryUpdate) }
     private val outputInventory = VirtualInventory(null, 1).apply { setItemUpdateHandler(::handleOutputInventoryUpdate) }
@@ -84,9 +83,9 @@ class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
         storeData("amount", inventory.amount, true)
     }
     
-    inner class StorageUnitGUI : TileEntityGUI() {
+    inner class StorageUnitGui : TileEntityGui() {
         
-        private val sideConfigGUI = SideConfigGUI(
+        private val sideConfigGui = SideConfigGui(
             this@StorageUnit,
             listOf(inventory to "inventory.nova.default"),
             ::openWindow
@@ -94,7 +93,7 @@ class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
         
         private val storageUnitDisplay = StorageUnitDisplay()
         
-        override val gui: GUI = GUIBuilder(GUIType.NORMAL)
+        override val gui = GuiBuilder(GuiType.NORMAL)
             .setStructure(
                 "1 - - - - - - - 2",
                 "| # i # c # o s |",
@@ -102,7 +101,7 @@ class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
             .addIngredient('c', storageUnitDisplay)
             .addIngredient('i', VISlotElement(inputInventory, 0))
             .addIngredient('o', VISlotElement(outputInventory, 0))
-            .addIngredient('s', OpenSideConfigItem(sideConfigGUI))
+            .addIngredient('s', OpenSideConfigItem(sideConfigGui))
             .build()
         
         init {

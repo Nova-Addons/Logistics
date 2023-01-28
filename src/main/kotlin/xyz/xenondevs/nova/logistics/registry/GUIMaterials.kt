@@ -3,7 +3,7 @@ package xyz.xenondevs.nova.logistics.registry
 import xyz.xenondevs.nova.logistics.Logistics
 import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerUnnamedHiddenItem
 
-object GUIMaterials {
+object GuiMaterials {
     
     val ITEM_FILTER_PLACEHOLDER = registerUnnamedHiddenItem(Logistics, "gui_item_filter_placeholder")
     val TRASH_CAN_PLACEHOLDER = registerUnnamedHiddenItem(Logistics, "gui_trash_can_placeholder")
