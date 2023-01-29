@@ -7,7 +7,7 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.gui.builder.GuiBuilder
-import xyz.xenondevs.invui.gui.builder.guitype.GuiType
+import xyz.xenondevs.invui.gui.builder.GuiType
 import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.impl.BaseItem
 import xyz.xenondevs.invui.virtualinventory.VirtualInventory
@@ -65,7 +65,7 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
                 .addContent(filterInventory)
                 .build()
         } else {
-            gui = GuiBuilder(GuiType.NORMAL)
+            gui = GuiType.NORMAL.builder()
                 .setStructure(9, 3 + rows,
                     "1 - - - - - - - 2" +
                         "| # # m # n # # |" +

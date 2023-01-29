@@ -5,7 +5,7 @@ import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.gui.builder.GuiBuilder
-import xyz.xenondevs.invui.gui.builder.guitype.GuiType
+import xyz.xenondevs.invui.gui.builder.GuiType
 import xyz.xenondevs.invui.window.builder.WindowType
 import xyz.xenondevs.nova.material.CoreGuiMaterial
 import xyz.xenondevs.nova.tileentity.network.NetworkEndPoint

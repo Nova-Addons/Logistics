@@ -2,8 +2,7 @@ package xyz.xenondevs.nova.logistics.tileentity
 
 import xyz.xenondevs.commons.provider.Provider
 import xyz.xenondevs.commons.provider.immutable.provider
-import xyz.xenondevs.invui.gui.builder.GuiBuilder
-import xyz.xenondevs.invui.gui.builder.guitype.GuiType
+import xyz.xenondevs.invui.gui.builder.GuiType
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.Reloadable
 import xyz.xenondevs.nova.data.config.configReloadable
@@ -32,7 +31,7 @@ class PowerCell(
         
         private val sideConfigGui = SideConfigGui(this@PowerCell, ::openWindow)
         
-        override val gui = GuiBuilder(GuiType.NORMAL)
+        override val gui = GuiType.NORMAL.builder()
             .setStructure(
                 "1 - - - - - - - 2",
                 "| s # # e # # # |",
