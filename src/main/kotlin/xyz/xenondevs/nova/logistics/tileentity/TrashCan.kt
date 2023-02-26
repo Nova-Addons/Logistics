@@ -1,8 +1,8 @@
 package xyz.xenondevs.nova.logistics.tileentity
 
 import xyz.xenondevs.commons.collections.enumMap
+import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.gui.SlotElement.VISlotElement
-import xyz.xenondevs.invui.gui.builder.GuiType
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.GuiMaterials
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
@@ -44,7 +44,7 @@ class TrashCan(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState
             ::openWindow
         )
         
-        override val gui = GuiType.NORMAL.builder()
+        override val gui = Gui.normal()
             .setStructure(
                 "1 - - - - - - - 2",
                 "| s # # i # # # |",

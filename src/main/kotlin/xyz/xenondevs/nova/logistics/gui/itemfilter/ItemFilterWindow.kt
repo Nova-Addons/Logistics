@@ -6,15 +6,13 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.invui.gui.Gui
-import xyz.xenondevs.invui.gui.builder.GuiBuilder
-import xyz.xenondevs.invui.gui.builder.GuiType
+import xyz.xenondevs.invui.gui.ScrollGui
 import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.impl.BaseItem
 import xyz.xenondevs.invui.virtualinventory.VirtualInventory
 import xyz.xenondevs.invui.virtualinventory.event.ItemUpdateEvent
 import xyz.xenondevs.invui.virtualinventory.event.UpdateReason
 import xyz.xenondevs.invui.window.Window
-import xyz.xenondevs.invui.window.builder.WindowType
 import xyz.xenondevs.nova.logistics.item.isItemFilter
 import xyz.xenondevs.nova.logistics.registry.GuiMaterials
 import xyz.xenondevs.nova.material.ItemNovaMaterial
@@ -51,7 +49,7 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
         val rows = ceil(itemFilter.items.size / 7.0).toInt()
         
         if (rows > 3) {
-            gui = GuiBuilder(GuiType.SCROLL_INVENTORY)
+            gui = ScrollGui.inventories()
                 .setStructure(
                     "1 - - - - - - - 2",
                     "| # # m # n # # |",
@@ -65,7 +63,7 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
                 .addContent(filterInventory)
                 .build()
         } else {
-            gui = GuiType.NORMAL.builder()
+            gui = Gui.normal()
                 .setStructure(9, 3 + rows,
                     "1 - - - - - - - 2" +
                         "| # # m # n # # |" +
@@ -79,7 +77,7 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
         
         filterInventory.setItemUpdateHandler(::handleInventoryUpdate)
         
-        window = WindowType.NORMAL.createWindow {
+        window = Window.single {
             it.setGui(gui)
             it.setViewer(player)
             it.setTitle(arrayOf(TranslatableComponent(material.localizedName)))

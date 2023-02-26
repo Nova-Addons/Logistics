@@ -2,7 +2,6 @@ package xyz.xenondevs.nova.logistics.gui.cable
 
 import org.bukkit.block.BlockFace
 import xyz.xenondevs.invui.gui.Gui
-import xyz.xenondevs.invui.gui.builder.GuiType
 import xyz.xenondevs.nova.tileentity.network.fluid.FluidNetwork
 import xyz.xenondevs.nova.tileentity.network.fluid.holder.FluidHolder
 import xyz.xenondevs.nova.ui.item.AddNumberItem
@@ -19,7 +18,7 @@ class FluidCableConfigGui(
     init {
         updateValues(false)
         
-        gui = GuiType.NORMAL.builder()
+        gui = Gui.normal()
             .setStructure(
                 "# p # # # # # P #",
                 "# d # e c i # D #",

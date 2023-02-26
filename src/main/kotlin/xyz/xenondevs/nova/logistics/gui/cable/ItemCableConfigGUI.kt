@@ -4,7 +4,6 @@ import org.bukkit.block.BlockFace
 import xyz.xenondevs.commons.collections.putOrRemove
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.gui.SlotElement.VISlotElement
-import xyz.xenondevs.invui.gui.builder.GuiType
 import xyz.xenondevs.invui.virtualinventory.VirtualInventory
 import xyz.xenondevs.invui.virtualinventory.event.ItemUpdateEvent
 import xyz.xenondevs.nova.logistics.item.getItemFilterConfig
@@ -32,7 +31,7 @@ class ItemCableConfigGui(
     init {
         updateValues(false)
         
-        gui = GuiType.NORMAL.builder()
+        gui = Gui.normal()
             .setStructure(
                 "# p # # c # # P #",
                 "# d # e # i # D #",

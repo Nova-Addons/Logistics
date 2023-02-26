@@ -4,9 +4,8 @@ import net.md_5.bungee.api.chat.TranslatableComponent
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
 import xyz.xenondevs.invui.gui.Gui
-import xyz.xenondevs.invui.gui.builder.GuiBuilder
-import xyz.xenondevs.invui.gui.builder.GuiType
-import xyz.xenondevs.invui.window.builder.WindowType
+import xyz.xenondevs.invui.gui.TabGui
+import xyz.xenondevs.invui.window.Window
 import xyz.xenondevs.nova.material.CoreGuiMaterial
 import xyz.xenondevs.nova.tileentity.network.NetworkEndPoint
 import xyz.xenondevs.nova.tileentity.network.NetworkManager
@@ -29,7 +28,7 @@ class CableConfigGui(
     init {
         require(itemConfigGui != null || fluidConfigGui != null)
         
-        gui = GuiBuilder(GuiType.TAB)
+        gui = TabGui.normal()
             .setStructure(
                 "# # # i # f # # #",
                 "- - - - - - - - -",
@@ -51,12 +50,12 @@ class CableConfigGui(
                     else CoreGuiMaterial.FLUID_BTN_ON
                 } else CoreGuiMaterial.FLUID_BTN_OFF).clientsideProvider
             })
-            .setContent(listOf(itemConfigGui?.gui, fluidConfigGui?.gui))
+            .setTabs(listOf(itemConfigGui?.gui, fluidConfigGui?.gui))
             .build()
     }
     
     fun openWindow(player: Player) {
-        WindowType.NORMAL.createWindow {
+        Window.single {
             it.setViewer(player)
             it.setTitle(arrayOf(TranslatableComponent("menu.logistics.cable_config")))
             it.setGui(gui)
