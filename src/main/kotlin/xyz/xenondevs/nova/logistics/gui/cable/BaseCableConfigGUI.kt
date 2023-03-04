@@ -8,7 +8,7 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import xyz.xenondevs.invui.item.Item
 import xyz.xenondevs.invui.item.ItemProvider
-import xyz.xenondevs.invui.item.impl.BaseItem
+import xyz.xenondevs.invui.item.impl.AbstractItem
 import xyz.xenondevs.invui.item.notifyWindows
 import xyz.xenondevs.nova.material.CoreGuiMaterial
 import xyz.xenondevs.nova.tileentity.network.ContainerEndPointDataHolder
@@ -59,7 +59,7 @@ abstract class BaseCableConfigGui<H : ContainerEndPointDataHolder<*>>(
         holder.connectionConfig[face] = NetworkConnectionType.of(insertState, extractState)
     }
     
-    protected inner class InsertItem : BaseItem() {
+    protected inner class InsertItem : AbstractItem() {
         
         override fun getItemProvider(): ItemProvider =
             (if (insertState) CoreGuiMaterial.GREEN_BTN else CoreGuiMaterial.GRAY_BTN)
@@ -75,7 +75,7 @@ abstract class BaseCableConfigGui<H : ContainerEndPointDataHolder<*>>(
         
     }
     
-    protected inner class ExtractItem : BaseItem() {
+    protected inner class ExtractItem : AbstractItem() {
         
         override fun getItemProvider(): ItemProvider =
             (if (extractState) CoreGuiMaterial.GREEN_BTN else CoreGuiMaterial.GRAY_BTN)
@@ -91,7 +91,7 @@ abstract class BaseCableConfigGui<H : ContainerEndPointDataHolder<*>>(
         
     }
     
-    protected inner class SwitchChannelItem : BaseItem() {
+    protected inner class SwitchChannelItem : AbstractItem() {
         
         override fun getItemProvider(): ItemProvider {
             return BUTTON_COLORS[channel].createClientsideItemBuilder()

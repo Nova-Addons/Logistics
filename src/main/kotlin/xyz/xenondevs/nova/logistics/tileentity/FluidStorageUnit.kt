@@ -8,7 +8,7 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.builder.ItemBuilder
-import xyz.xenondevs.invui.item.impl.BaseItem
+import xyz.xenondevs.invui.item.impl.AbstractItem
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.Reloadable
 import xyz.xenondevs.nova.data.config.configReloadable
@@ -75,7 +75,7 @@ class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(bl
             .addIngredient('f', FluidBar(3, fluidHolder, fluidTank))
             .build()
         
-        private inner class FluidStorageUnitDisplay : BaseItem() {
+        private inner class FluidStorageUnitDisplay : AbstractItem() {
             
             init {
                 fluidTank.updateHandlers += { notifyWindows() }

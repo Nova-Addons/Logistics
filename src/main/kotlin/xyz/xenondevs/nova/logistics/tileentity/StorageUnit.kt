@@ -11,7 +11,7 @@ import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.gui.SlotElement.VISlotElement
 import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.builder.ItemBuilder
-import xyz.xenondevs.invui.item.impl.BaseItem
+import xyz.xenondevs.invui.item.impl.AbstractItem
 import xyz.xenondevs.invui.virtualinventory.VirtualInventory
 import xyz.xenondevs.invui.virtualinventory.event.ItemUpdateEvent
 import xyz.xenondevs.nova.data.config.NovaConfig
@@ -112,7 +112,7 @@ class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
             updateOutputSlot()
         }
         
-        private inner class StorageUnitDisplay : BaseItem() {
+        private inner class StorageUnitDisplay : AbstractItem() {
             
             override fun getItemProvider(): ItemProvider {
                 val type = inventory.type ?: return ItemBuilder(Material.BARRIER).setDisplayName("§r")

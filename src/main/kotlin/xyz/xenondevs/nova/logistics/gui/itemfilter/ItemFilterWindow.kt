@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.gui.ScrollGui
 import xyz.xenondevs.invui.item.ItemProvider
-import xyz.xenondevs.invui.item.impl.BaseItem
+import xyz.xenondevs.invui.item.impl.AbstractItem
 import xyz.xenondevs.invui.virtualinventory.VirtualInventory
 import xyz.xenondevs.invui.virtualinventory.event.ItemUpdateEvent
 import xyz.xenondevs.invui.virtualinventory.event.UpdateReason
@@ -98,7 +98,7 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
         filterInventory.setItemStack(null, event.slot, event.newItemStack?.clone()?.apply { amount = 1 })
     }
     
-    private inner class SwitchModeItem : BaseItem() {
+    private inner class SwitchModeItem : AbstractItem() {
         
         override fun getItemProvider(): ItemProvider =
             if (itemFilter.whitelist) GuiMaterials.WHITELIST_BTN.createClientsideItemBuilder().setLocalizedName("menu.logistics.item_filter.whitelist")
@@ -111,7 +111,7 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
         
     }
     
-    private inner class SwitchNBTItem : BaseItem() {
+    private inner class SwitchNBTItem : AbstractItem() {
         
         override fun getItemProvider(): ItemProvider {
             return (if (itemFilter.nbt) GuiMaterials.NBT_BTN_ON else GuiMaterials.NBT_BTN_OFF)
