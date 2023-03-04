@@ -1,8 +1,8 @@
 package xyz.xenondevs.nova.logistics.tileentity
 
 import org.bukkit.entity.Item
+import org.bukkit.entity.Player
 import xyz.xenondevs.invui.gui.Gui
-import xyz.xenondevs.invui.gui.SlotElement.VISlotElement
 import xyz.xenondevs.invui.virtualinventory.VirtualInventory
 import xyz.xenondevs.invui.virtualinventory.event.ItemUpdateEvent
 import xyz.xenondevs.nova.data.config.NovaConfig
@@ -14,13 +14,14 @@ import xyz.xenondevs.nova.logistics.item.isItemFilter
 import xyz.xenondevs.nova.logistics.registry.Blocks.VACUUM_CHEST
 import xyz.xenondevs.nova.logistics.registry.GuiMaterials
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
+import xyz.xenondevs.nova.tileentity.menu.TileEntityMenuClass
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.item.ItemFilter
 import xyz.xenondevs.nova.tileentity.network.item.holder.NovaItemHolder
 import xyz.xenondevs.nova.tileentity.upgrade.Upgradable
 import xyz.xenondevs.nova.ui.OpenUpgradesItem
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
-import xyz.xenondevs.nova.ui.config.side.SideConfigGui
+import xyz.xenondevs.nova.ui.config.side.SideConfigMenu
 import xyz.xenondevs.nova.util.item.novaMaterial
 import xyz.xenondevs.nova.util.serverTick
 import xyz.xenondevs.simpleupgrades.registry.UpgradeTypes
@@ -37,7 +38,6 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
         this,
         inventory to NetworkConnectionType.BUFFER
     ) { createSideConfig(NetworkConnectionType.EXTRACT) }
-    override val gui = lazy { VacuumChestGui() }
     override val upgradeHolder = getUpgradeHolder(UpgradeTypes.RANGE)
     
     private var filter: ItemFilter? by storedValue("itemFilter")
@@ -86,12 +86,14 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
         else if (newStack != null) event.isCancelled = true
     }
     
-    inner class VacuumChestGui : TileEntityGui() {
+    @TileEntityMenuClass
+    inner class VacuumChestGui(player: Player) : IndividualTileEntityMenu(player) {
         
-        private val sideConfigGui = SideConfigGui(
+        private val SideConfigMenu = SideConfigMenu(
             this@VacuumChest,
-            listOf(itemHolder.getNetworkedInventory(inventory) to "inventory.nova.default")
-        ) { openWindow(it) }
+            listOf(itemHolder.getNetworkedInventory(inventory) to "inventory.nova.default"),
+            ::openWindow
+        )
         
         override val gui = Gui.normal()
             .setStructure(
@@ -101,10 +103,10 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
                 "| f # # i i i m |",
                 "3 - - - - - - - 4")
             .addIngredient('i', inventory)
-            .addIngredient('s', OpenSideConfigItem(sideConfigGui))
+            .addIngredient('f', filterInventory, GuiMaterials.ITEM_FILTER_PLACEHOLDER.clientsideProvider)
+            .addIngredient('s', OpenSideConfigItem(SideConfigMenu))
             .addIngredient('u', OpenUpgradesItem(upgradeHolder))
-            .addIngredient('r', region.visualizeRegionItem)
-            .addIngredient('f', VISlotElement(filterInventory, 0, GuiMaterials.ITEM_FILTER_PLACEHOLDER.clientsideProvider))
+            .addIngredient('r', region.createVisualizeRegionItem(player))
             .addIngredient('p', region.increaseSizeItem)
             .addIngredient('m', region.decreaseSizeItem)
             .addIngredient('d', region.displaySizeItem)

@@ -73,7 +73,6 @@ open class Cable(
     override val typeId: String
         get() = material.id.toString()
     
-    override val gui: Lazy<TileEntityGui>? = null
     private val configGuis = enumMap<BlockFace, CableConfigGui>()
     
     private val hitboxes = ArrayList<Hitbox>()

@@ -8,12 +8,13 @@ import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
+import xyz.xenondevs.nova.tileentity.menu.TileEntityMenuClass
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.fluid.FluidType
 import xyz.xenondevs.nova.tileentity.network.fluid.holder.NovaFluidHolder
 import xyz.xenondevs.nova.ui.FluidBar
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
-import xyz.xenondevs.nova.ui.config.side.SideConfigGui
+import xyz.xenondevs.nova.ui.config.side.SideConfigMenu
 import xyz.xenondevs.nova.util.center
 import xyz.xenondevs.nova.world.fakeentity.impl.FakeArmorStand
 import kotlin.math.roundToInt
@@ -26,8 +27,6 @@ open class FluidTank(
     capacity: Provider<Long>,
     blockState: NovaTileEntityState
 ) : NetworkedTileEntity(blockState) {
-    
-    override val gui = lazy(::FluidTankGui)
     
     val fluidContainer = getFluidContainer("tank", hashSetOf(FluidType.WATER, FluidType.LAVA), capacity, 0, ::handleFluidUpdate)
     override val fluidHolder = NovaFluidHolder(this, fluidContainer to NetworkConnectionType.BUFFER) { createSideConfig(NetworkConnectionType.BUFFER) }
@@ -72,9 +71,10 @@ open class FluidTank(
         fluidLevel.remove()
     }
     
-    inner class FluidTankGui : TileEntityGui() {
+    @TileEntityMenuClass
+    inner class FluidTankMenu : GlobalTileEntityMenu() {
         
-        private val sideConfigGui = SideConfigGui(
+        private val SideConfigMenu = SideConfigMenu(
             this@FluidTank,
             fluidContainerNames = listOf(fluidContainer to "container.nova.fluid_tank"),
             openPrevious = ::openWindow
@@ -87,7 +87,7 @@ open class FluidTank(
                 "| # # # f # # # |",
                 "| # # # f # # # |",
                 "3 - - - - - - - 4")
-            .addIngredient('s', OpenSideConfigItem(sideConfigGui))
+            .addIngredient('s', OpenSideConfigItem(SideConfigMenu))
             .addIngredient('f', FluidBar(3, fluidHolder, fluidContainer))
             .build()
         

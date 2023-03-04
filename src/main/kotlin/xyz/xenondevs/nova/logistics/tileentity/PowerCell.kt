@@ -9,11 +9,12 @@ import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
+import xyz.xenondevs.nova.tileentity.menu.TileEntityMenuClass
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType.BUFFER
 import xyz.xenondevs.nova.tileentity.network.energy.holder.BufferEnergyHolder
 import xyz.xenondevs.nova.ui.EnergyBar
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
-import xyz.xenondevs.nova.ui.config.side.SideConfigGui
+import xyz.xenondevs.nova.ui.config.side.SideConfigMenu
 
 class PowerCell(
     creative: Boolean,
@@ -23,13 +24,12 @@ class PowerCell(
     
     override val energyHolder = BufferEnergyHolder(this, maxEnergy, creative) { createSideConfig(BUFFER) }
     
-    override val gui = lazy(::PowerCellGui)
-    
     override fun handleTick() = Unit
     
-    inner class PowerCellGui : TileEntityGui() {
+    @TileEntityMenuClass
+    inner class PowerCellMenu : GlobalTileEntityMenu() {
         
-        private val sideConfigGui = SideConfigGui(this@PowerCell, ::openWindow)
+        private val SideConfigMenu = SideConfigMenu(this@PowerCell, ::openWindow)
         
         override val gui = Gui.normal()
             .setStructure(
@@ -38,7 +38,7 @@ class PowerCell(
                 "| # # # e # # # |",
                 "| # # # e # # # |",
                 "3 - - - - - - - 4")
-            .addIngredient('s', OpenSideConfigItem(sideConfigGui))
+            .addIngredient('s', OpenSideConfigItem(SideConfigMenu))
             .addIngredient('e', EnergyBar(3, energyHolder))
             .build()
         

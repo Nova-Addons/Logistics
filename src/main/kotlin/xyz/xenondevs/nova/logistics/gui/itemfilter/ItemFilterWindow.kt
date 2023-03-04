@@ -82,7 +82,7 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
             it.setViewer(player)
             it.setTitle(arrayOf(TranslatableComponent(material.localizedName)))
             it.addCloseHandler(::saveFilterConfig)
-        }.apply { show() }
+        }.apply { open() }
     }
     
     private fun saveFilterConfig() {

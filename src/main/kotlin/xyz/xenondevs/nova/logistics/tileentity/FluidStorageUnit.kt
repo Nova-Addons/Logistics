@@ -16,12 +16,13 @@ import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.logistics.registry.Blocks.FLUID_STORAGE_UNIT
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
+import xyz.xenondevs.nova.tileentity.menu.TileEntityMenuClass
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.fluid.FluidType
 import xyz.xenondevs.nova.tileentity.network.fluid.holder.NovaFluidHolder
 import xyz.xenondevs.nova.ui.FluidBar
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
-import xyz.xenondevs.nova.ui.config.side.SideConfigGui
+import xyz.xenondevs.nova.ui.config.side.SideConfigMenu
 import xyz.xenondevs.nova.util.center
 import xyz.xenondevs.nova.world.fakeentity.impl.FakeArmorStand
 
@@ -29,7 +30,6 @@ private val MAX_CAPACITY = configReloadable { NovaConfig[FLUID_STORAGE_UNIT].get
 
 class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState), Reloadable {
     
-    override val gui = lazy(::FluidStorageUnitGui)
     private val fluidTank = getFluidContainer("fluid", setOf(FluidType.LAVA, FluidType.WATER), MAX_CAPACITY, 0, ::handleFluidUpdate)
     private val fluidLevel = FakeArmorStand(pos.location.center()) { _, data -> data.isInvisible = true; data.isMarker = true }
     override val fluidHolder = NovaFluidHolder(this, fluidTank to NetworkConnectionType.BUFFER) { createSideConfig(NetworkConnectionType.BUFFER) }
@@ -55,9 +55,10 @@ class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(bl
         fluidLevel.remove()
     }
     
-    inner class FluidStorageUnitGui : TileEntityGui() {
+    @TileEntityMenuClass
+    inner class FluidStorageUnitMenu : GlobalTileEntityMenu() {
         
-        private val sideConfigGui = SideConfigGui(
+        private val SideConfigMenu = SideConfigMenu(
             this@FluidStorageUnit,
             fluidContainerNames = listOf(fluidTank to "container.nova.fluid_tank"),
             openPrevious = ::openWindow
@@ -70,7 +71,7 @@ class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(bl
                 "| # # # d # # f |",
                 "| # # # # # # f |",
                 "3 - - - - - - - 4")
-            .addIngredient('s', OpenSideConfigItem(sideConfigGui))
+            .addIngredient('s', OpenSideConfigItem(SideConfigMenu))
             .addIngredient('d', FluidStorageUnitDisplay())
             .addIngredient('f', FluidBar(3, fluidHolder, fluidTank))
             .build()

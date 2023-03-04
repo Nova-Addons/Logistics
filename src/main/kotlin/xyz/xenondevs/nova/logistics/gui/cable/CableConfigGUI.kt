@@ -60,7 +60,7 @@ class CableConfigGui(
             it.setTitle(arrayOf(TranslatableComponent("menu.logistics.cable_config")))
             it.setGui(gui)
             it.addCloseHandler(::writeChanges)
-        }.show()
+        }.open()
     }
     
     fun closeForAllViewers() {

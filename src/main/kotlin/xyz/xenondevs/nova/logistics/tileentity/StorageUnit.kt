@@ -19,11 +19,12 @@ import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks.STORAGE_UNIT
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
+import xyz.xenondevs.nova.tileentity.menu.TileEntityMenuClass
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.item.holder.NovaItemHolder
 import xyz.xenondevs.nova.tileentity.network.item.inventory.NetworkedInventory
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
-import xyz.xenondevs.nova.ui.config.side.SideConfigGui
+import xyz.xenondevs.nova.ui.config.side.SideConfigMenu
 import xyz.xenondevs.nova.util.data.localized
 import xyz.xenondevs.nova.util.item.takeUnlessEmpty
 import xyz.xenondevs.nova.util.runTaskLater
@@ -33,7 +34,6 @@ private val MAX_ITEMS by configReloadable { NovaConfig[STORAGE_UNIT].getInt("max
 
 class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState) {
     
-    override val gui = lazy { StorageUnitGui() }
     private val inventory = StorageUnitInventory(retrieveDataOrNull("type"), retrieveDataOrNull("amount") ?: 0)
     private val inputInventory = VirtualInventory(null, 1).apply { setItemUpdateHandler(::handleInputInventoryUpdate) }
     private val outputInventory = VirtualInventory(null, 1).apply { setItemUpdateHandler(::handleOutputInventoryUpdate) }
@@ -57,7 +57,7 @@ class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
             inventory.amount -= event.removedAmount
             if (inventory.amount == 0) inventory.type = null
             
-            runTaskLater(1) { if (gui.isInitialized()) gui.value.update() }
+            runTaskLater(1) { menuContainer.forEachMenu(StorageUnitMenu::update) }
         }
     }
     
@@ -82,9 +82,10 @@ class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
         storeData("amount", inventory.amount, true)
     }
     
-    inner class StorageUnitGui : TileEntityGui() {
+    @TileEntityMenuClass
+    inner class StorageUnitMenu : GlobalTileEntityMenu() {
         
-        private val sideConfigGui = SideConfigGui(
+        private val SideConfigMenu = SideConfigMenu(
             this@StorageUnit,
             listOf(inventory to "inventory.nova.default"),
             ::openWindow
@@ -100,7 +101,7 @@ class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
             .addIngredient('c', storageUnitDisplay)
             .addIngredient('i', VISlotElement(inputInventory, 0))
             .addIngredient('o', VISlotElement(outputInventory, 0))
-            .addIngredient('s', OpenSideConfigItem(sideConfigGui))
+            .addIngredient('s', OpenSideConfigItem(SideConfigMenu))
             .build()
         
         init {
@@ -129,7 +130,6 @@ class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
         }
         
     }
-    
     
     @Suppress("LiftReturnOrAssignment")
     inner class StorageUnitInventory(var type: ItemStack? = null, var amount: Int = 0) : NetworkedInventory {
@@ -165,15 +165,15 @@ class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
                 } else remaining = item.amount - leeway  // Not all items fit so a few will remain
             } else remaining = item.amount // The item isn't the same as the one stored in the unit
             
-            if (gui.isInitialized()) gui.value.update()
+            menuContainer.forEachMenu(StorageUnitMenu::update)
             return remaining
         }
         
         override fun setItem(slot: Int, item: ItemStack?): Boolean {
             amount = item?.takeUnlessEmpty()?.amount ?: 0
             type = if (amount != 0) item else null
-            if (gui.isInitialized()) gui.value.update()
             
+            menuContainer.forEachMenu(StorageUnitMenu::update)
             return true
         }
         
@@ -185,7 +185,7 @@ class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
                 type = null
             }
             
-            if (gui.isInitialized()) gui.value.update()
+            menuContainer.forEachMenu(StorageUnitMenu::update)
         }
         
         override fun isFull(): Boolean {
