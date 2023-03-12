@@ -1,10 +1,7 @@
 package xyz.xenondevs.nova.logistics.item
 
-import net.md_5.bungee.api.ChatColor
-import net.md_5.bungee.api.chat.BaseComponent
-import net.md_5.bungee.api.chat.ComponentBuilder
-import net.md_5.bungee.api.chat.TextComponent
-import net.md_5.bungee.api.chat.TranslatableComponent
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.entity.Player
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
@@ -22,7 +19,6 @@ import xyz.xenondevs.nova.material.ItemNovaMaterial
 import xyz.xenondevs.nova.tileentity.network.item.ItemFilter
 import xyz.xenondevs.nova.tileentity.network.item.getOrCreateFilterConfig
 import xyz.xenondevs.nova.tileentity.network.item.saveFilterConfig
-import xyz.xenondevs.nova.util.data.localized
 import xyz.xenondevs.nova.util.item.localizedName
 import xyz.xenondevs.nova.util.item.novaMaterial
 
@@ -72,36 +68,39 @@ abstract class ItemFilterBehavior(size: Provider<Int>) : ItemBehavior() {
     
     override fun updatePacketItemData(data: NamespacedCompound, itemData: PacketItemData) {
         val filterConfig = data.get<ItemFilter>(ItemFilter.ITEM_FILTER_KEY) ?: return
-        val lines = ArrayList<Array<BaseComponent>>()
+        val lines = ArrayList<Component>()
         
         val whitelist = filterConfig.whitelist
-        lines += arrayOf(localized(
-            ChatColor.GRAY,
+        lines += Component.translatable(
             "item.logistics.item_filter.lore.type",
-            localized(
-                if (whitelist) ChatColor.GREEN else ChatColor.RED,
-                "item.logistics.item_filter.lore.type.${if (whitelist) "whitelist" else "blacklist"}"
+            NamedTextColor.GRAY,
+            Component.translatable(
+                "item.logistics.item_filter.lore.type.${if (whitelist) "whitelist" else "blacklist"}",
+                if (whitelist) NamedTextColor.GREEN else NamedTextColor.RED
             )
-        ))
+        )
         
         val nbt = filterConfig.nbt
-        lines += arrayOf(localized(
-            ChatColor.GRAY,
+        lines += Component.translatable(
             "item.logistics.item_filter.lore.nbt",
-            localized(
-                if (nbt) ChatColor.GREEN else ChatColor.RED,
-                "item.logistics.item_filter.lore.nbt.${if (nbt) "on" else "off"}"
+            NamedTextColor.GRAY,
+            Component.translatable(
+                "item.logistics.item_filter.lore.nbt.${if (nbt) "on" else "off"}",
+                if (nbt) NamedTextColor.GREEN else NamedTextColor.RED
             )
-        ))
+        )
         
-        lines += arrayOf(TextComponent())
+        lines += Component.empty()
         
-        lines += arrayOf(localized(ChatColor.GRAY, "item.logistics.item_filter.lore.contents", filterConfig.items.count { it != null }))
+        lines += Component.translatable(
+            "item.logistics.item_filter.lore.contents",
+            NamedTextColor.GRAY,
+            Component.text(filterConfig.items.count { it != null })
+        )
+        
         filterConfig.items.filterNotNull().forEach {
-            lines += ComponentBuilder("- ")
-                .color(ChatColor.DARK_GRAY)
-                .append(TranslatableComponent(it.localizedName ?: "Unknown Name"))
-                .create()
+            lines += Component.text("- ", NamedTextColor.GRAY)
+                .append(Component.translatable(it.localizedName ?: "Unknown Name"))
         }
         
         itemData.addLore(lines)

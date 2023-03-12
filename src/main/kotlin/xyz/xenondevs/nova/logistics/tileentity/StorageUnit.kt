@@ -1,7 +1,7 @@
 package xyz.xenondevs.nova.logistics.tileentity
 
-import net.md_5.bungee.api.ChatColor
-import net.md_5.bungee.api.chat.TextComponent
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
@@ -11,6 +11,7 @@ import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.gui.SlotElement.VISlotElement
 import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.builder.ItemBuilder
+import xyz.xenondevs.invui.item.builder.setDisplayName
 import xyz.xenondevs.invui.item.impl.AbstractItem
 import xyz.xenondevs.invui.virtualinventory.VirtualInventory
 import xyz.xenondevs.invui.virtualinventory.event.ItemUpdateEvent
@@ -25,7 +26,6 @@ import xyz.xenondevs.nova.tileentity.network.item.holder.NovaItemHolder
 import xyz.xenondevs.nova.tileentity.network.item.inventory.NetworkedInventory
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigMenu
-import xyz.xenondevs.nova.util.data.localized
 import xyz.xenondevs.nova.util.item.takeUnlessEmpty
 import xyz.xenondevs.nova.util.runTaskLater
 import kotlin.math.min
@@ -118,9 +118,10 @@ class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
             override fun getItemProvider(): ItemProvider {
                 val type = inventory.type ?: return ItemBuilder(Material.BARRIER).setDisplayName("§r")
                 val amount = inventory.amount
-                val component = localized(ChatColor.GRAY,
+                val component = Component.translatable(
                     "menu.logistics.storage_unit.item_display_" + if (amount > 1) "plural" else "singular",
-                    TextComponent(amount.toString()).apply { color = ChatColor.GREEN }
+                    NamedTextColor.GRAY,
+                    Component.text(amount, NamedTextColor.GREEN)
                 )
                 return ItemBuilder(type).setDisplayName(component).setAmount(1)
             }

@@ -1,5 +1,6 @@
 package xyz.xenondevs.nova.logistics.gui.itemfilter
 
+import net.kyori.adventure.text.Component
 import net.md_5.bungee.api.chat.TranslatableComponent
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
@@ -8,6 +9,7 @@ import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.gui.ScrollGui
 import xyz.xenondevs.invui.item.ItemProvider
+import xyz.xenondevs.invui.item.builder.setDisplayName
 import xyz.xenondevs.invui.item.impl.AbstractItem
 import xyz.xenondevs.invui.virtualinventory.VirtualInventory
 import xyz.xenondevs.invui.virtualinventory.event.ItemUpdateEvent
@@ -18,7 +20,6 @@ import xyz.xenondevs.nova.logistics.registry.GuiMaterials
 import xyz.xenondevs.nova.material.ItemNovaMaterial
 import xyz.xenondevs.nova.tileentity.network.item.getOrCreateFilterConfig
 import xyz.xenondevs.nova.tileentity.network.item.saveFilterConfig
-import xyz.xenondevs.nova.util.data.setLocalizedName
 import xyz.xenondevs.nova.util.item.novaMaterial
 import kotlin.math.ceil
 
@@ -101,8 +102,8 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
     private inner class SwitchModeItem : AbstractItem() {
         
         override fun getItemProvider(): ItemProvider =
-            if (itemFilter.whitelist) GuiMaterials.WHITELIST_BTN.createClientsideItemBuilder().setLocalizedName("menu.logistics.item_filter.whitelist")
-            else GuiMaterials.BLACKLIST_BTN.createClientsideItemBuilder().setLocalizedName("menu.logistics.item_filter.blacklist")
+            if (itemFilter.whitelist) GuiMaterials.WHITELIST_BTN.createClientsideItemBuilder().setDisplayName(Component.translatable("menu.logistics.item_filter.whitelist"))
+            else GuiMaterials.BLACKLIST_BTN.createClientsideItemBuilder().setDisplayName(Component.translatable("menu.logistics.item_filter.blacklist"))
         
         override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {
             itemFilter.whitelist = !itemFilter.whitelist
@@ -115,7 +116,7 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
         
         override fun getItemProvider(): ItemProvider {
             return (if (itemFilter.nbt) GuiMaterials.NBT_BTN_ON else GuiMaterials.NBT_BTN_OFF)
-                .createClientsideItemBuilder().setLocalizedName("menu.logistics.item_filter.nbt." + if (itemFilter.nbt) "on" else "off")
+                .createClientsideItemBuilder().setDisplayName(Component.translatable("menu.logistics.item_filter.nbt." + if (itemFilter.nbt) "on" else "off"))
         }
         
         override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {

@@ -1,8 +1,7 @@
 package xyz.xenondevs.nova.logistics.item
 
-import net.md_5.bungee.api.ChatColor
-import net.md_5.bungee.api.chat.ComponentBuilder
-import net.md_5.bungee.api.chat.TranslatableComponent
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.cbf.Compound
 import xyz.xenondevs.nova.data.serialization.cbf.NamespacedCompound
@@ -19,11 +18,11 @@ object StorageUnitItemBehavior : ItemBehavior() {
         val amount: Int = tileEntityData["amount"] ?: return
         
         itemData.addLore(
-            ComponentBuilder()
-                .append("${amount}x ")
-                .color(ChatColor.GRAY)
-                .append(TranslatableComponent(type.localizedName))
-                .create()
+            Component.text()
+                .color(NamedTextColor.GRAY)
+                .append(Component.translatable("${amount}x "))
+                .append(Component.translatable(type.localizedName ?: type.type.name.lowercase()))
+                .build()
         )
     }
     
