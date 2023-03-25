@@ -5,19 +5,18 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.Orientable
+import org.bukkit.entity.Player
 import org.bukkit.event.block.BlockBreakEvent
-import org.bukkit.event.player.PlayerInteractEvent
 import xyz.xenondevs.commons.collections.enumMap
 import xyz.xenondevs.commons.provider.Provider
 import xyz.xenondevs.commons.provider.immutable.provider
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.configReloadable
-import xyz.xenondevs.nova.data.resources.model.data.ArmorStandBlockModelData
+import xyz.xenondevs.nova.data.resources.model.data.DisplayEntityBlockModelData
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.gui.cable.CableConfigGui
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.material.CoreItems
-import xyz.xenondevs.nova.tileentity.Model
 import xyz.xenondevs.nova.tileentity.TileEntity
 import xyz.xenondevs.nova.tileentity.network.Network
 import xyz.xenondevs.nova.tileentity.network.NetworkEndPoint
@@ -34,19 +33,21 @@ import xyz.xenondevs.nova.tileentity.network.item.ItemBridge
 import xyz.xenondevs.nova.tileentity.network.item.holder.ItemHolder
 import xyz.xenondevs.nova.util.CUBE_FACES
 import xyz.xenondevs.nova.util.MathUtils
-import xyz.xenondevs.nova.util.center
-import xyz.xenondevs.nova.util.handItems
-import xyz.xenondevs.nova.util.hasInventoryOpen
-import xyz.xenondevs.nova.util.isRightClick
+import xyz.xenondevs.nova.util.advance
 import xyz.xenondevs.nova.util.item.novaMaterial
+import xyz.xenondevs.nova.util.rotation
 import xyz.xenondevs.nova.util.rotationValues
 import xyz.xenondevs.nova.util.runTask
 import xyz.xenondevs.nova.util.toIntArray
 import xyz.xenondevs.nova.world.block.hitbox.Hitbox
+import xyz.xenondevs.nova.world.block.hitbox.PhysicalHitbox
+import xyz.xenondevs.nova.world.block.hitbox.VirtualHitbox
+import xyz.xenondevs.nova.world.model.FixedMultiModel
+import xyz.xenondevs.nova.world.model.Model
 import xyz.xenondevs.nova.world.point.Point3D
 
 private val SUPPORTED_NETWORK_TYPES = hashSetOf(ENERGY, ITEMS, FLUID)
-private val ATTACHMENTS: IntArray = (64..112).toIntArray()
+private val ATTACHMENTS: IntArray = (64..79).toIntArray()
 
 private val NetworkNode.itemHolder: ItemHolder?
     get() = if (this is NetworkEndPoint) (holders[ITEMS] as ItemHolder?) else null
@@ -75,10 +76,10 @@ open class Cable(
     
     private val configGuis = enumMap<BlockFace, CableConfigGui>()
     
-    private val hitboxes = ArrayList<Hitbox>()
-    private val multiModel = createMultiModel()
+    private val hitboxes = ArrayList<Hitbox<*, *>>()
+    private val multiModel = FixedMultiModel()
     private var modelId by storedValue("modelId") { 0 }
-    private var attachments: ArrayList<Pair<Int, Int>> by storedValue("attachments", ::ArrayList)
+    private var attachments: ArrayList<Pair<BlockFace, Int>> by storedValue("attachments-0.2.4", ::ArrayList)
     
     init {
         if (attachments.isNotEmpty()) {
@@ -133,6 +134,7 @@ open class Cable(
     
     override fun handleRemoved(unload: Boolean) {
         super.handleRemoved(unload)
+        multiModel.close()
         hitboxes.forEach { it.remove() }
         if (!unload) {
             NetworkManager.queueAsync { it.removeBridge(this) }
@@ -164,23 +166,18 @@ open class Cable(
                 fluidHolder?.isInsert(oppositeFace) ?: false
             )
             
-            val id = MathUtils.convertBooleanArrayToInt(array) +
-                when (face) {
-                    BlockFace.UP -> 16
-                    BlockFace.DOWN -> 32
-                    else -> 0
-                }
-            
-            attachments += id to face.ordinal
+            attachments += face to MathUtils.convertBooleanArrayToInt(array)
         }
     }
     
     private fun updateAttachmentModels() {
-        val models = ArrayList<Model>()
-        
-        attachments.forEach { (id, face) ->
-            val attachmentStack = (material.block as ArmorStandBlockModelData)[ATTACHMENTS[id]].get()
-            models += Model(attachmentStack, location.clone().center().apply { yaw = BlockFace.values()[face].rotationValues.second * 90f })
+        val models = HashSet<Model>()
+        attachments.forEach { (face, id) ->
+            models += Model(
+                (material.block as DisplayEntityBlockModelData)[ATTACHMENTS[id]].get(),
+                location.add(.5, .5, .5),
+                leftRotation = face.rotation
+            )
         }
         multiModel.replaceModels(models)
     }
@@ -217,38 +214,24 @@ open class Cable(
             val from = location.clone().add(sortedPoints.first.x, sortedPoints.first.y, sortedPoints.first.z)
             val to = location.clone().add(sortedPoints.second.x, sortedPoints.second.y, sortedPoints.second.z)
             
-            hitboxes += Hitbox(
-                from, to,
-                { it.action.isRightClick() && it.handItems.any { item -> item.novaMaterial == CoreItems.WRENCH } },
-                { handleCableWrenchHit(it, blockFace) }
-            )
+            hitboxes += VirtualHitbox(from, to).apply {
+                setQualifier { it.item?.novaMaterial == CoreItems.WRENCH }
+                addRightClickHandler { player, _, _ -> handleCableWrenchHit(player, blockFace) }
+                register()
+            }
         }
     }
     
     private fun createAttachmentHitboxes() {
-        attachments.forEach { (_, faceOrdinal) ->
-            val face = BlockFace.values()[faceOrdinal]
+        attachments.forEach { (face, _) ->
+            val hitboxCenter = location
+                .advance(face, .75)
+                .add(.5, .125, .5)
             
-            val pointA = Point3D(0.125, 0.125, 0.0)
-            val pointB = Point3D(0.875, 0.875, 0.2)
-            
-            val origin = Point3D(0.5, 0.5, 0.5)
-            
-            val rotationValues = face.rotationValues
-            pointA.rotateAroundXAxis(rotationValues.first, origin)
-            pointA.rotateAroundYAxis(rotationValues.second, origin)
-            pointB.rotateAroundXAxis(rotationValues.first, origin)
-            pointB.rotateAroundYAxis(rotationValues.second, origin)
-            
-            val sortedPoints = Point3D.sort(pointA, pointB)
-            val from = location.clone().add(sortedPoints.first.x, sortedPoints.first.y, sortedPoints.first.z)
-            val to = location.clone().add(sortedPoints.second.x, sortedPoints.second.y, sortedPoints.second.z)
-            
-            hitboxes += Hitbox(
-                from, to,
-                { it.action.isRightClick() },
-                { handleAttachmentHit(it, face) }
-            )
+            hitboxes += PhysicalHitbox(hitboxCenter, .75, .75).apply {
+                addRightClickHandler { player, _, _ -> handleAttachmentHit(player, face) }
+                register()
+            }
         }
     }
     
@@ -273,22 +256,16 @@ open class Cable(
         }
     }
     
-    private fun handleAttachmentHit(event: PlayerInteractEvent, face: BlockFace) {
-        if (!event.player.hasInventoryOpen) {
-            event.isCancelled = true
-            NetworkManager.queueSync {
-                val endPoint = getConnectedNode(face) as? NetworkEndPoint
-                    ?: return@queueSync
-                
-                configGuis.getOrPut(face) { CableConfigGui(endPoint, endPoint.itemHolder, endPoint.fluidHolder, face.oppositeFace) }.openWindow(event.player)
-            }
+    private fun handleAttachmentHit(player: Player, face: BlockFace) {
+        NetworkManager.queueSync {
+            val endPoint = getConnectedNode(face) as? NetworkEndPoint
+                ?: return@queueSync
+            
+            configGuis.getOrPut(face) { CableConfigGui(endPoint, endPoint.itemHolder, endPoint.fluidHolder, face.oppositeFace) }.openWindow(player)
         }
     }
     
-    private fun handleCableWrenchHit(event: PlayerInteractEvent, face: BlockFace) {
-        event.isCancelled = true
-        
-        val player = event.player
+    private fun handleCableWrenchHit(player: Player, face: BlockFace) {
         if (player.isSneaking) {
             Bukkit.getPluginManager().callEvent(BlockBreakEvent(location.block, player))
         } else {
