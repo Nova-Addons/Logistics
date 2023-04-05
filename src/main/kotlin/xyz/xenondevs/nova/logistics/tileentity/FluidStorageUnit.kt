@@ -13,8 +13,8 @@ import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.Reloadable
 import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
-import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.logistics.registry.Blocks.FLUID_STORAGE_UNIT
+import xyz.xenondevs.nova.logistics.registry.Items
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
 import xyz.xenondevs.nova.tileentity.menu.TileEntityMenuClass
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
@@ -41,8 +41,8 @@ class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(bl
     private fun handleFluidUpdate() {
         val stack = if (fluidTank.hasFluid()) {
             when (fluidTank.type) {
-                FluidType.LAVA -> Blocks.TANK_LAVA_LEVELS
-                FluidType.WATER -> Blocks.TANK_WATER_LEVELS
+                FluidType.LAVA -> Items.TANK_LAVA_LEVELS
+                FluidType.WATER -> Items.TANK_WATER_LEVELS
                 else -> throw IllegalStateException()
             }.clientsideProviders[10].get()
         } else null

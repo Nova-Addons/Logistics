@@ -5,8 +5,8 @@ import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.cbf.Compound
 import xyz.xenondevs.nova.data.serialization.cbf.NamespacedCompound
-import xyz.xenondevs.nova.item.PacketItemData
 import xyz.xenondevs.nova.item.behavior.ItemBehavior
+import xyz.xenondevs.nova.item.logic.PacketItemData
 import xyz.xenondevs.nova.tileentity.TileEntity
 import xyz.xenondevs.nova.util.item.localizedName
 

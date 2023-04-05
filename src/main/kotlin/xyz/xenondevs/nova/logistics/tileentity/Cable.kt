@@ -14,18 +14,18 @@ import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.resources.model.data.DisplayEntityBlockModelData
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
+import xyz.xenondevs.nova.item.DefaultItems
 import xyz.xenondevs.nova.logistics.gui.cable.CableConfigGui
 import xyz.xenondevs.nova.logistics.registry.Blocks
-import xyz.xenondevs.nova.material.CoreItems
 import xyz.xenondevs.nova.tileentity.TileEntity
+import xyz.xenondevs.nova.tileentity.network.DefaultNetworkTypes.ENERGY
+import xyz.xenondevs.nova.tileentity.network.DefaultNetworkTypes.FLUID
+import xyz.xenondevs.nova.tileentity.network.DefaultNetworkTypes.ITEMS
 import xyz.xenondevs.nova.tileentity.network.Network
 import xyz.xenondevs.nova.tileentity.network.NetworkEndPoint
 import xyz.xenondevs.nova.tileentity.network.NetworkManager
 import xyz.xenondevs.nova.tileentity.network.NetworkNode
 import xyz.xenondevs.nova.tileentity.network.NetworkType
-import xyz.xenondevs.nova.tileentity.network.NetworkType.Companion.ENERGY
-import xyz.xenondevs.nova.tileentity.network.NetworkType.Companion.FLUID
-import xyz.xenondevs.nova.tileentity.network.NetworkType.Companion.ITEMS
 import xyz.xenondevs.nova.tileentity.network.energy.EnergyBridge
 import xyz.xenondevs.nova.tileentity.network.fluid.FluidBridge
 import xyz.xenondevs.nova.tileentity.network.fluid.holder.FluidHolder
@@ -34,7 +34,7 @@ import xyz.xenondevs.nova.tileentity.network.item.holder.ItemHolder
 import xyz.xenondevs.nova.util.CUBE_FACES
 import xyz.xenondevs.nova.util.MathUtils
 import xyz.xenondevs.nova.util.advance
-import xyz.xenondevs.nova.util.item.novaMaterial
+import xyz.xenondevs.nova.util.item.novaItem
 import xyz.xenondevs.nova.util.rotation
 import xyz.xenondevs.nova.util.rotationValues
 import xyz.xenondevs.nova.util.runTask
@@ -72,7 +72,7 @@ open class Cable(
     override val bridgeFaces by storedValue("bridgeFaces") { CUBE_FACES.toHashSet() }
     override val connectedNodes = HashMap<NetworkType, MutableMap<BlockFace, NetworkNode>>()
     override val typeId: String
-        get() = material.id.toString()
+        get() = block.id.toString()
     
     private val configGuis = enumMap<BlockFace, CableConfigGui>()
     
@@ -174,7 +174,7 @@ open class Cable(
         val models = HashSet<Model>()
         attachments.forEach { (face, id) ->
             models += Model(
-                (material.block as DisplayEntityBlockModelData)[ATTACHMENTS[id]].get(),
+                (block.model as DisplayEntityBlockModelData)[ATTACHMENTS[id]].get(),
                 location.add(.5, .5, .5),
                 leftRotation = face.rotation
             )
@@ -215,7 +215,7 @@ open class Cable(
             val to = location.clone().add(sortedPoints.second.x, sortedPoints.second.y, sortedPoints.second.z)
             
             hitboxes += VirtualHitbox(from, to).apply {
-                setQualifier { it.item?.novaMaterial == CoreItems.WRENCH }
+                setQualifier { it.item?.novaItem == DefaultItems.WRENCH }
                 addRightClickHandler { player, _, _ -> handleCableWrenchHit(player, blockFace) }
                 register()
             }

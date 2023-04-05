@@ -7,6 +7,7 @@ import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks
+import xyz.xenondevs.nova.logistics.registry.Items
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
 import xyz.xenondevs.nova.tileentity.menu.TileEntityMenuClass
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
@@ -55,8 +56,8 @@ open class FluidTank(
         val stack = if (fluidContainer.hasFluid()) {
             val state = (fluidContainer.amount.toDouble() / fluidContainer.capacity.toDouble() * MAX_STATE.toDouble()).roundToInt()
             when (fluidContainer.type) {
-                FluidType.LAVA -> Blocks.TANK_LAVA_LEVELS
-                FluidType.WATER -> Blocks.TANK_WATER_LEVELS
+                FluidType.LAVA -> Items.TANK_LAVA_LEVELS
+                FluidType.WATER -> Items.TANK_WATER_LEVELS
                 else -> throw IllegalStateException()
             }.clientsideProviders[state].get()
         } else null

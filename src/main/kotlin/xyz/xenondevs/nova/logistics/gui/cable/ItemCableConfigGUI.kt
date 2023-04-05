@@ -15,7 +15,7 @@ import xyz.xenondevs.nova.tileentity.network.item.holder.ItemHolder
 import xyz.xenondevs.nova.ui.item.AddNumberItem
 import xyz.xenondevs.nova.ui.item.DisplayNumberItem
 import xyz.xenondevs.nova.ui.item.RemoveNumberItem
-import xyz.xenondevs.nova.util.item.novaMaterial
+import xyz.xenondevs.nova.util.item.novaItem
 
 class ItemCableConfigGui(
     holder: ItemHolder,
@@ -69,7 +69,7 @@ class ItemCableConfigGui(
     
     private fun checkItem(event: ItemUpdateEvent) {
         val newStack = event.newItemStack
-        event.isCancelled = newStack != null && !newStack.novaMaterial.isItemFilter()
+        event.isCancelled = newStack != null && !newStack.novaItem.isItemFilter()
     }
     
 }

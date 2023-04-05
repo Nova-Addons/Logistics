@@ -22,7 +22,7 @@ import xyz.xenondevs.nova.tileentity.upgrade.Upgradable
 import xyz.xenondevs.nova.ui.OpenUpgradesItem
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigMenu
-import xyz.xenondevs.nova.util.item.novaMaterial
+import xyz.xenondevs.nova.util.item.novaItem
 import xyz.xenondevs.nova.util.serverTick
 import xyz.xenondevs.simpleupgrades.registry.UpgradeTypes
 
@@ -81,7 +81,7 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
     
     private fun handleFilterInventoryUpdate(event: ItemUpdateEvent) {
         val newStack = event.newItemStack
-        if (newStack?.novaMaterial.isItemFilter())
+        if (newStack?.novaItem.isItemFilter())
             filter = newStack.getItemFilterConfig()
         else if (newStack != null) event.isCancelled = true
     }

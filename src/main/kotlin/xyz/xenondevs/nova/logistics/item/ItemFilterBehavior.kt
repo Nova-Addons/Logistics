@@ -11,16 +11,16 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.serialization.cbf.NamespacedCompound
-import xyz.xenondevs.nova.item.PacketItemData
+import xyz.xenondevs.nova.item.NovaItem
 import xyz.xenondevs.nova.item.behavior.ItemBehavior
+import xyz.xenondevs.nova.item.logic.PacketItemData
 import xyz.xenondevs.nova.logistics.gui.itemfilter.ItemFilterWindow
 import xyz.xenondevs.nova.logistics.registry.Items
-import xyz.xenondevs.nova.material.ItemNovaMaterial
 import xyz.xenondevs.nova.tileentity.network.item.ItemFilter
 import xyz.xenondevs.nova.tileentity.network.item.getOrCreateFilterConfig
 import xyz.xenondevs.nova.tileentity.network.item.saveFilterConfig
 import xyz.xenondevs.nova.util.item.localizedName
-import xyz.xenondevs.nova.util.item.novaMaterial
+import xyz.xenondevs.nova.util.item.novaItem
 
 private val FILTER_MATERIALS = hashMapOf(
     BasicItemFilterBehavior.size to Items.BASIC_ITEM_FILTER,
@@ -30,18 +30,18 @@ private val FILTER_MATERIALS = hashMapOf(
 )
 
 fun ItemStack.getItemFilterConfig(): ItemFilter? {
-    return (this.novaMaterial?.novaItem?.getBehavior(ItemFilterBehavior::class))
+    return (this.novaItem?.getBehavior(ItemFilterBehavior::class))
         ?.getFilterConfig(this)
 }
 
-fun ItemNovaMaterial?.isItemFilter(): Boolean {
+fun NovaItem?.isItemFilter(): Boolean {
     return this == Items.BASIC_ITEM_FILTER
         || this == Items.ADVANCED_ITEM_FILTER
         || this == Items.ELITE_ITEM_FILTER
         || this == Items.ULTIMATE_ITEM_FILTER
 }
 
-fun findCorrectFilterMaterial(itemFilter: ItemFilter): ItemNovaMaterial {
+fun findCorrectFilterItem(itemFilter: ItemFilter): NovaItem {
     return FILTER_MATERIALS[itemFilter.size] ?: Items.BASIC_ITEM_FILTER
 }
 
@@ -52,7 +52,7 @@ abstract class ItemFilterBehavior(size: Provider<Int>) : ItemBehavior() {
     override fun handleInteract(player: Player, itemStack: ItemStack, action: Action, event: PlayerInteractEvent) {
         if (action == Action.RIGHT_CLICK_AIR) {
             event.isCancelled = true
-            ItemFilterWindow(player, itemStack.novaMaterial!!, size, itemStack)
+            ItemFilterWindow(player, itemStack.novaItem!!, size, itemStack)
         }
     }
     

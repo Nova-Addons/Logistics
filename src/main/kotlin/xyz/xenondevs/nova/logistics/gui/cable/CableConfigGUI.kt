@@ -6,7 +6,7 @@ import org.bukkit.entity.Player
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.gui.TabGui
 import xyz.xenondevs.invui.window.Window
-import xyz.xenondevs.nova.material.CoreGuiMaterial
+import xyz.xenondevs.nova.item.DefaultGuiItems
 import xyz.xenondevs.nova.tileentity.network.NetworkEndPoint
 import xyz.xenondevs.nova.tileentity.network.NetworkManager
 import xyz.xenondevs.nova.tileentity.network.fluid.holder.FluidHolder
@@ -39,16 +39,16 @@ class CableConfigGui(
             .addIngredient('i', ClickyTabItem(0) {
                 (if (itemConfigGui != null) {
                     if (it.currentTab == 0)
-                        CoreGuiMaterial.ITEM_BTN_SELECTED
-                    else CoreGuiMaterial.ITEM_BTN_ON
-                } else CoreGuiMaterial.ITEM_BTN_OFF).clientsideProvider
+                        DefaultGuiItems.ITEM_BTN_SELECTED
+                    else DefaultGuiItems.ITEM_BTN_ON
+                } else DefaultGuiItems.ITEM_BTN_OFF).clientsideProvider
             })
             .addIngredient('f', ClickyTabItem(1) {
                 (if (fluidConfigGui != null) {
                     if (it.currentTab == 1)
-                        CoreGuiMaterial.FLUID_BTN_SELECTED
-                    else CoreGuiMaterial.FLUID_BTN_ON
-                } else CoreGuiMaterial.FLUID_BTN_OFF).clientsideProvider
+                        DefaultGuiItems.FLUID_BTN_SELECTED
+                    else DefaultGuiItems.FLUID_BTN_ON
+                } else DefaultGuiItems.FLUID_BTN_OFF).clientsideProvider
             })
             .setTabs(listOf(itemConfigGui?.gui, fluidConfigGui?.gui))
             .build()

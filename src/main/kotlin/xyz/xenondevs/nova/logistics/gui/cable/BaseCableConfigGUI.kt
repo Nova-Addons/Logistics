@@ -12,7 +12,7 @@ import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.builder.setDisplayName
 import xyz.xenondevs.invui.item.impl.AbstractItem
 import xyz.xenondevs.invui.item.notifyWindows
-import xyz.xenondevs.nova.material.CoreGuiMaterial
+import xyz.xenondevs.nova.item.DefaultGuiItems
 import xyz.xenondevs.nova.tileentity.network.ContainerEndPointDataHolder
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.NetworkManager
@@ -63,7 +63,7 @@ abstract class BaseCableConfigGui<H : ContainerEndPointDataHolder<*>>(
     protected inner class InsertItem : AbstractItem() {
         
         override fun getItemProvider(): ItemProvider =
-            (if (insertState) CoreGuiMaterial.GREEN_BTN else CoreGuiMaterial.GRAY_BTN)
+            (if (insertState) DefaultGuiItems.GREEN_BTN else DefaultGuiItems.GRAY_BTN)
                 .createClientsideItemBuilder().setDisplayName(Component.translatable("menu.logistics.cable_config.insert"))
         
         override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {
@@ -79,7 +79,7 @@ abstract class BaseCableConfigGui<H : ContainerEndPointDataHolder<*>>(
     protected inner class ExtractItem : AbstractItem() {
         
         override fun getItemProvider(): ItemProvider =
-            (if (extractState) CoreGuiMaterial.GREEN_BTN else CoreGuiMaterial.GRAY_BTN)
+            (if (extractState) DefaultGuiItems.GREEN_BTN else DefaultGuiItems.GRAY_BTN)
                 .createClientsideItemBuilder().setDisplayName(Component.translatable("menu.logistics.cable_config.extract"))
         
         override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {

@@ -15,15 +15,15 @@ import xyz.xenondevs.invui.virtualinventory.VirtualInventory
 import xyz.xenondevs.invui.virtualinventory.event.ItemUpdateEvent
 import xyz.xenondevs.invui.virtualinventory.event.UpdateReason
 import xyz.xenondevs.invui.window.Window
+import xyz.xenondevs.nova.item.NovaItem
 import xyz.xenondevs.nova.logistics.item.isItemFilter
 import xyz.xenondevs.nova.logistics.registry.GuiMaterials
-import xyz.xenondevs.nova.material.ItemNovaMaterial
 import xyz.xenondevs.nova.tileentity.network.item.getOrCreateFilterConfig
 import xyz.xenondevs.nova.tileentity.network.item.saveFilterConfig
-import xyz.xenondevs.nova.util.item.novaMaterial
+import xyz.xenondevs.nova.util.item.novaItem
 import kotlin.math.ceil
 
-class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, private val itemStack: ItemStack) {
+class ItemFilterWindow(player: Player, item: NovaItem, size: Int, private val itemStack: ItemStack) {
     
     private val itemFilter = itemStack.getOrCreateFilterConfig(size)
     private val filterInventory = object : VirtualInventory(null, itemFilter.items.size, itemFilter.items, IntArray(itemFilter.items.size) { 1 }) {
@@ -81,7 +81,7 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
         window = Window.single {
             it.setGui(gui)
             it.setViewer(player)
-            it.setTitle(arrayOf(TranslatableComponent(material.localizedName)))
+            it.setTitle(arrayOf(TranslatableComponent(item.localizedName)))
             it.addCloseHandler(::saveFilterConfig)
         }.apply { open() }
     }
@@ -95,7 +95,7 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
         if (event.updateReason == null) return
         
         event.isCancelled = true
-        if (event.newItemStack?.novaMaterial.isItemFilter()) return
+        if (event.newItemStack?.novaItem.isItemFilter()) return
         filterInventory.setItemStack(null, event.slot, event.newItemStack?.clone()?.apply { amount = 1 })
     }
     
