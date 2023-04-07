@@ -49,7 +49,7 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
         filter?.let { filterInventory.setItemStack(SELF_UPDATE_REASON, 0, it.createFilterItem()) }
         
         filterInventory.setItemUpdateHandler(::handleFilterInventoryUpdate)
-        filterInventory.guiShiftPriority = 1
+        filterInventory.guiPriority = 1
     }
     
     override fun handleTick() {
