@@ -3,15 +3,15 @@ package xyz.xenondevs.nova.logistics.gui.cable
 import org.bukkit.block.BlockFace
 import xyz.xenondevs.commons.collections.putOrRemove
 import xyz.xenondevs.invui.gui.Gui
-import xyz.xenondevs.invui.gui.SlotElement.VISlotElement
-import xyz.xenondevs.invui.virtualinventory.VirtualInventory
-import xyz.xenondevs.invui.virtualinventory.event.ItemUpdateEvent
+import xyz.xenondevs.invui.inventory.VirtualInventory
+import xyz.xenondevs.invui.inventory.event.ItemPreUpdateEvent
 import xyz.xenondevs.nova.logistics.item.getItemFilterConfig
 import xyz.xenondevs.nova.logistics.item.isItemFilter
 import xyz.xenondevs.nova.logistics.registry.GuiMaterials
 import xyz.xenondevs.nova.tileentity.network.NetworkManager
 import xyz.xenondevs.nova.tileentity.network.item.ItemNetwork
 import xyz.xenondevs.nova.tileentity.network.item.holder.ItemHolder
+import xyz.xenondevs.nova.ui.addIngredient
 import xyz.xenondevs.nova.ui.item.AddNumberItem
 import xyz.xenondevs.nova.ui.item.DisplayNumberItem
 import xyz.xenondevs.nova.ui.item.RemoveNumberItem
@@ -24,9 +24,9 @@ class ItemCableConfigGui(
     
     val gui: Gui
     private val insertFilterInventory = VirtualInventory(null, 1, arrayOfNulls(1), intArrayOf(1))
-        .apply { setItemUpdateHandler(::checkItem) }
+        .apply { setPreUpdateHandler(::checkItem) }
     private val extractFilterInventory = VirtualInventory(null, 1, arrayOfNulls(1), intArrayOf(1))
-        .apply { setItemUpdateHandler(::checkItem) }
+        .apply { setPreUpdateHandler(::checkItem) }
     
     init {
         updateValues(false)
@@ -38,8 +38,8 @@ class ItemCableConfigGui(
                 "# m # E # I # M #")
             .addIngredient('i', InsertItem().also(updatableItems::add))
             .addIngredient('e', ExtractItem().also(updatableItems::add))
-            .addIngredient('I', VISlotElement(insertFilterInventory, 0, GuiMaterials.ITEM_FILTER_PLACEHOLDER.clientsideProvider))
-            .addIngredient('E', VISlotElement(extractFilterInventory, 0, GuiMaterials.ITEM_FILTER_PLACEHOLDER.clientsideProvider))
+            .addIngredient('I', insertFilterInventory, GuiMaterials.ITEM_FILTER_PLACEHOLDER)
+            .addIngredient('E', extractFilterInventory,  GuiMaterials.ITEM_FILTER_PLACEHOLDER)
             .addIngredient('P', AddNumberItem({ 0..100 }, { insertPriority }, { insertPriority = it; updateButtons() }).also(updatableItems::add))
             .addIngredient('M', RemoveNumberItem({ 0..100 }, { insertPriority }, { insertPriority = it; updateButtons() }).also(updatableItems::add))
             .addIngredient('D', DisplayNumberItem({ insertPriority }, "menu.logistics.cable_config.insert_priority").also(updatableItems::add))
@@ -54,8 +54,8 @@ class ItemCableConfigGui(
         updateCoreValues()
         
         NetworkManager.execute { // TODO: queueSync / queueAsync ?
-            insertFilterInventory.setItemStackSilently(0, holder.insertFilters[face]?.createFilterItem())
-            extractFilterInventory.setItemStackSilently(0, holder.extractFilters[face]?.createFilterItem())
+            insertFilterInventory.setItemSilently(0, holder.insertFilters[face]?.createFilterItem())
+            extractFilterInventory.setItemSilently(0, holder.extractFilters[face]?.createFilterItem())
         }
         
         if (updateButtons) updateButtons()
@@ -63,12 +63,12 @@ class ItemCableConfigGui(
     
     override fun writeChanges() {
         super.writeChanges()
-        holder.insertFilters.putOrRemove(face, insertFilterInventory.getUnsafeItemStack(0)?.getItemFilterConfig())
-        holder.extractFilters.putOrRemove(face, extractFilterInventory.getUnsafeItemStack(0)?.getItemFilterConfig())
+        holder.insertFilters.putOrRemove(face, insertFilterInventory.getUnsafeItem(0)?.getItemFilterConfig())
+        holder.extractFilters.putOrRemove(face, extractFilterInventory.getUnsafeItem(0)?.getItemFilterConfig())
     }
     
-    private fun checkItem(event: ItemUpdateEvent) {
-        val newStack = event.newItemStack
+    private fun checkItem(event: ItemPreUpdateEvent) {
+        val newStack = event.newItem
         event.isCancelled = newStack != null && !newStack.novaItem.isItemFilter()
     }
     

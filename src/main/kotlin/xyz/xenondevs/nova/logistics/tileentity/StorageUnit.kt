@@ -8,13 +8,12 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.invui.gui.Gui
-import xyz.xenondevs.invui.gui.SlotElement.VISlotElement
+import xyz.xenondevs.invui.inventory.VirtualInventory
+import xyz.xenondevs.invui.inventory.event.ItemPreUpdateEvent
 import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.builder.setDisplayName
 import xyz.xenondevs.invui.item.impl.AbstractItem
-import xyz.xenondevs.invui.virtualinventory.VirtualInventory
-import xyz.xenondevs.invui.virtualinventory.event.ItemUpdateEvent
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
@@ -35,19 +34,19 @@ private val MAX_ITEMS by configReloadable { NovaConfig[STORAGE_UNIT].getInt("max
 class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState) {
     
     private val inventory = StorageUnitInventory(retrieveDataOrNull("type"), retrieveDataOrNull("amount") ?: 0)
-    private val inputInventory = VirtualInventory(null, 1).apply { setItemUpdateHandler(::handleInputInventoryUpdate) }
-    private val outputInventory = VirtualInventory(null, 1).apply { setItemUpdateHandler(::handleOutputInventoryUpdate) }
+    private val inputInventory = VirtualInventory(null, 1).apply { setPreUpdateHandler(::handleInputInventoryUpdate) }
+    private val outputInventory = VirtualInventory(null, 1).apply { setPreUpdateHandler(::handleOutputInventoryUpdate) }
     override val itemHolder = NovaItemHolder(
         this,
         uuid to (inventory to NetworkConnectionType.BUFFER)
     ) { createSideConfig(NetworkConnectionType.BUFFER) }
     
-    private fun handleInputInventoryUpdate(event: ItemUpdateEvent) {
-        if (event.isAdd && inventory.type != null && !inventory.type!!.isSimilar(event.newItemStack))
+    private fun handleInputInventoryUpdate(event: ItemPreUpdateEvent) {
+        if (event.isAdd && inventory.type != null && !inventory.type!!.isSimilar(event.newItem))
             event.isCancelled = true
     }
     
-    private fun handleOutputInventoryUpdate(event: ItemUpdateEvent) {
+    private fun handleOutputInventoryUpdate(event: ItemPreUpdateEvent) {
         if (event.updateReason == SELF_UPDATE_REASON)
             return
         
@@ -63,16 +62,16 @@ class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
     
     private fun updateOutputSlot() {
         if (inventory.type == null)
-            outputInventory.setItemStack(SELF_UPDATE_REASON, 0, null)
+            outputInventory.setItem(SELF_UPDATE_REASON, 0, null)
         else
-            outputInventory.setItemStack(SELF_UPDATE_REASON, 0, inventory.type!!.apply { amount = min(type.maxStackSize, inventory.amount) })
+            outputInventory.setItem(SELF_UPDATE_REASON, 0, inventory.type!!.apply { amount = min(type.maxStackSize, inventory.amount) })
     }
     
     override fun handleTick() {
-        val item = inputInventory.getItemStack(0)
+        val item = inputInventory.getItem(0)
         if (item != null) {
             val remaining = inventory.addItem(item)
-            inputInventory.setItemStack(null, 0, item.apply { amount = remaining }.takeUnless { it.amount <= 0 })
+            inputInventory.setItem(null, 0, item.apply { amount = remaining }.takeUnless { it.amount <= 0 })
         }
     }
     
@@ -99,8 +98,8 @@ class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
                 "| # i # c # o s |",
                 "3 - - - - - - - 4")
             .addIngredient('c', storageUnitDisplay)
-            .addIngredient('i', VISlotElement(inputInventory, 0))
-            .addIngredient('o', VISlotElement(outputInventory, 0))
+            .addIngredient('i', inputInventory)
+            .addIngredient('o', outputInventory)
             .addIngredient('s', OpenSideConfigItem(SideConfigMenu))
             .build()
         
@@ -132,7 +131,6 @@ class StorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
         
     }
     
-    @Suppress("LiftReturnOrAssignment")
     inner class StorageUnitInventory(var type: ItemStack? = null, var amount: Int = 0) : NetworkedInventory {
         
         override val size: Int

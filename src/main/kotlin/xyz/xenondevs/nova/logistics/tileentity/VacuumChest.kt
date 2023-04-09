@@ -3,8 +3,8 @@ package xyz.xenondevs.nova.logistics.tileentity
 import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import xyz.xenondevs.invui.gui.Gui
-import xyz.xenondevs.invui.virtualinventory.VirtualInventory
-import xyz.xenondevs.invui.virtualinventory.event.ItemUpdateEvent
+import xyz.xenondevs.invui.inventory.VirtualInventory
+import xyz.xenondevs.invui.inventory.event.ItemPreUpdateEvent
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.configReloadable
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
@@ -46,9 +46,9 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
     private val items = ArrayList<Item>()
     
     init {
-        filter?.let { filterInventory.setItemStack(SELF_UPDATE_REASON, 0, it.createFilterItem()) }
+        filter?.let { filterInventory.setItem(SELF_UPDATE_REASON, 0, it.createFilterItem()) }
         
-        filterInventory.setItemUpdateHandler(::handleFilterInventoryUpdate)
+        filterInventory.setPreUpdateHandler(::handleFilterInventoryUpdate)
         filterInventory.guiPriority = 1
     }
     
@@ -79,8 +79,8 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
         }
     }
     
-    private fun handleFilterInventoryUpdate(event: ItemUpdateEvent) {
-        val newStack = event.newItemStack
+    private fun handleFilterInventoryUpdate(event: ItemPreUpdateEvent) {
+        val newStack = event.newItem
         if (newStack?.novaItem.isItemFilter())
             filter = newStack.getItemFilterConfig()
         else if (newStack != null) event.isCancelled = true

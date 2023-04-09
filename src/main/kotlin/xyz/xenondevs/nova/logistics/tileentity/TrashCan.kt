@@ -2,7 +2,6 @@ package xyz.xenondevs.nova.logistics.tileentity
 
 import xyz.xenondevs.commons.collections.enumMap
 import xyz.xenondevs.invui.gui.Gui
-import xyz.xenondevs.invui.gui.SlotElement.VISlotElement
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.GuiMaterials
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
@@ -12,6 +11,7 @@ import xyz.xenondevs.nova.tileentity.network.fluid.FluidType
 import xyz.xenondevs.nova.tileentity.network.fluid.container.FluidContainer
 import xyz.xenondevs.nova.tileentity.network.fluid.holder.NovaFluidHolder
 import xyz.xenondevs.nova.tileentity.network.item.holder.NovaItemHolder
+import xyz.xenondevs.nova.ui.addIngredient
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigMenu
 import xyz.xenondevs.nova.util.CUBE_FACES
@@ -50,7 +50,7 @@ class TrashCan(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState
                 "1 - - - - - - - 2",
                 "| s # # i # # # |",
                 "3 - - - - - - - 4")
-            .addIngredient('i', VISlotElement(inventory, 0, GuiMaterials.TRASH_CAN_PLACEHOLDER.clientsideProvider))
+            .addIngredient('i', inventory, GuiMaterials.TRASH_CAN_PLACEHOLDER)
             .addIngredient('s', OpenSideConfigItem(SideConfigMenu))
             .build()
         

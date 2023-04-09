@@ -8,12 +8,12 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.gui.ScrollGui
+import xyz.xenondevs.invui.inventory.VirtualInventory
+import xyz.xenondevs.invui.inventory.event.ItemPreUpdateEvent
+import xyz.xenondevs.invui.inventory.event.UpdateReason
 import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.builder.setDisplayName
 import xyz.xenondevs.invui.item.impl.AbstractItem
-import xyz.xenondevs.invui.virtualinventory.VirtualInventory
-import xyz.xenondevs.invui.virtualinventory.event.ItemUpdateEvent
-import xyz.xenondevs.invui.virtualinventory.event.UpdateReason
 import xyz.xenondevs.invui.window.Window
 import xyz.xenondevs.nova.item.NovaItem
 import xyz.xenondevs.nova.logistics.item.isItemFilter
@@ -32,13 +32,13 @@ class ItemFilterWindow(player: Player, item: NovaItem, size: Int, private val it
             items.withIndex()
                 .firstOrNull { it.value == null }
                 ?.index
-                ?.also { putItemStack(updateReason, it, itemStack) }
+                ?.also { putItem(updateReason, it, itemStack) }
             
             return itemStack.amount
         }
         
-        override fun setItemStack(updateReason: UpdateReason?, slot: Int, itemStack: ItemStack?): Boolean {
-            return super.forceSetItemStack(updateReason, slot, itemStack)
+        override fun setItem(updateReason: UpdateReason?, slot: Int, itemStack: ItemStack?): Boolean {
+            return super.forceSetItem(updateReason, slot, itemStack)
         }
         
     }
@@ -76,7 +76,7 @@ class ItemFilterWindow(player: Player, item: NovaItem, size: Int, private val it
             gui.fillRectangle(1, 2, 7, filterInventory, true)
         }
         
-        filterInventory.setItemUpdateHandler(::handleInventoryUpdate)
+        filterInventory.setPreUpdateHandler(::handleInventoryUpdate)
         
         window = Window.single {
             it.setGui(gui)
@@ -91,12 +91,12 @@ class ItemFilterWindow(player: Player, item: NovaItem, size: Int, private val it
         itemStack.saveFilterConfig(itemFilter)
     }
     
-    private fun handleInventoryUpdate(event: ItemUpdateEvent) {
+    private fun handleInventoryUpdate(event: ItemPreUpdateEvent) {
         if (event.updateReason == null) return
         
         event.isCancelled = true
-        if (event.newItemStack?.novaItem.isItemFilter()) return
-        filterInventory.setItemStack(null, event.slot, event.newItemStack?.clone()?.apply { amount = 1 })
+        if (event.newItem?.novaItem.isItemFilter()) return
+        filterInventory.setItem(null, event.slot, event.newItem?.clone()?.apply { amount = 1 })
     }
     
     private inner class SwitchModeItem : AbstractItem() {
