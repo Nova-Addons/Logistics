@@ -1,21 +1,20 @@
 package xyz.xenondevs.nova.logistics.tileentity
 
-import de.studiocode.invui.gui.GUI
-import de.studiocode.invui.gui.builder.GUIBuilder
-import de.studiocode.invui.gui.builder.guitype.GUIType
+import xyz.xenondevs.commons.provider.Provider
+import xyz.xenondevs.commons.provider.immutable.provider
+import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.Reloadable
 import xyz.xenondevs.nova.data.config.configReloadable
-import xyz.xenondevs.nova.data.provider.Provider
-import xyz.xenondevs.nova.data.provider.provider
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
+import xyz.xenondevs.nova.tileentity.menu.TileEntityMenuClass
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType.BUFFER
 import xyz.xenondevs.nova.tileentity.network.energy.holder.BufferEnergyHolder
 import xyz.xenondevs.nova.ui.EnergyBar
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
-import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
+import xyz.xenondevs.nova.ui.config.side.SideConfigMenu
 
 class PowerCell(
     creative: Boolean,
@@ -25,22 +24,21 @@ class PowerCell(
     
     override val energyHolder = BufferEnergyHolder(this, maxEnergy, creative) { createSideConfig(BUFFER) }
     
-    override val gui = lazy(::PowerCellGUI)
-    
     override fun handleTick() = Unit
     
-    inner class PowerCellGUI : TileEntityGUI() {
+    @TileEntityMenuClass
+    inner class PowerCellMenu : GlobalTileEntityMenu() {
         
-        private val sideConfigGUI = SideConfigGUI(this@PowerCell, ::openWindow)
+        private val SideConfigMenu = SideConfigMenu(this@PowerCell, ::openWindow)
         
-        override val gui: GUI = GUIBuilder(GUIType.NORMAL)
+        override val gui = Gui.normal()
             .setStructure(
                 "1 - - - - - - - 2",
                 "| s # # e # # # |",
                 "| # # # e # # # |",
                 "| # # # e # # # |",
                 "3 - - - - - - - 4")
-            .addIngredient('s', OpenSideConfigItem(sideConfigGUI))
+            .addIngredient('s', OpenSideConfigItem(SideConfigMenu))
             .addIngredient('e', EnergyBar(3, energyHolder))
             .build()
         

@@ -1,28 +1,24 @@
 package xyz.xenondevs.nova.logistics.gui.cable
 
-import de.studiocode.invui.gui.GUI
-import de.studiocode.invui.gui.builder.GUIBuilder
-import de.studiocode.invui.gui.builder.guitype.GUIType
 import org.bukkit.block.BlockFace
-import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
-import xyz.xenondevs.nova.tileentity.network.NetworkManager
+import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.nova.tileentity.network.fluid.FluidNetwork
 import xyz.xenondevs.nova.tileentity.network.fluid.holder.FluidHolder
 import xyz.xenondevs.nova.ui.item.AddNumberItem
 import xyz.xenondevs.nova.ui.item.DisplayNumberItem
 import xyz.xenondevs.nova.ui.item.RemoveNumberItem
 
-class FluidCableConfigGUI(
-    val fluidHolder: FluidHolder,
-    private val face: BlockFace
-) : BaseCableConfigGUI(FluidNetwork.CHANNEL_AMOUNT) {
+class FluidCableConfigGui(
+     holder: FluidHolder,
+     face: BlockFace
+) : BaseCableConfigGui<FluidHolder>(holder, face, FluidNetwork.CHANNEL_AMOUNT) {
     
-    val gui: GUI
+    val gui: Gui
     
     init {
         updateValues(false)
         
-        gui = GUIBuilder(GUIType.NORMAL)
+        gui = Gui.normal()
             .setStructure(
                 "# p # # # # # P #",
                 "# d # e c i # D #",
@@ -40,26 +36,8 @@ class FluidCableConfigGUI(
     }
     
     override fun updateValues(updateButtons: Boolean) {
-        NetworkManager.execute { // TODO: queueSync / queueAsync ?
-            val allowedConnections = fluidHolder.allowedConnectionTypes[fluidHolder.containerConfig[face]]!!
-            allowsExtract = allowedConnections.extract
-            allowsInsert = allowedConnections.insert
-            
-            insertPriority = fluidHolder.insertPriorities[face]!!
-            extractPriority = fluidHolder.extractPriorities[face]!!
-            insertState = fluidHolder.connectionConfig[face]!!.insert
-            extractState = fluidHolder.connectionConfig[face]!!.extract
-            channel = fluidHolder.channels[face]!!
-        }
-        
+        updateCoreValues()
         if (updateButtons) updateButtons()
-    }
-    
-    override fun writeChanges() {
-        fluidHolder.insertPriorities[face] = insertPriority
-        fluidHolder.extractPriorities[face] = extractPriority
-        fluidHolder.channels[face] = channel
-        fluidHolder.connectionConfig[face] = NetworkConnectionType.of(insertState, extractState)
     }
     
 }

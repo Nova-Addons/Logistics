@@ -1,48 +1,45 @@
 package xyz.xenondevs.nova.logistics.gui.cable
 
-import de.studiocode.invui.gui.GUI
-import de.studiocode.invui.gui.SlotElement.VISlotElement
-import de.studiocode.invui.gui.builder.GUIBuilder
-import de.studiocode.invui.gui.builder.guitype.GUIType
-import de.studiocode.invui.virtualinventory.VirtualInventory
-import de.studiocode.invui.virtualinventory.event.ItemUpdateEvent
 import org.bukkit.block.BlockFace
+import xyz.xenondevs.commons.collections.putOrRemove
+import xyz.xenondevs.invui.gui.Gui
+import xyz.xenondevs.invui.inventory.VirtualInventory
+import xyz.xenondevs.invui.inventory.event.ItemPreUpdateEvent
 import xyz.xenondevs.nova.logistics.item.getItemFilterConfig
 import xyz.xenondevs.nova.logistics.item.isItemFilter
-import xyz.xenondevs.nova.logistics.registry.GUIMaterials
-import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
+import xyz.xenondevs.nova.logistics.registry.GuiMaterials
 import xyz.xenondevs.nova.tileentity.network.NetworkManager
 import xyz.xenondevs.nova.tileentity.network.item.ItemNetwork
 import xyz.xenondevs.nova.tileentity.network.item.holder.ItemHolder
+import xyz.xenondevs.nova.ui.addIngredient
 import xyz.xenondevs.nova.ui.item.AddNumberItem
 import xyz.xenondevs.nova.ui.item.DisplayNumberItem
 import xyz.xenondevs.nova.ui.item.RemoveNumberItem
-import xyz.xenondevs.nova.util.item.novaMaterial
-import xyz.xenondevs.nova.util.putOrRemove
+import xyz.xenondevs.nova.util.item.novaItem
 
-class ItemCableConfigGUI(
-    val itemHolder: ItemHolder,
-    private val face: BlockFace
-) : BaseCableConfigGUI(ItemNetwork.CHANNEL_AMOUNT) {
+class ItemCableConfigGui(
+    holder: ItemHolder,
+    face: BlockFace
+) : BaseCableConfigGui<ItemHolder>(holder, face, ItemNetwork.CHANNEL_AMOUNT) {
     
-    val gui: GUI
+    val gui: Gui
     private val insertFilterInventory = VirtualInventory(null, 1, arrayOfNulls(1), intArrayOf(1))
-        .apply { setItemUpdateHandler(::checkItem) }
+        .apply { setPreUpdateHandler(::checkItem) }
     private val extractFilterInventory = VirtualInventory(null, 1, arrayOfNulls(1), intArrayOf(1))
-        .apply { setItemUpdateHandler(::checkItem) }
+        .apply { setPreUpdateHandler(::checkItem) }
     
     init {
         updateValues(false)
         
-        gui = GUIBuilder(GUIType.NORMAL)
+        gui = Gui.normal()
             .setStructure(
                 "# p # # c # # P #",
                 "# d # e # i # D #",
                 "# m # E # I # M #")
             .addIngredient('i', InsertItem().also(updatableItems::add))
             .addIngredient('e', ExtractItem().also(updatableItems::add))
-            .addIngredient('I', VISlotElement(insertFilterInventory, 0, GUIMaterials.ITEM_FILTER_PLACEHOLDER.clientsideProvider))
-            .addIngredient('E', VISlotElement(extractFilterInventory, 0, GUIMaterials.ITEM_FILTER_PLACEHOLDER.clientsideProvider))
+            .addIngredient('I', insertFilterInventory, GuiMaterials.ITEM_FILTER_PLACEHOLDER)
+            .addIngredient('E', extractFilterInventory,  GuiMaterials.ITEM_FILTER_PLACEHOLDER)
             .addIngredient('P', AddNumberItem({ 0..100 }, { insertPriority }, { insertPriority = it; updateButtons() }).also(updatableItems::add))
             .addIngredient('M', RemoveNumberItem({ 0..100 }, { insertPriority }, { insertPriority = it; updateButtons() }).also(updatableItems::add))
             .addIngredient('D', DisplayNumberItem({ insertPriority }, "menu.logistics.cable_config.insert_priority").also(updatableItems::add))
@@ -54,36 +51,25 @@ class ItemCableConfigGUI(
     }
     
     override fun updateValues(updateButtons: Boolean) {
+        updateCoreValues()
+        
         NetworkManager.execute { // TODO: queueSync / queueAsync ?
-            val allowedConnections = itemHolder.allowedConnectionTypes[itemHolder.inventories[face]]!!
-            allowsExtract = allowedConnections.extract
-            allowsInsert = allowedConnections.insert
-            
-            insertPriority = itemHolder.insertPriorities[face]!!
-            extractPriority = itemHolder.extractPriorities[face]!!
-            insertState = itemHolder.connectionConfig[face]!!.insert
-            extractState = itemHolder.connectionConfig[face]!!.extract
-            channel = itemHolder.channels[face]!!
-            
-            insertFilterInventory.setItemStackSilently(0, itemHolder.insertFilters[face]?.createFilterItem())
-            extractFilterInventory.setItemStackSilently(0, itemHolder.extractFilters[face]?.createFilterItem())
+            insertFilterInventory.setItemSilently(0, holder.insertFilters[face]?.createFilterItem())
+            extractFilterInventory.setItemSilently(0, holder.extractFilters[face]?.createFilterItem())
         }
         
         if (updateButtons) updateButtons()
     }
     
     override fun writeChanges() {
-        itemHolder.insertPriorities[face] = insertPriority
-        itemHolder.extractPriorities[face] = extractPriority
-        itemHolder.channels[face] = channel
-        itemHolder.connectionConfig[face] = NetworkConnectionType.of(insertState, extractState)
-        itemHolder.insertFilters.putOrRemove(face, insertFilterInventory.getUnsafeItemStack(0)?.getItemFilterConfig())
-        itemHolder.extractFilters.putOrRemove(face, extractFilterInventory.getUnsafeItemStack(0)?.getItemFilterConfig())
+        super.writeChanges()
+        holder.insertFilters.putOrRemove(face, insertFilterInventory.getUnsafeItem(0)?.getItemFilterConfig())
+        holder.extractFilters.putOrRemove(face, extractFilterInventory.getUnsafeItem(0)?.getItemFilterConfig())
     }
     
-    private fun checkItem(event: ItemUpdateEvent) {
-        val newStack = event.newItemStack
-        event.isCancelled = newStack != null && !newStack.novaMaterial.isItemFilter()
+    private fun checkItem(event: ItemPreUpdateEvent) {
+        val newStack = event.newItem
+        event.isCancelled = newStack != null && !newStack.novaItem.isItemFilter()
     }
     
 }

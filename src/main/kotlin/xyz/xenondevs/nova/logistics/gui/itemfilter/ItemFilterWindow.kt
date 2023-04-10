@@ -1,30 +1,29 @@
 package xyz.xenondevs.nova.logistics.gui.itemfilter
 
-import de.studiocode.invui.gui.GUI
-import de.studiocode.invui.gui.builder.GUIBuilder
-import de.studiocode.invui.gui.builder.guitype.GUIType
-import de.studiocode.invui.item.ItemProvider
-import de.studiocode.invui.item.impl.BaseItem
-import de.studiocode.invui.virtualinventory.VirtualInventory
-import de.studiocode.invui.virtualinventory.event.ItemUpdateEvent
-import de.studiocode.invui.virtualinventory.event.UpdateReason
-import de.studiocode.invui.window.Window
-import de.studiocode.invui.window.impl.single.SimpleWindow
+import net.kyori.adventure.text.Component
 import net.md_5.bungee.api.chat.TranslatableComponent
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
+import xyz.xenondevs.invui.gui.Gui
+import xyz.xenondevs.invui.gui.ScrollGui
+import xyz.xenondevs.invui.inventory.VirtualInventory
+import xyz.xenondevs.invui.inventory.event.ItemPreUpdateEvent
+import xyz.xenondevs.invui.inventory.event.UpdateReason
+import xyz.xenondevs.invui.item.ItemProvider
+import xyz.xenondevs.invui.item.builder.setDisplayName
+import xyz.xenondevs.invui.item.impl.AbstractItem
+import xyz.xenondevs.invui.window.Window
+import xyz.xenondevs.nova.item.NovaItem
 import xyz.xenondevs.nova.logistics.item.isItemFilter
-import xyz.xenondevs.nova.logistics.registry.GUIMaterials
-import xyz.xenondevs.nova.material.ItemNovaMaterial
+import xyz.xenondevs.nova.logistics.registry.GuiMaterials
 import xyz.xenondevs.nova.tileentity.network.item.getOrCreateFilterConfig
 import xyz.xenondevs.nova.tileentity.network.item.saveFilterConfig
-import xyz.xenondevs.nova.util.data.setLocalizedName
-import xyz.xenondevs.nova.util.item.novaMaterial
+import xyz.xenondevs.nova.util.item.novaItem
 import kotlin.math.ceil
 
-class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, private val itemStack: ItemStack) {
+class ItemFilterWindow(player: Player, item: NovaItem, size: Int, private val itemStack: ItemStack) {
     
     private val itemFilter = itemStack.getOrCreateFilterConfig(size)
     private val filterInventory = object : VirtualInventory(null, itemFilter.items.size, itemFilter.items, IntArray(itemFilter.items.size) { 1 }) {
@@ -33,25 +32,25 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
             items.withIndex()
                 .firstOrNull { it.value == null }
                 ?.index
-                ?.also { putItemStack(updateReason, it, itemStack) }
+                ?.also { putItem(updateReason, it, itemStack) }
             
             return itemStack.amount
         }
         
-        override fun setItemStack(updateReason: UpdateReason?, slot: Int, itemStack: ItemStack?): Boolean {
-            return super.forceSetItemStack(updateReason, slot, itemStack)
+        override fun setItem(updateReason: UpdateReason?, slot: Int, itemStack: ItemStack?): Boolean {
+            return super.forceSetItem(updateReason, slot, itemStack)
         }
         
     }
     
-    private val gui: GUI
+    private val gui: Gui
     private val window: Window
     
     init {
         val rows = ceil(itemFilter.items.size / 7.0).toInt()
         
         if (rows > 3) {
-            gui = GUIBuilder(GUIType.SCROLL_INVENTORY)
+            gui = ScrollGui.inventories()
                 .setStructure(
                     "1 - - - - - - - 2",
                     "| # # m # n # # |",
@@ -62,10 +61,10 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
                 )
                 .addIngredient('m', SwitchModeItem())
                 .addIngredient('n', SwitchNBTItem())
-                .setInventory(filterInventory)
+                .addContent(filterInventory)
                 .build()
         } else {
-            gui = GUIBuilder(GUIType.NORMAL)
+            gui = Gui.normal()
                 .setStructure(9, 3 + rows,
                     "1 - - - - - - - 2" +
                         "| # # m # n # # |" +
@@ -77,10 +76,14 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
             gui.fillRectangle(1, 2, 7, filterInventory, true)
         }
         
-        window = SimpleWindow(player, arrayOf(TranslatableComponent(material.localizedName)), gui)
-        filterInventory.setItemUpdateHandler(::handleInventoryUpdate)
-        window.addCloseHandler(::saveFilterConfig)
-        window.show()
+        filterInventory.setPreUpdateHandler(::handleInventoryUpdate)
+        
+        window = Window.single {
+            it.setGui(gui)
+            it.setViewer(player)
+            it.setTitle(arrayOf(TranslatableComponent(item.localizedName)))
+            it.addCloseHandler(::saveFilterConfig)
+        }.apply { open() }
     }
     
     private fun saveFilterConfig() {
@@ -88,19 +91,19 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
         itemStack.saveFilterConfig(itemFilter)
     }
     
-    private fun handleInventoryUpdate(event: ItemUpdateEvent) {
+    private fun handleInventoryUpdate(event: ItemPreUpdateEvent) {
         if (event.updateReason == null) return
         
         event.isCancelled = true
-        if (event.newItemStack?.novaMaterial.isItemFilter()) return
-        filterInventory.setItemStack(null, event.slot, event.newItemStack?.clone()?.apply { amount = 1 })
+        if (event.newItem?.novaItem.isItemFilter()) return
+        filterInventory.setItem(null, event.slot, event.newItem?.clone()?.apply { amount = 1 })
     }
     
-    private inner class SwitchModeItem : BaseItem() {
+    private inner class SwitchModeItem : AbstractItem() {
         
         override fun getItemProvider(): ItemProvider =
-            if (itemFilter.whitelist) GUIMaterials.WHITELIST_BTN.createClientsideItemBuilder().setLocalizedName("menu.logistics.item_filter.whitelist")
-            else GUIMaterials.BLACKLIST_BTN.createClientsideItemBuilder().setLocalizedName("menu.logistics.item_filter.blacklist")
+            if (itemFilter.whitelist) GuiMaterials.WHITELIST_BTN.createClientsideItemBuilder().setDisplayName(Component.translatable("menu.logistics.item_filter.whitelist"))
+            else GuiMaterials.BLACKLIST_BTN.createClientsideItemBuilder().setDisplayName(Component.translatable("menu.logistics.item_filter.blacklist"))
         
         override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {
             itemFilter.whitelist = !itemFilter.whitelist
@@ -109,11 +112,11 @@ class ItemFilterWindow(player: Player, material: ItemNovaMaterial, size: Int, pr
         
     }
     
-    private inner class SwitchNBTItem : BaseItem() {
+    private inner class SwitchNBTItem : AbstractItem() {
         
         override fun getItemProvider(): ItemProvider {
-            return (if (itemFilter.nbt) GUIMaterials.NBT_BTN_ON else GUIMaterials.NBT_BTN_OFF)
-                .createClientsideItemBuilder().setLocalizedName("menu.logistics.item_filter.nbt." + if (itemFilter.nbt) "on" else "off")
+            return (if (itemFilter.nbt) GuiMaterials.NBT_BTN_ON else GuiMaterials.NBT_BTN_OFF)
+                .createClientsideItemBuilder().setDisplayName(Component.translatable("menu.logistics.item_filter.nbt." + if (itemFilter.nbt) "on" else "off"))
         }
         
         override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {

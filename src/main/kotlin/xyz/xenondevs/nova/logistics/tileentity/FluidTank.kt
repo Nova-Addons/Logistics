@@ -1,21 +1,21 @@
 package xyz.xenondevs.nova.logistics.tileentity
 
-import de.studiocode.invui.gui.GUI
-import de.studiocode.invui.gui.builder.GUIBuilder
-import de.studiocode.invui.gui.builder.guitype.GUIType
+import xyz.xenondevs.commons.provider.Provider
+import xyz.xenondevs.commons.provider.immutable.provider
+import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.nova.data.config.NovaConfig
 import xyz.xenondevs.nova.data.config.configReloadable
-import xyz.xenondevs.nova.data.provider.Provider
-import xyz.xenondevs.nova.data.provider.provider
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
 import xyz.xenondevs.nova.logistics.registry.Blocks
+import xyz.xenondevs.nova.logistics.registry.Items
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
+import xyz.xenondevs.nova.tileentity.menu.TileEntityMenuClass
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.fluid.FluidType
 import xyz.xenondevs.nova.tileentity.network.fluid.holder.NovaFluidHolder
 import xyz.xenondevs.nova.ui.FluidBar
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
-import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
+import xyz.xenondevs.nova.ui.config.side.SideConfigMenu
 import xyz.xenondevs.nova.util.center
 import xyz.xenondevs.nova.world.fakeentity.impl.FakeArmorStand
 import kotlin.math.roundToInt
@@ -28,8 +28,6 @@ open class FluidTank(
     capacity: Provider<Long>,
     blockState: NovaTileEntityState
 ) : NetworkedTileEntity(blockState) {
-    
-    override val gui = lazy(::FluidTankGUI)
     
     val fluidContainer = getFluidContainer("tank", hashSetOf(FluidType.WATER, FluidType.LAVA), capacity, 0, ::handleFluidUpdate)
     override val fluidHolder = NovaFluidHolder(this, fluidContainer to NetworkConnectionType.BUFFER) { createSideConfig(NetworkConnectionType.BUFFER) }
@@ -58,8 +56,8 @@ open class FluidTank(
         val stack = if (fluidContainer.hasFluid()) {
             val state = (fluidContainer.amount.toDouble() / fluidContainer.capacity.toDouble() * MAX_STATE.toDouble()).roundToInt()
             when (fluidContainer.type) {
-                FluidType.LAVA -> Blocks.TANK_LAVA_LEVELS
-                FluidType.WATER -> Blocks.TANK_WATER_LEVELS
+                FluidType.LAVA -> Items.TANK_LAVA_LEVELS
+                FluidType.WATER -> Items.TANK_WATER_LEVELS
                 else -> throw IllegalStateException()
             }.clientsideProviders[state].get()
         } else null
@@ -74,22 +72,23 @@ open class FluidTank(
         fluidLevel.remove()
     }
     
-    inner class FluidTankGUI : TileEntityGUI() {
+    @TileEntityMenuClass
+    inner class FluidTankMenu : GlobalTileEntityMenu() {
         
-        private val sideConfigGUI = SideConfigGUI(
+        private val SideConfigMenu = SideConfigMenu(
             this@FluidTank,
             fluidContainerNames = listOf(fluidContainer to "container.nova.fluid_tank"),
             openPrevious = ::openWindow
         )
         
-        override val gui: GUI = GUIBuilder(GUIType.NORMAL)
+        override val gui = Gui.normal()
             .setStructure(
                 "1 - - - - - - - 2",
                 "| s # # f # # # |",
                 "| # # # f # # # |",
                 "| # # # f # # # |",
                 "3 - - - - - - - 4")
-            .addIngredient('s', OpenSideConfigItem(sideConfigGUI))
+            .addIngredient('s', OpenSideConfigItem(SideConfigMenu))
             .addIngredient('f', FluidBar(3, fluidHolder, fluidContainer))
             .build()
         

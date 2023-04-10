@@ -1,5 +1,5 @@
 {
-	"parent": "logistics:block/cable/attachment_up",
+	"parent": "logistics:block/cable/attachment",
 	"textures": {
 		"2": "logistics:block/cable/attachment/13"
 	}

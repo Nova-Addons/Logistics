@@ -1,13 +1,15 @@
+@file:Suppress("unused")
+
 package xyz.xenondevs.nova.logistics.registry
 
 import org.bukkit.Material.*
+import xyz.xenondevs.nova.addon.registry.BlockRegistry
 import xyz.xenondevs.nova.data.world.block.property.Directional
-import xyz.xenondevs.nova.data.world.block.property.LegacyDirectional
-import xyz.xenondevs.nova.item.NovaItem
-import xyz.xenondevs.nova.item.tool.ToolCategory
-import xyz.xenondevs.nova.item.tool.ToolLevel
+import xyz.xenondevs.nova.initialize.Init
+import xyz.xenondevs.nova.item.options.BlockOptions
+import xyz.xenondevs.nova.item.tool.VanillaToolCategories
+import xyz.xenondevs.nova.item.tool.VanillaToolTiers
 import xyz.xenondevs.nova.logistics.Logistics
-import xyz.xenondevs.nova.logistics.item.StorageUnitItemBehavior
 import xyz.xenondevs.nova.logistics.tileentity.AdvancedCable
 import xyz.xenondevs.nova.logistics.tileentity.AdvancedFluidTank
 import xyz.xenondevs.nova.logistics.tileentity.BasicCable
@@ -27,46 +29,37 @@ import xyz.xenondevs.nova.logistics.tileentity.createBasicPowerCell
 import xyz.xenondevs.nova.logistics.tileentity.createCreativePowerCell
 import xyz.xenondevs.nova.logistics.tileentity.createElitePowerCell
 import xyz.xenondevs.nova.logistics.tileentity.createUltimatePowerCell
-import xyz.xenondevs.nova.material.BlockOptions
-import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerDefaultItem
-import xyz.xenondevs.nova.material.NovaMaterialRegistry.registerTileEntity
-import xyz.xenondevs.nova.world.block.TileEntityBlock
 import xyz.xenondevs.nova.world.block.sound.SoundGroup
 
-object Blocks {
+@Init
+object Blocks : BlockRegistry by Logistics.registry {
     
-    private val CABLE = BlockOptions(0.0, null, null, false, SoundGroup.STONE)
-    private val POWER_CELL = BlockOptions(4.0, ToolCategory.PICKAXE, ToolLevel.STONE, true, SoundGroup.METAL, IRON_BLOCK)
-    private val TANK = BlockOptions(2.0, ToolCategory.PICKAXE, ToolLevel.STONE, true, SoundGroup.GLASS, GLASS)
-    private val OTHER = BlockOptions(4.0, ToolCategory.PICKAXE, ToolLevel.STONE, true, SoundGroup.STONE, COBBLESTONE)
+    private val CABLE = BlockOptions(0.0, SoundGroup.STONE)
+    private val POWER_CELL = BlockOptions(4.0, VanillaToolCategories.PICKAXE, VanillaToolTiers.STONE, true, SoundGroup.METAL, IRON_BLOCK)
+    private val TANK = BlockOptions(2.0, VanillaToolCategories.PICKAXE, VanillaToolTiers.STONE, true, SoundGroup.GLASS, GLASS)
+    private val OTHER = BlockOptions(4.0, VanillaToolCategories.PICKAXE, VanillaToolTiers.STONE, true, SoundGroup.STONE, COBBLESTONE)
     
-    val BASIC_CABLE = registerTileEntity(Logistics, "basic_cable", CABLE, ::BasicCable, isInteractive = false)
-    val ADVANCED_CABLE = registerTileEntity(Logistics, "advanced_cable", CABLE, ::AdvancedCable, isInteractive = false)
-    val ELITE_CABLE = registerTileEntity(Logistics, "elite_cable", CABLE, ::EliteCable, isInteractive = false)
-    val ULTIMATE_CABLE = registerTileEntity(Logistics, "ultimate_cable", CABLE, ::UltimateCable, isInteractive = false)
-    val CREATIVE_CABLE = registerTileEntity(Logistics, "creative_cable", CABLE, ::CreativeCable, isInteractive = false)
+    val BASIC_CABLE = tileEntity( "basic_cable", ::BasicCable).blockOptions(CABLE).interactive(false).register()
+    val ADVANCED_CABLE = tileEntity( "advanced_cable", ::AdvancedCable).blockOptions(CABLE).interactive(false).register()
+    val ELITE_CABLE = tileEntity( "elite_cable", ::EliteCable).blockOptions(CABLE).interactive(false).register()
+    val ULTIMATE_CABLE = tileEntity( "ultimate_cable", ::UltimateCable).blockOptions(CABLE).interactive(false).register()
+    val CREATIVE_CABLE = tileEntity("creative_cable", ::CreativeCable).blockOptions(CABLE).interactive(false).register()
     
-    val BASIC_POWER_CELL = registerTileEntity(Logistics, "basic_power_cell", POWER_CELL, ::createBasicPowerCell, properties = listOf(LegacyDirectional))
-    val ADVANCED_POWER_CELL = registerTileEntity(Logistics, "advanced_power_cell", POWER_CELL, ::createAdvancedPowerCell, properties = listOf(LegacyDirectional))
-    val ELITE_POWER_CELL = registerTileEntity(Logistics, "elite_power_cell", POWER_CELL, ::createElitePowerCell, properties = listOf(LegacyDirectional))
-    val ULTIMATE_POWER_CELL = registerTileEntity(Logistics, "ultimate_power_cell", POWER_CELL, ::createUltimatePowerCell, properties = listOf(LegacyDirectional))
-    val CREATIVE_POWER_CELL = registerTileEntity(Logistics, "creative_power_cell", POWER_CELL, ::createCreativePowerCell, properties = listOf(LegacyDirectional))
+    val BASIC_POWER_CELL = tileEntity( "basic_power_cell", ::createBasicPowerCell).blockOptions(POWER_CELL).register()
+    val ADVANCED_POWER_CELL = tileEntity( "advanced_power_cell", ::createAdvancedPowerCell).blockOptions(POWER_CELL).register()
+    val ELITE_POWER_CELL = tileEntity( "elite_power_cell", ::createElitePowerCell).blockOptions(POWER_CELL).register()
+    val ULTIMATE_POWER_CELL = tileEntity("ultimate_power_cell", ::createUltimatePowerCell).blockOptions(POWER_CELL).register()
+    val CREATIVE_POWER_CELL = tileEntity("creative_power_cell", ::createCreativePowerCell).blockOptions(POWER_CELL).register()
     
-    val BASIC_FLUID_TANK = registerTileEntity(Logistics, "basic_fluid_tank", TANK, ::BasicFluidTank, properties = listOf(LegacyDirectional))
-    val ADVANCED_FLUID_TANK = registerTileEntity(Logistics, "advanced_fluid_tank", TANK, ::AdvancedFluidTank, properties = listOf(LegacyDirectional))
-    val ELITE_FLUID_TANK = registerTileEntity(Logistics, "elite_fluid_tank", TANK, ::EliteFluidTank, properties = listOf(LegacyDirectional))
-    val ULTIMATE_FLUID_TANK = registerTileEntity(Logistics, "ultimate_fluid_tank", TANK, ::UltimateFluidTank, properties = listOf(LegacyDirectional))
-    val CREATIVE_FLUID_TANK = registerTileEntity(Logistics, "creative_fluid_tank", TANK, ::CreativeFluidTank, properties = listOf(LegacyDirectional))
+    val BASIC_FLUID_TANK = tileEntity("basic_fluid_tank", ::BasicFluidTank).blockOptions(TANK).register()
+    val ADVANCED_FLUID_TANK = tileEntity("advanced_fluid_tank", ::AdvancedFluidTank).blockOptions(TANK).register()
+    val ELITE_FLUID_TANK = tileEntity("elite_fluid_tank", ::EliteFluidTank).blockOptions(TANK).register()
+    val ULTIMATE_FLUID_TANK = tileEntity("ultimate_fluid_tank", ::UltimateFluidTank).blockOptions(TANK).register()
+    val CREATIVE_FLUID_TANK = tileEntity("creative_fluid_tank", ::CreativeFluidTank).blockOptions(TANK).register()
     
-    val STORAGE_UNIT = registerTileEntity(Logistics, "storage_unit", OTHER, ::StorageUnit, NovaItem(StorageUnitItemBehavior), block = TileEntityBlock.INTERACTIVE, properties = listOf(LegacyDirectional))
-    val FLUID_STORAGE_UNIT = registerTileEntity(Logistics, "fluid_storage_unit", OTHER, ::FluidStorageUnit, properties = listOf(LegacyDirectional))
-    val VACUUM_CHEST = registerTileEntity(Logistics, "vacuum_chest", OTHER, ::VacuumChest, properties = listOf(LegacyDirectional))
-    val TRASH_CAN = registerTileEntity(Logistics, "trash_can", OTHER, ::TrashCan, properties = listOf(Directional.NORMAL))
-    
-    // Move these somewhere else?
-    val TANK_WATER_LEVELS = registerDefaultItem(Logistics, "tank_water_levels")
-    val TANK_LAVA_LEVELS = registerDefaultItem(Logistics, "tank_lava_levels")
-    
-    fun init() = Unit
+    val STORAGE_UNIT = tileEntity("storage_unit", ::StorageUnit).blockOptions(OTHER).register()
+    val FLUID_STORAGE_UNIT = tileEntity("fluid_storage_unit", ::FluidStorageUnit).blockOptions(OTHER).register()
+    val VACUUM_CHEST = tileEntity("vacuum_chest", ::VacuumChest).blockOptions(OTHER).register()
+    val TRASH_CAN = tileEntity("trash_can", ::TrashCan).blockOptions(OTHER).properties(Directional.NORMAL).register()
     
 }

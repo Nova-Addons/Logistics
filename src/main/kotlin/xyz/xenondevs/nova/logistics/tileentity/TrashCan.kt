@@ -1,30 +1,28 @@
 package xyz.xenondevs.nova.logistics.tileentity
 
-import de.studiocode.invui.gui.GUI
-import de.studiocode.invui.gui.SlotElement.VISlotElement
-import de.studiocode.invui.gui.builder.GUIBuilder
-import de.studiocode.invui.gui.builder.guitype.GUIType
+import xyz.xenondevs.commons.collections.enumMap
+import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.nova.data.world.block.state.NovaTileEntityState
-import xyz.xenondevs.nova.logistics.registry.GUIMaterials
+import xyz.xenondevs.nova.logistics.registry.GuiMaterials
 import xyz.xenondevs.nova.tileentity.NetworkedTileEntity
+import xyz.xenondevs.nova.tileentity.menu.TileEntityMenuClass
 import xyz.xenondevs.nova.tileentity.network.NetworkConnectionType
 import xyz.xenondevs.nova.tileentity.network.fluid.FluidType
 import xyz.xenondevs.nova.tileentity.network.fluid.container.FluidContainer
 import xyz.xenondevs.nova.tileentity.network.fluid.holder.NovaFluidHolder
 import xyz.xenondevs.nova.tileentity.network.item.holder.NovaItemHolder
+import xyz.xenondevs.nova.ui.addIngredient
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
-import xyz.xenondevs.nova.ui.config.side.SideConfigGUI
+import xyz.xenondevs.nova.ui.config.side.SideConfigMenu
 import xyz.xenondevs.nova.util.CUBE_FACES
 import xyz.xenondevs.nova.util.VoidingVirtualInventory
-import xyz.xenondevs.nova.util.associateWithToEnumMap
 import java.util.*
 
-private val ALL_INSERT_CONFIG = { CUBE_FACES.associateWithToEnumMap { NetworkConnectionType.INSERT } }
+private val ALL_INSERT_CONFIG = { CUBE_FACES.associateWithTo(enumMap()) { NetworkConnectionType.INSERT } }
 
 class TrashCan(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState) {
     
     private val inventory = VoidingVirtualInventory(1)
-    override val gui: Lazy<TileEntityGUI> = lazy(::TrashCanGUI)
     override val itemHolder = NovaItemHolder(
         this,
         inventory to NetworkConnectionType.INSERT,
@@ -37,22 +35,23 @@ class TrashCan(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState
     
     override fun handleTick() = Unit
     
-    private inner class TrashCanGUI : TileEntityGUI() {
+    @TileEntityMenuClass
+    private inner class TrashCanMenu : GlobalTileEntityMenu() {
         
-        private val sideConfigGUI = SideConfigGUI(
+        private val SideConfigMenu = SideConfigMenu(
             this@TrashCan,
             listOf(itemHolder.getNetworkedInventory(inventory) to "inventory.nova.default"),
             listOf(VoidingFluidContainer to "container.nova.fluid_tank"),
             ::openWindow
         )
         
-        override val gui: GUI = GUIBuilder(GUIType.NORMAL)
+        override val gui = Gui.normal()
             .setStructure(
                 "1 - - - - - - - 2",
                 "| s # # i # # # |",
                 "3 - - - - - - - 4")
-            .addIngredient('i', VISlotElement(inventory, 0, GUIMaterials.TRASH_CAN_PLACEHOLDER.clientsideProvider))
-            .addIngredient('s', OpenSideConfigItem(sideConfigGUI))
+            .addIngredient('i', inventory, GuiMaterials.TRASH_CAN_PLACEHOLDER)
+            .addIngredient('s', OpenSideConfigItem(SideConfigMenu))
             .build()
         
     }
