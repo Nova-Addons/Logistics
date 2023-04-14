@@ -1,5 +1,7 @@
 package xyz.xenondevs.nova.logistics.tileentity
 
+import net.minecraft.util.Brightness
+import net.minecraft.world.item.ItemDisplayContext
 import xyz.xenondevs.commons.provider.Provider
 import xyz.xenondevs.commons.provider.immutable.provider
 import xyz.xenondevs.invui.gui.Gui
@@ -16,10 +18,9 @@ import xyz.xenondevs.nova.tileentity.network.fluid.holder.NovaFluidHolder
 import xyz.xenondevs.nova.ui.FluidBar
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigMenu
-import xyz.xenondevs.nova.util.center
-import xyz.xenondevs.nova.world.fakeentity.impl.FakeArmorStand
+import xyz.xenondevs.nova.util.nmsCopy
+import xyz.xenondevs.nova.world.fakeentity.impl.FakeItemDisplay
 import kotlin.math.roundToInt
-import net.minecraft.world.entity.EquipmentSlot as NMSEquipmentSlot
 
 private const val MAX_STATE = 99
 
@@ -31,11 +32,11 @@ open class FluidTank(
     
     val fluidContainer = getFluidContainer("tank", hashSetOf(FluidType.WATER, FluidType.LAVA), capacity, 0, ::handleFluidUpdate)
     override val fluidHolder = NovaFluidHolder(this, fluidContainer to NetworkConnectionType.BUFFER) { createSideConfig(NetworkConnectionType.BUFFER) }
-    private lateinit var fluidLevel: FakeArmorStand
+    private lateinit var fluidLevel: FakeItemDisplay
     
     override fun handleInitialized(first: Boolean) {
         super.handleInitialized(first)
-        fluidLevel = FakeArmorStand(pos.location.center()) { _, data -> data.isInvisible = true; data.isMarker = true }
+        fluidLevel = FakeItemDisplay(location.add(.5, .5, .5)) { _, data -> data.itemDisplay = ItemDisplayContext.HEAD }
         updateFluidLevel()
     }
     
@@ -62,9 +63,10 @@ open class FluidTank(
             }.clientsideProviders[state].get()
         } else null
         
-        val shouldGlow = fluidContainer.type == FluidType.LAVA
-        fluidLevel.updateEntityData(true) { isOnFire = shouldGlow }
-        fluidLevel.setEquipment(NMSEquipmentSlot.HEAD, stack, true)
+        fluidLevel.updateEntityData(true) {
+            brightness = if (fluidContainer.type == FluidType.LAVA) Brightness.FULL_BRIGHT else null
+            itemStack = stack.nmsCopy
+        }
     }
     
     override fun handleRemoved(unload: Boolean) {

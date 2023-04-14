@@ -81,9 +81,11 @@ class VacuumChest(blockState: NovaTileEntityState) : NetworkedTileEntity(blockSt
     
     private fun handleFilterInventoryUpdate(event: ItemPreUpdateEvent) {
         val newStack = event.newItem
-        if (newStack?.novaItem.isItemFilter())
-            filter = newStack.getItemFilterConfig()
-        else if (newStack != null) event.isCancelled = true
+        if (newStack != null) {
+            if (newStack.novaItem.isItemFilter()) {
+                filter = newStack.getItemFilterConfig()
+            } else event.isCancelled = true
+        }
     }
     
     @TileEntityMenuClass

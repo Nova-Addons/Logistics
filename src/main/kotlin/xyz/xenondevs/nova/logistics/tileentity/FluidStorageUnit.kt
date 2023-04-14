@@ -1,6 +1,7 @@
 package xyz.xenondevs.nova.logistics.tileentity
 
-import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.util.Brightness
+import net.minecraft.world.item.ItemDisplayContext
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
@@ -23,15 +24,15 @@ import xyz.xenondevs.nova.tileentity.network.fluid.holder.NovaFluidHolder
 import xyz.xenondevs.nova.ui.FluidBar
 import xyz.xenondevs.nova.ui.config.side.OpenSideConfigItem
 import xyz.xenondevs.nova.ui.config.side.SideConfigMenu
-import xyz.xenondevs.nova.util.center
-import xyz.xenondevs.nova.world.fakeentity.impl.FakeArmorStand
+import xyz.xenondevs.nova.util.nmsCopy
+import xyz.xenondevs.nova.world.fakeentity.impl.FakeItemDisplay
 
 private val MAX_CAPACITY = configReloadable { NovaConfig[FLUID_STORAGE_UNIT].getLong("max_capacity") }
 
 class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(blockState), Reloadable {
     
     private val fluidTank = getFluidContainer("fluid", setOf(FluidType.LAVA, FluidType.WATER), MAX_CAPACITY, 0, ::handleFluidUpdate)
-    private val fluidLevel = FakeArmorStand(pos.location.center()) { _, data -> data.isInvisible = true; data.isMarker = true }
+    private val fluidLevel = FakeItemDisplay(location.add(.5, .5, .5)) { _, data -> data.itemDisplay = ItemDisplayContext.HEAD }
     override val fluidHolder = NovaFluidHolder(this, fluidTank to NetworkConnectionType.BUFFER) { createSideConfig(NetworkConnectionType.BUFFER) }
     
     init {
@@ -47,7 +48,10 @@ class FluidStorageUnit(blockState: NovaTileEntityState) : NetworkedTileEntity(bl
             }.clientsideProviders[10].get()
         } else null
         
-        fluidLevel.setEquipment(EquipmentSlot.HEAD, stack, true)
+        fluidLevel.updateEntityData(true) {
+            brightness = if (fluidTank.type == FluidType.LAVA) Brightness.FULL_BRIGHT else null
+            itemStack = stack.nmsCopy
+        }
     }
     
     override fun handleRemoved(unload: Boolean) {
