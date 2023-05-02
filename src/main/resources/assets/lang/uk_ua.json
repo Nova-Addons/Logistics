@@ -3,9 +3,9 @@
   "menu.logistics.item_filter.nbt.on": "NBT дані: не ігноруются",
   "advancement.logistics.elite_cable.description": "Зроби елітний кабель",
   "advancement.logistics.basic_power_cell.title": "Зберегання енергій",
-  "block.logistics.basic_cable": "Базовий кабель",
-  "block.logistics.elite_cable": "Елітний кабель",
-  "block.logistics.creative_cable": "Креативний кабель",
+  "block.logistics.basic_cable": "Базовий Кабель",
+  "block.logistics.elite_cable": "Елітний Кабель",
+  "block.logistics.creative_cable": "Творчий Кабель",
   "block.logistics.storage_unit": "Блок зберігання предметів",
   "block.logistics.fluid_storage_unit": "Блок зберігання рідини",
   "block.logistics.trash_can": "Мусорка",
@@ -25,5 +25,12 @@
   "advancement.logistics.basic_fluid_tank.title": "Базовий зберігач рідини",
   "advancement.logistics.elite_fluid_tank.title": "БАГАТО рідини",
   "advancement.logistics.ultimate_fluid_tank.title": "Для чого тобі стількі рідини?",
-  "advancement.logistics.trash_can.description": "Зроби мусорку"
+  "advancement.logistics.trash_can.description": "Зроби мусорку",
+  "block.logistics.advanced_cable": "Удосконалений Кабель",
+  "block.logistics.ultimate_cable": "Досконалий Кабель",
+  "block.logistics.advanced_power_cell": "Удосконалений Елемент Живлення",
+  "block.logistics.elite_power_cell": "Елітний Елемент Живлення",
+  "block.logistics.creative_power_cell": "Творчий Елемент Живлення",
+  "block.logistics.basic_power_cell": "Базовий Елемент Живлення",
+  "block.logistics.ultimate_power_cell": "Досконалий Елемент Живлення"
 }
