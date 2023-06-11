@@ -21,6 +21,19 @@ pluginManagement {
     repositories {
         mavenLocal()
         mavenCentral()
+        gradlePluginPortal()
         maven("https://repo.xenondevs.xyz/releases")
+        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") // for nova-gradle-plugin
+    }
+}
+
+plugins {
+    id("com.gradle.enterprise") version "3.13"
+}
+
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        termsOfServiceAgree = "yes"
     }
 }

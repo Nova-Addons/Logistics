@@ -14,9 +14,19 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven("https://repo.xenondevs.xyz/releases")
-    mavenLocal { content { includeGroup("org.spigotmc") } }
+    
+    // include xenondevs-nms repository if requested
+    if (project.hasProperty("xenondevsNms")) {
+        maven("https://repo.papermc.io/repository/maven-public/") // authlib, brigadier, etc.
+        maven {
+            name = "xenondevsNms"
+            url = uri("https://repo.xenondevs.xyz/nms/")
+            credentials(PasswordCredentials::class)
+        }
+    }
 }
 
 dependencies {
