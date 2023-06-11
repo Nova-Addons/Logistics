@@ -35,7 +35,7 @@ import xyz.xenondevs.nova.util.CUBE_FACES
 import xyz.xenondevs.nova.util.MathUtils
 import xyz.xenondevs.nova.util.advance
 import xyz.xenondevs.nova.util.item.novaItem
-import xyz.xenondevs.nova.util.rotation
+import xyz.xenondevs.nova.util.rotationNorth
 import xyz.xenondevs.nova.util.rotationValues
 import xyz.xenondevs.nova.util.runTask
 import xyz.xenondevs.nova.util.toIntArray
@@ -175,8 +175,8 @@ open class Cable(
         attachments.forEach { (face, id) ->
             models += Model(
                 (block.model as DisplayEntityBlockModelData)[ATTACHMENTS[id]].get(),
-                location.add(.5, .5, .5),
-                leftRotation = face.rotation
+                pos.location.add(.5, .5, .5),
+                leftRotation = face.rotationNorth // attachment models face south, display entities make north side of models face south, therefore attachments face north by default TODO: make attachment models face north
             )
         }
         multiModel.replaceModels(models)
