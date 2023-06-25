@@ -4,7 +4,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             version("nova", "0.14")
-            version("spigot", "1.22-R0.1-SNAPSHOT")
+            version("spigot", "1.20.1-R0.1-SNAPSHOT")
             version("kotlin", "1.8.22")
             
             plugin("kotlin", "org.jetbrains.kotlin.jvm").versionRef("kotlin")
