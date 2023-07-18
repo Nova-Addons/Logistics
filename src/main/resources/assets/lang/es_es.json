@@ -64,5 +64,6 @@
   "advancement.logistics.storage_unit.description": "Crea una Unidad de Almacenamiento",
   "item.logistics.basic_item_filter": "Filtro de Ítems Básico",
   "item.logistics.advanced_item_filter": "Filtro de Ítems Avanzado",
-  "item.logistics.elite_item_filter": "Filtro de Ítems Elite"
+  "item.logistics.elite_item_filter": "Filtro de Ítems Elite",
+  "item.logistics.item_filter.lore.nbt.off": "Ignorado"
 }
